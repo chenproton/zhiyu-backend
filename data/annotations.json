@@ -1,0 +1,21 @@
+{
+  "annotations": [
+    {
+      "page": "/portal",
+      "x": 44.82993197278912,
+      "y": 38.279301745635905,
+      "content": "你好",
+      "id": "8aec114b-5029-46c0-b5fb-6b54ca316f99",
+      "createdAt": 1777254955656
+    }
+  ],
+  "comments": [
+    {
+      "annotationId": "8aec114b-5029-46c0-b5fb-6b54ca316f99",
+      "user": "hello",
+      "text": "好的",
+      "id": "b14722eb-7453-4a29-8c05-6cb2f395342c",
+      "createdAt": 1777254959485
+    }
+  ]
+}

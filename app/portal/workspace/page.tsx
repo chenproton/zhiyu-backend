@@ -1,0 +1,586 @@
+"use client"
+
+import { useState } from "react"
+import { Bell, Calendar, CheckSquare, Shield, Users, ChevronRight, ChevronLeft, TrendingUp, BarChart3, PieChart, BookOpen, GraduationCap, Briefcase, Building2 } from "lucide-react"
+import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card"
+import { Badge } from "@/components/ui/badge"
+import { Button } from "@/components/ui/button"
+import { ScrollArea } from "@/components/ui/scroll-area"
+import { Bar, BarChart, Pie, PieChart as RePieChart, Cell, XAxis, YAxis, CartesianGrid, Area, AreaChart } from "recharts"
+import { ChartContainer, ChartTooltip, ChartTooltipContent } from "@/components/ui/chart"
+import { useAuth } from "@/contexts/auth-context"
+
+// 不同身份的服务台内容
+const roleConfigs = {
+  teacher: {
+    welcomeText: "欢迎回来，张老师。",
+    announcements: [
+      { id: 1, title: "关于2026年春季学期教学安排的通知", date: "2026-04-10", isNew: true, type: "重要" },
+      { id: 2, title: "教务系统升级维护公告", date: "2026-04-08", isNew: true, type: "通知" },
+      { id: 3, title: "关于开展教学质量评估工作的通知", date: "2026-04-05", isNew: false, type: "通知" },
+      { id: 4, title: "2026年度教师培训计划发布", date: "2026-04-01", isNew: false, type: "公告" },
+    ],
+    todoItems: [
+      { id: 1, title: "审批学生请假申请", count: 3, urgent: true, color: "#ef4444" },
+      { id: 2, title: "批改作业", count: 28, urgent: false, color: "#3b82f6" },
+      { id: 3, title: "课程资源审核", count: 5, urgent: false, color: "#10b981" },
+      { id: 4, title: "填写教学日志", count: 1, urgent: true, color: "#f59e0b" },
+    ],
+    calendarEvents: [
+      { id: 1, title: "教研组会议", time: "09:00", date: 14, color: "bg-primary" },
+      { id: 2, title: "课程设计评审", time: "14:00", date: 14, color: "bg-amber-500" },
+      { id: 3, title: "学生答疑", time: "10:00", date: 15, color: "bg-emerald-500" },
+    ],
+    stats: { label1: "授课课程", value1: 8, label2: "学生人数", value2: 256 },
+  },
+  student: {
+    welcomeText: "欢迎回来，同学。",
+    announcements: [
+      { id: 1, title: "期中考试安排通知", date: "2026-04-10", isNew: true, type: "重要" },
+      { id: 2, title: "图书馆延长开放时间通知", date: "2026-04-08", isNew: true, type: "通知" },
+      { id: 3, title: "社团招新活动公告", date: "2026-04-05", isNew: false, type: "公告" },
+      { id: 4, title: "奖学金评选通知", date: "2026-04-01", isNew: false, type: "重要" },
+    ],
+    todoItems: [
+      { id: 1, title: "待完成作业", count: 5, urgent: true, color: "#ef4444" },
+      { id: 2, title: "待学习课程", count: 3, urgent: false, color: "#3b82f6" },
+      { id: 3, title: "待参加考试", count: 2, urgent: true, color: "#f59e0b" },
+      { id: 4, title: "待提交报告", count: 1, urgent: false, color: "#10b981" },
+    ],
+    calendarEvents: [
+      { id: 1, title: "高数课程", time: "08:00", date: 14, color: "bg-primary" },
+      { id: 2, title: "英语听力", time: "10:00", date: 14, color: "bg-amber-500" },
+      { id: 3, title: "实验课", time: "14:00", date: 15, color: "bg-emerald-500" },
+    ],
+    stats: { label1: "在修课程", value1: 12, label2: "已获学分", value2: 86 },
+  },
+  enterprise: {
+    welcomeText: "欢迎回来，企业用户。",
+    announcements: [
+      { id: 1, title: "校企合作项目申报通知", date: "2026-04-10", isNew: true, type: "重要" },
+      { id: 2, title: "实习生招聘平台上线", date: "2026-04-08", isNew: true, type: "通知" },
+      { id: 3, title: "产学研合作洽谈会", date: "2026-04-05", isNew: false, type: "公告" },
+    ],
+    todoItems: [
+      { id: 1, title: "待审核简历", count: 15, urgent: false, color: "#3b82f6" },
+      { id: 2, title: "待安排面试", count: 8, urgent: true, color: "#ef4444" },
+      { id: 3, title: "待签订协议", count: 3, urgent: false, color: "#10b981" },
+    ],
+    calendarEvents: [
+      { id: 1, title: "宣讲会", time: "14:00", date: 14, color: "bg-primary" },
+      { id: 2, title: "面试安排", time: "09:00", date: 16, color: "bg-amber-500" },
+    ],
+    stats: { label1: "合作项目", value1: 5, label2: "实习学生", value2: 23 },
+  },
+  admin: {
+    welcomeText: "欢迎回来，管理员。",
+    announcements: [
+      { id: 1, title: "系统安全检查通知", date: "2026-04-10", isNew: true, type: "重要" },
+      { id: 2, title: "数据备份完成通知", date: "2026-04-08", isNew: true, type: "通知" },
+      { id: 3, title: "权限审计报告", date: "2026-04-05", isNew: false, type: "报告" },
+    ],
+    todoItems: [
+      { id: 1, title: "待审批账号", count: 12, urgent: true, color: "#ef4444" },
+      { id: 2, title: "待处理工单", count: 8, urgent: false, color: "#3b82f6" },
+      { id: 3, title: "待审核权限", count: 5, urgent: false, color: "#10b981" },
+      { id: 4, title: "系统告警", count: 2, urgent: true, color: "#f59e0b" },
+    ],
+    calendarEvents: [
+      { id: 1, title: "系统维护", time: "22:00", date: 14, color: "bg-primary" },
+      { id: 2, title: "安全审计", time: "10:00", date: 18, color: "bg-amber-500" },
+    ],
+    stats: { label1: "在线用户", value1: 1256, label2: "总用户数", value2: 8500 },
+  },
+}
+
+const securityItems = [
+  { label: "登录密码", status: "strong", statusText: "安全", action: "修改" },
+  { label: "手机绑定", status: "bound", statusText: "138****8888", action: "更换" },
+  { label: "邮箱绑定", status: "unbound", statusText: "未绑定", action: "绑定" },
+  { label: "登录设备", status: "normal", statusText: "3台设备", action: "管理" },
+]
+
+const weeklyData = [
+  { day: "周一", value: 45 },
+  { day: "周二", value: 52 },
+  { day: "周三", value: 38 },
+  { day: "周四", value: 65 },
+  { day: "周五", value: 48 },
+  { day: "周六", value: 28 },
+  { day: "周日", value: 15 },
+]
+
+const monthlyTrend = [
+  { month: "1月", students: 1200, courses: 45 },
+  { month: "2月", students: 1350, courses: 48 },
+  { month: "3月", students: 1480, courses: 52 },
+  { month: "4月", students: 1620, courses: 58 },
+]
+
+const resourceUsage = [
+  { name: "视频资源", value: 35, color: "#3b82f6" },
+  { name: "文档资源", value: 28, color: "#10b981" },
+  { name: "题库资源", value: 22, color: "#f59e0b" },
+  { name: "其他资源", value: 15, color: "#8b5cf6" },
+]
+
+const contacts = [
+  { id: 1, name: "教务处", phone: "0571-88888001", avatar: "教" },
+  { id: 2, name: "学生处", phone: "0571-88888002", avatar: "学" },
+  { id: 3, name: "信息中心", phone: "0571-88888003", avatar: "信" },
+  { id: 4, name: "人事处", phone: "0571-88888004", avatar: "人" },
+]
+
+function generateCalendarDays(year: number, month: number) {
+  const firstDay = new Date(year, month, 1)
+  const lastDay = new Date(year, month + 1, 0)
+  const daysInMonth = lastDay.getDate()
+  const startDayOfWeek = firstDay.getDay()
+  
+  const days: (number | null)[] = []
+  
+  for (let i = 0; i < startDayOfWeek; i++) {
+    days.push(null)
+  }
+  
+  for (let i = 1; i <= daysInMonth; i++) {
+    days.push(i)
+  }
+  
+  return days
+}
+
+const roleIcons = {
+  teacher: GraduationCap,
+  student: BookOpen,
+  enterprise: Building2,
+  admin: Briefcase,
+}
+
+export default function WorkspacePage() {
+  const { user } = useAuth()
+  const currentRole = user?.currentRole?.name || "teacher"
+  const config = roleConfigs[currentRole as keyof typeof roleConfigs] || roleConfigs.teacher
+  
+  const calendarDays = generateCalendarDays(2026, 3)
+  const weekDays = ["日", "一", "二", "三", "四", "五", "六"]
+  
+  const todoPieData = config.todoItems.map(item => ({
+    name: item.title,
+    value: item.count,
+    color: item.color,
+  }))
+  
+  const totalTodo = config.todoItems.reduce((acc, item) => acc + item.count, 0)
+  const RoleIcon = roleIcons[currentRole as keyof typeof roleIcons] || GraduationCap
+
+  return (
+    <div className="p-6 bg-gradient-to-br from-slate-50 via-blue-50/30 to-indigo-50/20 min-h-[calc(100vh-3.5rem)] pt-20">
+      <div className="mb-6 flex items-center justify-between">
+        <div>
+          <h1 className="text-xl font-semibold text-foreground">我的服务台</h1>
+          <p className="text-sm text-muted-foreground mt-1">{config.welcomeText}今天是2026年4月14日，星期二。</p>
+        </div>
+        <div className="flex items-center gap-2 px-4 py-2 bg-card rounded-lg border border-border shadow-sm">
+          <RoleIcon className="w-5 h-5 text-primary" />
+          <span className="text-sm font-medium text-foreground">当前身份：{user?.currentRole?.label || "教职工"}</span>
+        </div>
+      </div>
+
+      {/* 快捷统计 */}
+      <div className="grid grid-cols-4 gap-4 mb-5">
+        <Card className="bg-gradient-to-r from-blue-500 to-blue-600 text-white border-0">
+          <CardContent className="p-4 flex items-center justify-between">
+            <div>
+              <p className="text-blue-100 text-sm">{config.stats.label1}</p>
+              <p className="text-2xl font-bold">{config.stats.value1}</p>
+            </div>
+            <div className="w-12 h-12 bg-card/20 rounded-lg flex items-center justify-center">
+              <BookOpen className="w-6 h-6" />
+            </div>
+          </CardContent>
+        </Card>
+        <Card className="bg-gradient-to-r from-emerald-500 to-emerald-600 text-white border-0">
+          <CardContent className="p-4 flex items-center justify-between">
+            <div>
+              <p className="text-emerald-100 text-sm">{config.stats.label2}</p>
+              <p className="text-2xl font-bold">{config.stats.value2}</p>
+            </div>
+            <div className="w-12 h-12 bg-card/20 rounded-lg flex items-center justify-center">
+              <Users className="w-6 h-6" />
+            </div>
+          </CardContent>
+        </Card>
+        <Card className="bg-gradient-to-r from-amber-500 to-amber-600 text-white border-0">
+          <CardContent className="p-4 flex items-center justify-between">
+            <div>
+              <p className="text-amber-100 text-sm">待办事项</p>
+              <p className="text-2xl font-bold">{totalTodo}</p>
+            </div>
+            <div className="w-12 h-12 bg-card/20 rounded-lg flex items-center justify-center">
+              <CheckSquare className="w-6 h-6" />
+            </div>
+          </CardContent>
+        </Card>
+        <Card className="bg-gradient-to-r from-purple-500 to-purple-600 text-white border-0">
+          <CardContent className="p-4 flex items-center justify-between">
+            <div>
+              <p className="text-purple-100 text-sm">消息通知</p>
+              <p className="text-2xl font-bold">{config.announcements.filter(a => a.isNew).length}</p>
+            </div>
+            <div className="w-12 h-12 bg-card/20 rounded-lg flex items-center justify-center">
+              <Bell className="w-6 h-6" />
+            </div>
+          </CardContent>
+        </Card>
+      </div>
+
+      <div className="grid grid-cols-4 gap-5">
+        {/* 通知公告 */}
+        <Card className="bg-card/80 backdrop-blur border-0 shadow-sm">
+          <CardHeader className="pb-3">
+            <div className="flex items-center justify-between">
+              <CardTitle className="text-base font-medium flex items-center gap-2 text-foreground">
+                <div className="w-8 h-8 rounded-lg bg-primary/10 flex items-center justify-center">
+                  <Bell className="w-4 h-4 text-primary" />
+                </div>
+                通知公告
+              </CardTitle>
+              <Button variant="ghost" size="sm" className="text-xs text-primary h-auto p-0 hover:bg-transparent">
+                查看全部
+                <ChevronRight className="w-3 h-3 ml-1" />
+              </Button>
+            </div>
+          </CardHeader>
+          <CardContent>
+            <ScrollArea className="h-[200px]">
+              <div className="space-y-3">
+                {config.announcements.map((item) => (
+                  <div key={item.id} className="flex items-start gap-2 group cursor-pointer p-2 -mx-2 rounded-lg hover:bg-slate-50 transition-colors">
+                    <Badge
+                      variant={item.type === "重要" ? "destructive" : "secondary"}
+                      className="shrink-0 text-xs px-1.5 py-0"
+                    >
+                      {item.type}
+                    </Badge>
+                    <div className="flex-1 min-w-0">
+                      <p className="text-sm text-foreground truncate group-hover:text-primary transition-colors">
+                        {item.title}
+                      </p>
+                      <p className="text-xs text-muted-foreground">{item.date}</p>
+                    </div>
+                    {item.isNew && <span className="w-2 h-2 rounded-full bg-destructive shrink-0 mt-1.5" />}
+                  </div>
+                ))}
+              </div>
+            </ScrollArea>
+          </CardContent>
+        </Card>
+
+        {/* 校园日历 */}
+        <Card className="bg-card/80 backdrop-blur border-0 shadow-sm">
+          <CardHeader className="pb-2">
+            <div className="flex items-center justify-between">
+              <CardTitle className="text-base font-medium flex items-center gap-2 text-foreground">
+                <div className="w-8 h-8 rounded-lg bg-amber-500/10 flex items-center justify-center">
+                  <Calendar className="w-4 h-4 text-amber-500" />
+                </div>
+                校园日历
+              </CardTitle>
+              <div className="flex items-center gap-1">
+                <Button variant="ghost" size="icon" className="h-6 w-6">
+                  <ChevronLeft className="w-3 h-3" />
+                </Button>
+                <span className="text-sm font-medium text-foreground">2026年4月</span>
+                <Button variant="ghost" size="icon" className="h-6 w-6">
+                  <ChevronRight className="w-3 h-3" />
+                </Button>
+              </div>
+            </div>
+          </CardHeader>
+          <CardContent className="pt-2">
+            <div className="grid grid-cols-7 gap-1 mb-3">
+              {weekDays.map((day) => (
+                <div key={day} className="text-center text-xs text-muted-foreground py-1">{day}</div>
+              ))}
+              {calendarDays.map((day, index) => {
+                const hasEvent = day && config.calendarEvents.some(e => e.date === day)
+                const isToday = day === 14
+                return (
+                  <div
+                    key={index}
+                    className={`text-center text-xs py-1.5 rounded-md cursor-pointer transition-colors relative
+                      ${day ? "hover:bg-primary/10" : ""}
+                      ${isToday ? "bg-primary text-white font-medium" : "text-muted-foreground"}
+                    `}
+                  >
+                    {day}
+                    {hasEvent && !isToday && (
+                      <span className="absolute bottom-0.5 left-1/2 -translate-x-1/2 w-1 h-1 rounded-full bg-primary" />
+                    )}
+                  </div>
+                )
+              })}
+            </div>
+            <div className="border-t border-border pt-2">
+              <div className="text-xs text-muted-foreground mb-2">今日日程</div>
+              <div className="space-y-1.5">
+                {config.calendarEvents.filter(e => e.date === 14).map((event) => (
+                  <div key={event.id} className="flex items-center gap-2 text-xs">
+                    <span className={`w-1.5 h-1.5 rounded-full ${event.color}`} />
+                    <span className="text-muted-foreground">{event.time}</span>
+                    <span className="text-foreground">{event.title}</span>
+                  </div>
+                ))}
+              </div>
+            </div>
+          </CardContent>
+        </Card>
+
+        {/* 待办事项 - 带饼图 */}
+        <Card className="bg-card/80 backdrop-blur border-0 shadow-sm">
+          <CardHeader className="pb-3">
+            <div className="flex items-center justify-between">
+              <CardTitle className="text-base font-medium flex items-center gap-2 text-foreground">
+                <div className="w-8 h-8 rounded-lg bg-emerald-500/10 flex items-center justify-center">
+                  <CheckSquare className="w-4 h-4 text-emerald-500" />
+                </div>
+                待办事项
+                <Badge className="ml-1 text-xs px-1.5 py-0 bg-rose-500">
+                  {totalTodo}
+                </Badge>
+              </CardTitle>
+              <Button variant="ghost" size="sm" className="text-xs text-primary h-auto p-0 hover:bg-transparent">
+                查看全部
+                <ChevronRight className="w-3 h-3 ml-1" />
+              </Button>
+            </div>
+          </CardHeader>
+          <CardContent>
+            <div className="flex items-center gap-4">
+              <div className="w-24 h-24 relative">
+                <ChartContainer config={{}} className="w-full h-full">
+                  <RePieChart>
+                    <Pie
+                      data={todoPieData}
+                      cx="50%"
+                      cy="50%"
+                      innerRadius={25}
+                      outerRadius={40}
+                      dataKey="value"
+                      strokeWidth={0}
+                    >
+                      {todoPieData.map((entry, index) => (
+                        <Cell key={`cell-${index}`} fill={entry.color} />
+                      ))}
+                    </Pie>
+                  </RePieChart>
+                </ChartContainer>
+                <div className="absolute inset-0 flex items-center justify-center">
+                  <div className="text-center">
+                    <div className="text-lg font-bold text-foreground">{totalTodo}</div>
+                    <div className="text-xs text-muted-foreground">待办</div>
+                  </div>
+                </div>
+              </div>
+              <div className="flex-1 space-y-2">
+                {config.todoItems.map((item) => (
+                  <div key={item.id} className="flex items-center justify-between text-sm">
+                    <div className="flex items-center gap-2">
+                      <span className="w-2 h-2 rounded-full" style={{ backgroundColor: item.color }} />
+                      <span className="text-muted-foreground text-xs">{item.title}</span>
+                    </div>
+                    <Badge variant="secondary" className="text-xs h-5">
+                      {item.count}
+                    </Badge>
+                  </div>
+                ))}
+              </div>
+            </div>
+          </CardContent>
+        </Card>
+
+        {/* 账号安全中心 */}
+        <Card className="bg-card/80 backdrop-blur border-0 shadow-sm">
+          <CardHeader className="pb-3">
+            <div className="flex items-center justify-between">
+              <CardTitle className="text-base font-medium flex items-center gap-2 text-foreground">
+                <div className="w-8 h-8 rounded-lg bg-purple-500/10 flex items-center justify-center">
+                  <Shield className="w-4 h-4 text-purple-500" />
+                </div>
+                账号安全中心
+              </CardTitle>
+              <Button variant="ghost" size="sm" className="text-xs text-primary h-auto p-0 hover:bg-transparent">
+                安全设置
+                <ChevronRight className="w-3 h-3 ml-1" />
+              </Button>
+            </div>
+          </CardHeader>
+          <CardContent>
+            <div className="space-y-3">
+              {securityItems.map((item, index) => (
+                <div key={index} className="flex items-center justify-between">
+                  <span className="text-sm text-muted-foreground">{item.label}</span>
+                  <div className="flex items-center gap-3">
+                    <span
+                      className={`text-sm ${
+                        item.status === "strong" || item.status === "bound" || item.status === "normal"
+                          ? "text-emerald-500"
+                          : "text-muted-foreground"
+                      }`}
+                    >
+                      {item.statusText}
+                    </span>
+                    <Button variant="link" size="sm" className="text-xs text-primary h-auto p-0">
+                      {item.action}
+                    </Button>
+                  </div>
+                </div>
+              ))}
+            </div>
+          </CardContent>
+        </Card>
+
+        {/* 本周活跃度 - 折线图 */}
+        <Card className="bg-card/80 backdrop-blur border-0 shadow-sm">
+          <CardHeader className="pb-3">
+            <div className="flex items-center justify-between">
+              <CardTitle className="text-base font-medium flex items-center gap-2 text-foreground">
+                <div className="w-8 h-8 rounded-lg bg-blue-500/10 flex items-center justify-center">
+                  <TrendingUp className="w-4 h-4 text-blue-500" />
+                </div>
+                本周活跃度
+              </CardTitle>
+              <Badge variant="secondary" className="text-xs">
+                +12.5%
+              </Badge>
+            </div>
+          </CardHeader>
+          <CardContent>
+            <ChartContainer config={{}} className="h-[180px] w-full">
+              <AreaChart data={weeklyData}>
+                <defs>
+                  <linearGradient id="colorValue" x1="0" y1="0" x2="0" y2="1">
+                    <stop offset="5%" stopColor="#3b82f6" stopOpacity={0.3}/>
+                    <stop offset="95%" stopColor="#3b82f6" stopOpacity={0}/>
+                  </linearGradient>
+                </defs>
+                <CartesianGrid strokeDasharray="3 3" stroke="#f0f0f0" />
+                <XAxis dataKey="day" tick={{ fontSize: 11 }} stroke="#94a3b8" />
+                <YAxis tick={{ fontSize: 11 }} stroke="#94a3b8" />
+                <ChartTooltip content={<ChartTooltipContent />} />
+                <Area type="monotone" dataKey="value" stroke="#3b82f6" strokeWidth={2} fill="url(#colorValue)" />
+              </AreaChart>
+            </ChartContainer>
+          </CardContent>
+        </Card>
+
+        {/* 学习数据统计 - 柱形图 */}
+        <Card className="bg-card/80 backdrop-blur border-0 shadow-sm">
+          <CardHeader className="pb-3">
+            <div className="flex items-center justify-between">
+              <CardTitle className="text-base font-medium flex items-center gap-2 text-foreground">
+                <div className="w-8 h-8 rounded-lg bg-indigo-500/10 flex items-center justify-center">
+                  <BarChart3 className="w-4 h-4 text-indigo-500" />
+                </div>
+                学习数据统计
+              </CardTitle>
+            </div>
+          </CardHeader>
+          <CardContent>
+            <ChartContainer config={{}} className="h-[180px] w-full">
+              <BarChart data={monthlyTrend}>
+                <CartesianGrid strokeDasharray="3 3" stroke="#f0f0f0" />
+                <XAxis dataKey="month" tick={{ fontSize: 11 }} stroke="#94a3b8" />
+                <YAxis tick={{ fontSize: 11 }} stroke="#94a3b8" />
+                <ChartTooltip content={<ChartTooltipContent />} />
+                <Bar dataKey="students" fill="#6366f1" radius={[4, 4, 0, 0]} name="学生数" />
+              </BarChart>
+            </ChartContainer>
+          </CardContent>
+        </Card>
+
+        {/* 资源使用占比 */}
+        <Card className="bg-card/80 backdrop-blur border-0 shadow-sm">
+          <CardHeader className="pb-3">
+            <div className="flex items-center justify-between">
+              <CardTitle className="text-base font-medium flex items-center gap-2 text-foreground">
+                <div className="w-8 h-8 rounded-lg bg-cyan-500/10 flex items-center justify-center">
+                  <PieChart className="w-4 h-4 text-cyan-500" />
+                </div>
+                资源使用占比
+              </CardTitle>
+            </div>
+          </CardHeader>
+          <CardContent>
+            <div className="flex items-center gap-4">
+              <div className="w-28 h-28">
+                <ChartContainer config={{}} className="w-full h-full">
+                  <RePieChart>
+                    <Pie
+                      data={resourceUsage}
+                      cx="50%"
+                      cy="50%"
+                      innerRadius={30}
+                      outerRadius={50}
+                      dataKey="value"
+                      strokeWidth={0}
+                    >
+                      {resourceUsage.map((entry, index) => (
+                        <Cell key={`cell-${index}`} fill={entry.color} />
+                      ))}
+                    </Pie>
+                  </RePieChart>
+                </ChartContainer>
+              </div>
+              <div className="flex-1 space-y-2">
+                {resourceUsage.map((item) => (
+                  <div key={item.name} className="flex items-center justify-between text-xs">
+                    <div className="flex items-center gap-2">
+                      <span className="w-2 h-2 rounded-full" style={{ backgroundColor: item.color }} />
+                      <span className="text-muted-foreground">{item.name}</span>
+                    </div>
+                    <span className="text-foreground font-medium">{item.value}%</span>
+                  </div>
+                ))}
+              </div>
+            </div>
+          </CardContent>
+        </Card>
+
+        {/* 校园通讯录 */}
+        <Card className="bg-card/80 backdrop-blur border-0 shadow-sm">
+          <CardHeader className="pb-3">
+            <div className="flex items-center justify-between">
+              <CardTitle className="text-base font-medium flex items-center gap-2 text-foreground">
+                <div className="w-8 h-8 rounded-lg bg-teal-500/10 flex items-center justify-center">
+                  <Users className="w-4 h-4 text-teal-500" />
+                </div>
+                校园通讯录
+              </CardTitle>
+              <Button variant="ghost" size="sm" className="text-xs text-primary h-auto p-0 hover:bg-transparent">
+                查看全部
+                <ChevronRight className="w-3 h-3 ml-1" />
+              </Button>
+            </div>
+          </CardHeader>
+          <CardContent>
+            <div className="space-y-3">
+              {contacts.map((contact) => (
+                <div key={contact.id} className="flex items-center gap-3 p-2 -mx-2 rounded-lg hover:bg-slate-50 transition-colors cursor-pointer">
+                  <div className="w-9 h-9 bg-primary/10 rounded-full flex items-center justify-center text-primary text-sm font-medium">
+                    {contact.avatar}
+                  </div>
+                  <div className="flex-1">
+                    <div className="text-sm font-medium text-foreground">{contact.name}</div>
+                    <div className="text-xs text-muted-foreground">{contact.phone}</div>
+                  </div>
+                </div>
+              ))}
+            </div>
+          </CardContent>
+        </Card>
+      </div>
+    </div>
+  )
+}

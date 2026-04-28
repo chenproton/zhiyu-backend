@@ -1,0 +1,25 @@
+import { NextResponse } from 'next/server';
+import { promises as fs } from 'fs';
+import path from 'path';
+
+const dataPath = path.join(process.cwd(), 'data', 'app-modules.json');
+
+export async function GET() {
+  try {
+    const data = await fs.readFile(dataPath, 'utf-8');
+    return NextResponse.json(JSON.parse(data));
+  } catch {
+    return NextResponse.json({ platforms: [] });
+  }
+}
+
+export async function POST(request: Request) {
+  try {
+    const body = await request.json();
+    await fs.writeFile(dataPath, JSON.stringify(body, null, 2), 'utf-8');
+    return NextResponse.json({ success: true });
+  } catch (error) {
+    console.error('Error saving app modules:', error);
+    return NextResponse.json({ error: 'Failed to save' }, { status: 500 });
+  }
+}
