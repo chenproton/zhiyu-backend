@@ -17,11 +17,25 @@ export function AnnotationEditor({ x, y, theme, onSave, onCancel }: AnnotationEd
   const [imageUrl, setImageUrl] = useState<string | undefined>();
   const inputRef = useRef<HTMLTextAreaElement>(null);
   const fileInputRef = useRef<HTMLInputElement>(null);
+  const containerRef = useRef<HTMLDivElement>(null);
 
   const primaryColor = theme?.primary ?? '#ef4444';
 
   useEffect(() => {
     inputRef.current?.focus();
+  }, []);
+
+  // 阻止 focusin 冒泡到 document，避免被 Dialog/Sheet 的 focus trap 抢回焦点
+  useEffect(() => {
+    const el = containerRef.current;
+    if (!el) return;
+
+    const stopPropagation = (e: Event) => {
+      e.stopPropagation();
+    };
+
+    el.addEventListener('focusin', stopPropagation, true);
+    return () => el.removeEventListener('focusin', stopPropagation, true);
   }, []);
 
   const handleSubmit = (e: React.FormEvent) => {
@@ -44,6 +58,7 @@ export function AnnotationEditor({ x, y, theme, onSave, onCancel }: AnnotationEd
 
   return (
     <div
+      ref={containerRef}
       className="absolute bg-white rounded-lg shadow-xl border border-gray-200 p-4 w-72 pointer-events-auto"
       style={{
         left: `${x}%`,
@@ -52,7 +67,7 @@ export function AnnotationEditor({ x, y, theme, onSave, onCancel }: AnnotationEd
       }}
     >
       <div className="flex items-center justify-between mb-3">
-        <span className="text-sm text-gray-500 font-medium">新建标注</span>
+        <span className="text-sm text-gray-500 font-medium">New Annotation</span>
         <button
           onClick={onCancel}
           className="p-1 hover:bg-gray-100 rounded-full transition-colors"
@@ -66,7 +81,7 @@ export function AnnotationEditor({ x, y, theme, onSave, onCancel }: AnnotationEd
           ref={inputRef}
           value={content}
           onChange={(e) => setContent(e.target.value)}
-          placeholder="输入标注内容..."
+          placeholder="Enter annotation content..."
           className="w-full h-24 p-3 border border-gray-200 rounded-lg resize-none focus:outline-none focus:ring-2 focus:border-transparent text-sm"
           style={{ '--tw-ring-color': primaryColor } as React.CSSProperties}
         />
@@ -106,7 +121,7 @@ export function AnnotationEditor({ x, y, theme, onSave, onCancel }: AnnotationEd
             onClick={onCancel}
             className="flex-1 px-3 py-2 text-gray-600 bg-gray-100 rounded-lg hover:bg-gray-200 transition-colors text-sm font-medium"
           >
-            取消
+            Cancel
           </button>
           <button
             type="submit"
@@ -115,7 +130,7 @@ export function AnnotationEditor({ x, y, theme, onSave, onCancel }: AnnotationEd
             style={{ backgroundColor: primaryColor }}
           >
             <Check className="w-4 h-4" />
-            保存
+            Save
           </button>
         </div>
       </form>

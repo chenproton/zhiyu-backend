@@ -21,7 +21,7 @@ interface CommentPanelProps {
 export function CommentPanel({
   annotation,
   comments,
-  zIndex = 500,
+  zIndex = 2147483647,
   theme,
   onAddComment,
   onDeleteComment,
@@ -49,6 +49,19 @@ export function CommentPanel({
     updateIsMobile();
     window.addEventListener('resize', updateIsMobile);
     return () => window.removeEventListener('resize', updateIsMobile);
+  }, []);
+
+  // 阻止 focusin 冒泡到 document，避免被 Dialog/Sheet 的 focus trap 抢回焦点
+  useEffect(() => {
+    const el = panelRef.current;
+    if (!el) return;
+
+    const stopPropagation = (e: Event) => {
+      e.stopPropagation();
+    };
+
+    el.addEventListener('focusin', stopPropagation, true);
+    return () => el.removeEventListener('focusin', stopPropagation, true);
   }, []);
 
   // ESC 关闭面板
@@ -128,7 +141,7 @@ export function CommentPanel({
                 <div className="flex items-center gap-2">
                   <span className="text-sm font-medium text-gray-800">{comment.user}</span>
                   <span className="text-xs text-gray-400">
-                    {format(new Date(comment.createdAt), 'MM月dd日 HH:mm')}
+                    {format(new Date(comment.createdAt), 'MMM d, h:mm a')}
                   </span>
                 </div>
                 <p className="text-sm text-gray-600 mt-1 whitespace-pre-wrap break-words">{comment.text}</p>
@@ -143,7 +156,7 @@ export function CommentPanel({
                     className="text-xs text-blue-600 hover:text-blue-700 flex items-center gap-1"
                   >
                     <Reply className="w-3 h-3" />
-                    回复
+                    Reply
                   </button>
                   {mode === 'edit' && (
                     <button
@@ -151,7 +164,7 @@ export function CommentPanel({
                       className="text-xs text-red-600 hover:text-red-700 flex items-center gap-1"
                     >
                       <Trash2 className="w-3 h-3" />
-                      删除
+                      Delete
                     </button>
                   )}
                 </div>
@@ -160,7 +173,7 @@ export function CommentPanel({
                   <div className="mt-2 flex gap-2">
                     <input
                       type="text"
-                      placeholder="写下回复..."
+                      placeholder="Write a reply..."
                       className="flex-1 px-3 py-2 text-sm border border-gray-200 rounded-lg focus:outline-none focus:ring-1 focus:ring-blue-500"
                       onKeyDown={(e) => {
                         if (e.key === 'Enter' && e.currentTarget.value.trim()) {
@@ -241,14 +254,14 @@ export function CommentPanel({
                       }}
                       className="text-xs px-3 py-1 bg-gray-100 text-gray-600 rounded hover:bg-gray-200"
                     >
-                      取消
+                      Cancel
                     </button>
                     <button
                       onClick={handleSaveEdit}
                       className="text-xs px-3 py-1 text-white rounded hover:opacity-90"
                       style={{ backgroundColor: primaryColor }}
                     >
-                      保存
+                      Save
                     </button>
                   </div>
                 </div>
@@ -267,18 +280,18 @@ export function CommentPanel({
                         className="text-xs text-blue-600 hover:text-blue-700 flex items-center gap-1"
                       >
                         <Pencil className="w-3 h-3" />
-                        编辑
+                        Edit
                       </button>
                       <button
                         onClick={() => {
-                          if (confirm('确定要删除这条标注吗？')) {
+                          if (confirm('Are you sure you want to delete this annotation?')) {
                             onDeleteAnnotation();
                           }
                         }}
                         className="text-xs text-red-600 hover:text-red-700 flex items-center gap-1"
                       >
                         <Trash2 className="w-3 h-3" />
-                        删除
+                        Delete
                       </button>
                     </div>
                   )}
@@ -290,10 +303,10 @@ export function CommentPanel({
 
         <div className="space-y-3">
           <h4 className="text-sm font-medium text-gray-500 uppercase tracking-wide">
-            评论 ({comments.length})
+            Comments ({comments.length})
           </h4>
           {comments.length === 0 ? (
-            <p className="text-sm text-gray-400 italic">暂无评论，在下方添加一条吧！</p>
+            <p className="text-sm text-gray-400 italic">No comments yet. Add one below!</p>
           ) : (
             renderCommentThread()
           )}
@@ -318,7 +331,7 @@ export function CommentPanel({
               type="text"
               value={newComment}
               onChange={(e) => setNewComment(e.target.value)}
-              placeholder="添加评论..."
+              placeholder="Add a comment..."
               className="w-full px-4 py-2 border border-gray-200 rounded-lg focus:outline-none focus:ring-2 focus:border-transparent"
               style={{ '--tw-ring-color': primaryColor } as React.CSSProperties}
               onKeyDown={(e) => e.key === 'Enter' && handleAddComment()}
@@ -334,7 +347,7 @@ export function CommentPanel({
           <button
             onClick={() => fileInputRef.current?.click()}
             className="p-2 text-gray-500 hover:bg-gray-100 rounded-lg transition-colors border border-gray-200"
-            title="添加图片"
+            title="Add image"
           >
             <ImageIcon className="w-5 h-5" />
           </button>
