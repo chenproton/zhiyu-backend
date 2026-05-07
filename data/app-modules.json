@@ -8,19 +8,25 @@
           "id": "job-resource",
           "title": "岗位资源管理",
           "desc": "管理岗位相关的学习资源",
-          "href": ""
+          "href": "http://47.251.48.187:3002/positions"
         },
         {
           "id": "job-approval",
-          "title": "岗位审批情况",
-          "desc": "查看岗位资源审批状态",
-          "href": ""
+          "title": "公共能力池",
+          "desc": "管理和维护可复用的能力点库，支持分类管理和批量操作",
+          "href": "http://47.251.48.187:3002/abilities"
         },
         {
           "id": "job-carousel",
-          "title": "首页轮播管理",
-          "desc": "配置平台首页轮播内容",
-          "href": ""
+          "title": "批次分组管理",
+          "desc": "管理岗位建设批次分组，关联审批流程",
+          "href": "http://47.251.48.187:3002/batches"
+        },
+        {
+          "id": "career-1778117196175",
+          "title": "审批流程管理",
+          "desc": "预设校内审批流模板，供批次关联使用",
+          "href": "http://47.251.48.187:3002/workflows"
         }
       ]
     },
@@ -32,19 +38,25 @@
           "id": "scene-resource",
           "title": "场景资源管理",
           "desc": "管理实践场景学习资源",
-          "href": ""
+          "href": "http://47.251.48.187:3003/"
         },
         {
           "id": "scene-approval",
           "title": "场景审批情况",
           "desc": "查看场景资源审批状态",
-          "href": ""
+          "href": "http://47.251.48.187:3003/approvals"
         },
         {
           "id": "scene-carousel",
-          "title": "首页轮播管理",
-          "desc": "配置平台首页轮播内容",
-          "href": ""
+          "title": "批次分组管理",
+          "desc": "管理场景建设批次分组，关联审批流程",
+          "href": "http://47.251.48.187:3003/batches"
+        },
+        {
+          "id": "scene-1778117112632",
+          "title": "审批流程管理",
+          "desc": "预设校内审批流模板，供批次关联使用",
+          "href": "http://47.251.48.187:3003/workflows"
         }
       ]
     },

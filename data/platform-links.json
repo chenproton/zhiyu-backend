@@ -3,26 +3,26 @@
     {
       "id": "alliance",
       "name": "产业联盟与人资品牌服务平台",
-      "url": "http://baidu.com",
-      "enabled": true
+      "url": "",
+      "enabled": false
     },
     {
       "id": "career",
       "name": "职业岗位学习平台",
-      "url": "",
+      "url": "http://47.251.48.187:3002/student.html",
       "enabled": true
     },
     {
       "id": "scene",
       "name": "实践场景学习平台",
-      "url": "",
+      "url": "http://47.251.48.187:3003/student.html",
       "enabled": true
     },
     {
       "id": "ability",
       "name": "能力测评认证平台",
       "url": "",
-      "enabled": true
+      "enabled": false
     },
     {
       "id": "course",
