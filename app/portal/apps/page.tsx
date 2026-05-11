@@ -4,6 +4,7 @@ import { useState, useEffect, useRef } from "react"
 import Link from "next/link"
 import {
   Settings,
+  Users,
   Briefcase,
   Layers,
   CheckCircle,
@@ -25,6 +26,7 @@ import { useAppModules } from "@/hooks/use-platform-links"
 
 const menuItems = [
   { id: "system", label: "系统管理", icon: Settings },
+  { id: "alliance", label: "产业联盟与人资品牌服务平台", icon: Users },
   { id: "career", label: "职业岗位学习平台", icon: Briefcase },
   { id: "scene", label: "实践场景学习平台", icon: Layers },
   { id: "ability", label: "能力测评认证平台", icon: CheckCircle },
@@ -52,6 +54,7 @@ interface PlatformStyle {
 
 const platformStyles: Record<string, PlatformStyle> = {
   system: { iconColor: "text-blue-600", iconBg: "bg-blue-50" },
+  alliance: { iconColor: "text-rose-600", iconBg: "bg-rose-50" },
   career: { iconColor: "text-purple-600", iconBg: "bg-purple-50" },
   scene: { iconColor: "text-cyan-600", iconBg: "bg-cyan-50" },
   ability: { iconColor: "text-emerald-600", iconBg: "bg-emerald-50" },

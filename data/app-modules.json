@@ -1,6 +1,30 @@
 {
   "platforms": [
     {
+      "id": "alliance",
+      "name": "产业联盟与人资品牌服务平台",
+      "modules": [
+        {
+          "id": "alliance-1",
+          "title": "产教融合管理",
+          "desc": "进行产教资源的高效对接与协同管理 ",
+          "href": "http://47.251.48.187:3004/admin"
+        },
+        {
+          "id": "alliance-2",
+          "title": "品牌运营管理",
+          "desc": "管理六大类品牌资产的配置、审核与发布",
+          "href": "http://47.251.48.187:3004/admin/brands"
+        },
+        {
+          "id": "alliance-3",
+          "title": "就业服务管理",
+          "desc": "承接校企合作在就业环节的落地，管理各类合作主体发布的岗位需求",
+          "href": "http://47.251.48.187:3004/admin/employment"
+        }
+      ]
+    },
+    {
       "id": "career",
       "name": "职业岗位学习平台",
       "modules": [

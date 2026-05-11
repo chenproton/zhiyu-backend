@@ -3,8 +3,8 @@
     {
       "id": "alliance",
       "name": "产业联盟与人资品牌服务平台",
-      "url": "",
-      "enabled": false
+      "url": "http://47.251.48.187:3004/",
+      "enabled": true
     },
     {
       "id": "career",
@@ -15,7 +15,7 @@
     {
       "id": "scene",
       "name": "实践场景学习平台",
-      "url": "http://47.251.48.187:3003/student.html",
+      "url": "http://47.251.48.187:3003/student_navigation.html",
       "enabled": true
     },
     {

@@ -1,7 +1,6 @@
 import type { Metadata } from 'next'
 import { Geist, Geist_Mono } from 'next/font/google'
 import { Analytics } from '@vercel/analytics/next'
-import { AnnotationSystem } from '@my-app/annotation-system'
 import './globals.css'
 
 const _geist = Geist({ subsets: ["latin"] });
@@ -39,18 +38,7 @@ export default function RootLayout({
     <html lang="zh-CN">
       <body className="font-sans antialiased">
         {children}
-        <AnnotationSystem
-          defaultMode="off"
-          theme={{
-            primary: '#3b82f6',
-            secondary: '#10b981',
-            danger: '#ef4444',
-            dotSize: 28,
-            panelBg: '#ffffff',
-            panelText: '#374151',
-          }}
-        />
-        <Analytics />
+<Analytics />
       </body>
     </html>
   )
