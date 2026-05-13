@@ -28,49 +28,49 @@
       "id": "course",
       "name": "数字课程服务平台",
       "url": "",
-      "enabled": true
+      "enabled": false
     },
     {
       "id": "ai",
       "name": "AI 服务平台",
       "url": "",
-      "enabled": true
+      "enabled": false
     },
     {
       "id": "resource",
       "name": "教学资源共享服务平台",
       "url": "",
-      "enabled": true
+      "enabled": false
     },
     {
       "id": "mall",
       "name": "教学资源商城",
       "url": "",
-      "enabled": true
+      "enabled": false
     },
     {
       "id": "research",
       "name": "教科研服务平台",
       "url": "",
-      "enabled": true
+      "enabled": false
     },
     {
       "id": "affairs",
       "name": "教务服务平台",
       "url": "",
-      "enabled": true
+      "enabled": false
     },
     {
       "id": "decision",
       "name": "决策支持平台",
       "url": "",
-      "enabled": true
+      "enabled": false
     },
     {
       "id": "employment",
       "name": "就业服务平台",
       "url": "",
-      "enabled": true
+      "enabled": false
     }
   ]
 }
