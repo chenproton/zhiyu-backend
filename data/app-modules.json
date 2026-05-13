@@ -7,25 +7,25 @@
         {
           "id": "alliance-1",
           "title": "产教融合管理",
-          "desc": "产教资源的高效对接与协同管理中枢",
+          "desc": "产教资源协同对接中枢",
           "href": "http://47.251.48.187:3004/admin"
         },
         {
           "id": "alliance-2",
           "title": "品牌运营管理",
-          "desc": "六大类品牌资产的配置审核与发布中心",
+          "desc": "品牌资产配置发布中心",
           "href": "http://47.251.48.187:3004/admin/brands"
         },
         {
           "id": "alliance-3",
           "title": "就业服务管理",
-          "desc": "校企合作就业岗位需求统筹平台",
+          "desc": "品牌资产配置发布中心",
           "href": "http://47.251.48.187:3004/admin/employment/projects"
         },
         {
           "id": "alliance-1778635151593",
-          "title": "【企业端】就业服务平台",
-          "desc": "企业人才招聘与校企对接的自助服务窗口",
+          "title": "【企业端】服务平台",
+          "desc": "品牌资产配置发布中心",
           "href": "http://47.251.48.187:3004/partner/login"
         }
       ]
@@ -37,19 +37,19 @@
         {
           "id": "job-resource",
           "title": "岗位资源管理",
-          "desc": "岗位相关学习资源的统一管理后台",
+          "desc": "职业岗位资源管理后台",
           "href": "http://47.251.48.187:3002/positions"
         },
         {
           "id": "job-carousel",
           "title": "批次分组管理",
-          "desc": "岗位建设批次分组及审批关联管理",
+          "desc": "批次分组与审批关联管理",
           "href": "http://47.251.48.187:3002/batches"
         },
         {
           "id": "career-1778117196175",
           "title": "审批流程管理",
-          "desc": "校内审批流模板的配置",
+          "desc": "审批流模板预设配置",
           "href": "http://47.251.48.187:3002/workflows"
         }
       ]
@@ -61,25 +61,25 @@
         {
           "id": "scene-resource",
           "title": "场景资源管理",
-          "desc": "实践场景学习资源的统一管理后台",
+          "desc": "场景学习资源管理后台",
           "href": "http://47.251.48.187:3003/"
         },
         {
           "id": "scene-approval",
           "title": "场景审批情况",
-          "desc": "查看场景资源审批状态",
+          "desc": "场景审批状态可视化追踪",
           "href": "http://47.251.48.187:3003/approvals"
         },
         {
           "id": "scene-carousel",
           "title": "批次分组管理",
-          "desc": "校内审批流模板的配置",
+          "desc": "批次分组与审批关联管理",
           "href": "http://47.251.48.187:3003/batches"
         },
         {
           "id": "scene-1778117112632",
           "title": "审批流程管理",
-          "desc": "场景资源全流程审批状态的可视化追踪",
+          "desc": "审批流模板预设配置",
           "href": "http://47.251.48.187:3003/workflows"
         }
       ]
