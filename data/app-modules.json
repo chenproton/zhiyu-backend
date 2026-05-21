@@ -8,25 +8,25 @@
           "id": "alliance-1",
           "title": "产教融合管理",
           "desc": "产教资源协同对接中枢",
-          "href": "http://47.251.48.187:3004/admin"
+          "href": "http://111.170.170.202:3004/admin"
         },
         {
           "id": "alliance-2",
           "title": "品牌运营管理",
-          "desc": "品牌资产配置发布中心",
-          "href": "http://47.251.48.187:3004/admin/brands"
+          "desc": "品牌资产配置与发布管理",
+          "href": "http://111.170.170.202:3004/admin/brands"
         },
         {
           "id": "alliance-3",
           "title": "就业服务管理",
-          "desc": "品牌资产配置发布中心",
-          "href": "http://47.251.48.187:3004/admin/employment/projects"
+          "desc": "就业项目与岗位推荐管理",
+          "href": "http://111.170.170.202:3004/admin/employment"
         },
         {
-          "id": "alliance-1778635151593",
+          "id": "alliance-4",
           "title": "【企业端】服务平台",
-          "desc": "品牌资产配置发布中心",
-          "href": "http://47.251.48.187:3004/partner/login"
+          "desc": "企业合作伙伴登录入口",
+          "href": "http://111.170.170.202:3004/partner/login"
         }
       ]
     },
@@ -35,22 +35,22 @@
       "name": "职业岗位学习平台",
       "modules": [
         {
-          "id": "job-resource",
+          "id": "career-1",
           "title": "岗位资源管理",
-          "desc": "职业岗位资源管理后台",
-          "href": "http://47.251.48.187:3002/positions"
+          "desc": "职业岗位资源与能力模型管理",
+          "href": "http://111.170.170.202:3002/positions"
         },
         {
-          "id": "job-carousel",
+          "id": "career-2",
           "title": "批次分组管理",
           "desc": "批次分组与审批关联管理",
-          "href": "http://47.251.48.187:3002/batches"
+          "href": "http://111.170.170.202:3002/batches"
         },
         {
-          "id": "career-1778117196175",
+          "id": "career-3",
           "title": "审批流程管理",
-          "desc": "审批流模板预设配置",
-          "href": "http://47.251.48.187:3002/workflows"
+          "desc": "审批流模板预设与配置",
+          "href": "http://111.170.170.202:3002/workflows"
         }
       ]
     },
@@ -59,28 +59,22 @@
       "name": "实践场景学习平台",
       "modules": [
         {
-          "id": "scene-resource",
+          "id": "scene-1",
           "title": "场景资源管理",
-          "desc": "场景学习资源管理后台",
-          "href": "http://47.251.48.187:3003/"
+          "desc": "实践场景资源总览与管理",
+          "href": "http://111.170.170.202:3003/"
         },
         {
-          "id": "scene-approval",
-          "title": "场景审批情况",
-          "desc": "场景审批状态可视化追踪",
-          "href": "http://47.251.48.187:3003/approvals"
-        },
-        {
-          "id": "scene-carousel",
+          "id": "scene-2",
           "title": "批次分组管理",
           "desc": "批次分组与审批关联管理",
-          "href": "http://47.251.48.187:3003/batches"
+          "href": "http://111.170.170.202:3003/batches"
         },
         {
-          "id": "scene-1778117112632",
+          "id": "scene-3",
           "title": "审批流程管理",
           "desc": "审批流模板预设配置",
-          "href": "http://47.251.48.187:3003/workflows"
+          "href": "http://111.170.170.202:3003/workflows"
         }
       ]
     },
@@ -90,21 +84,33 @@
       "modules": [
         {
           "id": "ability-1",
-          "title": "测评题库管理",
-          "desc": "管理测评题库与量规",
-          "href": ""
+          "title": "通用测评管理",
+          "desc": "测评题库与通用测评管理",
+          "href": "http://111.170.170.202:3005/question-banks"
         },
         {
           "id": "ability-2",
-          "title": "认证标准配置",
-          "desc": "配置能力认证标准与等级",
-          "href": ""
+          "title": "岗位认定管理",
+          "desc": "岗位能力模型与认定管理",
+          "href": "http://111.170.170.202:3005/job-ability"
         },
         {
           "id": "ability-3",
-          "title": "测评结果分析",
-          "desc": "查看学生能力测评结果",
-          "href": ""
+          "title": "测评方式库",
+          "desc": "能力测评方法与量规配置",
+          "href": "http://111.170.170.202:3005/evaluation-methods"
+        },
+        {
+          "id": "ability-4",
+          "title": "毕业设计管理",
+          "desc": "毕业设计选题与评审管理",
+          "href": "http://111.170.170.202:3005/graduation-project/topics"
+        },
+        {
+          "id": "ability-5",
+          "title": "学生画像管理",
+          "desc": "学生能力画像与成长档案",
+          "href": "http://111.170.170.202:3005/student-portrait/portraits"
         }
       ]
     },
@@ -114,21 +120,57 @@
       "modules": [
         {
           "id": "course-1",
-          "title": "课程资源管理",
-          "desc": "管理数字化课程资源",
-          "href": ""
+          "title": "课程后台管理",
+          "desc": "体系化课程建设与审批管理",
+          "href": "http://111.170.170.202:3006/admin/system"
         },
         {
           "id": "course-2",
-          "title": "课程分类配置",
-          "desc": "配置课程分类与标签体系",
-          "href": ""
+          "title": "智慧课堂平台",
+          "desc": "教师教学分析与排课管理",
+          "href": "http://111.170.170.202:3006/teacher"
         },
         {
           "id": "course-3",
-          "title": "学习进度跟踪",
-          "desc": "跟踪学生课程学习进度",
-          "href": ""
+          "title": "学生学习平台",
+          "desc": "学生课程学习与进度跟踪",
+          "href": "http://111.170.170.202:3006/learn"
+        }
+      ]
+    },
+    {
+      "id": "affairs",
+      "name": "教务服务平台",
+      "modules": [
+        {
+          "id": "affairs-1",
+          "title": "教务数据中心",
+          "desc": "教务数据总览与管理入口",
+          "href": "http://111.170.170.202:3007/admin"
+        },
+        {
+          "id": "affairs-2",
+          "title": "培养方案管理",
+          "desc": "人才培养方案制定与审批",
+          "href": "http://111.170.170.202:3007/admin/programs"
+        },
+        {
+          "id": "affairs-3",
+          "title": "教学运行中心",
+          "desc": "学期课程排课与调课管理",
+          "href": "http://111.170.170.202:3007/admin/operations/calendar"
+        },
+        {
+          "id": "affairs-4",
+          "title": "学业认定中心",
+          "desc": "学生成绩与学分认定管理",
+          "href": "http://111.170.170.202:3007/admin/academics/grades"
+        },
+        {
+          "id": "affairs-5",
+          "title": "教学成果管理",
+          "desc": "教学成果申报与审核管理",
+          "href": "http://111.170.170.202:3007/admin/achievements/applications"
         }
       ]
     },
@@ -200,30 +242,6 @@
           "id": "research-3",
           "title": "学术交流活动",
           "desc": "管理学术交流与研讨活动",
-          "href": ""
-        }
-      ]
-    },
-    {
-      "id": "affairs",
-      "name": "教务服务平台",
-      "modules": [
-        {
-          "id": "affairs-1",
-          "title": "排课管理",
-          "desc": "管理学期课程排课安排",
-          "href": ""
-        },
-        {
-          "id": "affairs-2",
-          "title": "学分认定",
-          "desc": "管理学生学分认定与转换",
-          "href": ""
-        },
-        {
-          "id": "affairs-3",
-          "title": "学籍管理",
-          "desc": "管理学生学籍信息变更",
           "href": ""
         }
       ]
