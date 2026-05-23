@@ -5,7 +5,7 @@
 set -euo pipefail
 
 # ==================== 配置区 ====================
-REMOTE_HOST="${REMOTE_HOST:-47.251.48.187}"
+REMOTE_HOST="${REMOTE_HOST:-111.170.170.202}"
 REMOTE_USER="${REMOTE_USER:-root}"
 REMOTE_BASE="${REMOTE_BASE:-/var/www}"
 
@@ -24,6 +24,10 @@ PUBLIC_DIR="$SCRIPT_DIR/public"
 
 SSH_OPTS="-o StrictHostKeyChecking=no -o ConnectTimeout=15 -o ServerAliveInterval=60 -o ServerAliveCountMax=3 -p $SSH_PORT"
 
+# 自定义路由数据备份配置
+BACKEND_DATA_FILES=("data/platform-links.json" "data/app-modules.json")
+BACKEND_BACKUP_DIR="/tmp/backend-data-backup"
+
 # ==================== 主入口 ====================
 
 echo ""
@@ -32,8 +36,13 @@ echo ""
 
 cd "$SCRIPT_DIR"
 
+# ── 0. 备份远程自定义路由数据 ────────────────────────────────────────
+echo "[0/4] 备份远程自定义路由数据..."
+ssh $SSH_OPTS "$REMOTE_USER@$REMOTE_HOST" \
+  "rm -rf $BACKEND_BACKUP_DIR; mkdir -p $BACKEND_BACKUP_DIR; for f in ${BACKEND_DATA_FILES[*]}; do src=\"$REMOTE_DIR/\$f\"; dst=\"$BACKEND_BACKUP_DIR/\$(basename \$f)\"; if [ -f \"\$src\" ]; then cp \"\$src\" \"\$dst\" && echo \"已备份: \$f\"; else echo \"远程无: \$f\"; fi; done"
+
 # ── 1. 本地构建 ──────────────────────────────────────────────────────
-echo "[1/3] 本地构建中..."
+echo "[1/4] 本地构建中..."
 rm -rf "$STANDALONE_DIR"
 
 # 编译
@@ -67,9 +76,15 @@ rsync -az --delete-after \
   "$STANDALONE_DIR/" \
   "$REMOTE_USER@$REMOTE_HOST:$REMOTE_DIR/"
 
-# ── 3. 服务器进程切换 ──────────────────────────────────────────────
+# ── 3. 恢复远程自定义路由数据（必须在 PM2 重启前恢复）
 echo ""
-echo "[3/3] 重启 PM2 服务..."
+echo "[3/4] 恢复远程自定义路由数据..."
+ssh $SSH_OPTS "$REMOTE_USER@$REMOTE_HOST" \
+  "for f in ${BACKEND_DATA_FILES[*]}; do src=\"$BACKEND_BACKUP_DIR/\$(basename \$f)\"; dst=\"$REMOTE_DIR/\$f\"; if [ -f \"\$src\" ]; then mkdir -p \$(dirname \"\$dst\") && cp \"\$src\" \"\$dst\" && echo \"已恢复: \$f\"; else echo \"无备份: \$f\"; fi; done"
+
+# ── 4. 服务器进程切换 ──────────────────────────────────────────────
+echo ""
+echo "[4/4] 重启 PM2 服务..."
 
 ssh $SSH_OPTS "$REMOTE_USER@$REMOTE_HOST" \
   "export SITE_NAME='$SITE_NAME'; export PORT='$PORT'; export REMOTE_DIR='$REMOTE_DIR'; bash -s" << 'REMOTE_EOF'
