@@ -1,52 +1,39 @@
 #!/bin/bash
 #
-# deploy.sh - Next.js Standalone 部署脚本 (v5.1 智能全自动清扫版)
+# deploy.sh - Next.js Standalone 本地构建发布脚本
 #
 set -euo pipefail
 
 # ==================== 配置区 ====================
-REMOTE_HOST="${REMOTE_HOST:-111.170.170.202}"
-REMOTE_USER="${REMOTE_USER:-root}"
-REMOTE_BASE="${REMOTE_BASE:-/var/www}"
-
-# 每个项目修改这里即可
-SITE_NAME="backend" 
+SITE_NAME="backend"
 PORT=3001
-
-SSH_PORT="${SSH_PORT:-22}"
 
 # ==================== 自动推导 ====================
 SCRIPT_DIR="$(cd "$(dirname "$0")" && pwd)"
-REMOTE_DIR="$REMOTE_BASE/$SITE_NAME"
 STANDALONE_DIR="$SCRIPT_DIR/.next/standalone"
 STATIC_DIR="$SCRIPT_DIR/.next/static"
 PUBLIC_DIR="$SCRIPT_DIR/public"
 
-SSH_OPTS="-o StrictHostKeyChecking=no -o ConnectTimeout=15 -o ServerAliveInterval=60 -o ServerAliveCountMax=3 -p $SSH_PORT"
-
-# 自定义路由数据备份配置
-BACKEND_DATA_FILES=("data/platform-links.json" "data/app-modules.json")
-BACKEND_BACKUP_DIR="/tmp/backend-data-backup"
-
 # ==================== 主入口 ====================
 
 echo ""
-echo "🚀 启动智能部署: [$SITE_NAME]"
+echo "🚀 启动本地构建发布: [$SITE_NAME]"
 echo ""
 
 cd "$SCRIPT_DIR"
 
-# ── 0. 备份远程自定义路由数据 ────────────────────────────────────────
-echo "[0/4] 备份远程自定义路由数据..."
-ssh $SSH_OPTS "$REMOTE_USER@$REMOTE_HOST" \
-  "rm -rf $BACKEND_BACKUP_DIR; mkdir -p $BACKEND_BACKUP_DIR; for f in ${BACKEND_DATA_FILES[*]}; do src=\"$REMOTE_DIR/\$f\"; dst=\"$BACKEND_BACKUP_DIR/\$(basename \$f)\"; if [ -f \"\$src\" ]; then cp \"\$src\" \"\$dst\" && echo \"已备份: \$f\"; else echo \"远程无: \$f\"; fi; done"
-
 # ── 1. 本地构建 ──────────────────────────────────────────────────────
-echo "[1/4] 本地构建中..."
+echo "[1/2] 本地构建中..."
 rm -rf "$STANDALONE_DIR"
 
-# 编译
-pnpm install --frozen-lockfile
+# 智能依赖安装：已存在则跳过，避免每次重新比对版本
+if [ ! -d "node_modules" ] || [ "${FORCE_INSTALL:-0}" = "1" ]; then
+  echo "  📦 安装依赖..."
+  pnpm install --prefer-offline --no-frozen-lockfile
+else
+  echo "  ⏩ node_modules 已存在，跳过依赖安装（设置 FORCE_INSTALL=1 可强制重新安装）"
+fi
+
 pnpm build
 
 # 组装产物
@@ -57,57 +44,28 @@ fi
 
 echo "✅ 本地构建完成"
 
-# ── 2. 远程智能清扫与同步 ──────────────────────────────────────────
+# ── 2. 本地 PM2 启动 ────────────────────────────────────────────────
 echo ""
-echo "[2/3] 远程清扫与同步..."
+echo "[2/2] 本地 PM2 启动服务..."
 
-# 【优化点】智能识别并清理远程所有干扰目录 (dist, .next, standalone)
-# 这样无论子模块叫什么名字，rsync 都不再会报 cannot delete 错误
-ssh $SSH_OPTS "$REMOTE_USER@$REMOTE_HOST" \
-  "mkdir -p $REMOTE_DIR && find $REMOTE_DIR -maxdepth 3 \( -name 'dist' -o -name '.next' -o -name 'standalone' \) -exec rm -rf {} + || true"
+export NVM_DIR="$HOME/.nvm"
+[ -s "$NVM_DIR/nvm.sh" ] && . "$NVM_DIR/nvm.sh"
 
-# 执行增量同步
-rsync -az --delete-after \
-  -e "ssh $SSH_OPTS" \
-  --timeout=300 \
-  --exclude='*.map' \
-  --exclude='*.log' \
-  --exclude='logs/' \
-  "$STANDALONE_DIR/" \
-  "$REMOTE_USER@$REMOTE_HOST:$REMOTE_DIR/"
+# 彻底删除旧进程防止残留
+pm2 delete "$SITE_NAME" &>/dev/null || true
 
-# ── 3. 恢复远程自定义路由数据（必须在 PM2 重启前恢复）
-echo ""
-echo "[3/4] 恢复远程自定义路由数据..."
-ssh $SSH_OPTS "$REMOTE_USER@$REMOTE_HOST" \
-  "for f in ${BACKEND_DATA_FILES[*]}; do src=\"$BACKEND_BACKUP_DIR/\$(basename \$f)\"; dst=\"$REMOTE_DIR/\$f\"; if [ -f \"\$src\" ]; then mkdir -p \$(dirname \"\$dst\") && cp \"\$src\" \"\$dst\" && echo \"已恢复: \$f\"; else echo \"无备份: \$f\"; fi; done"
+cd "$STANDALONE_DIR"
+NODE_BIN=$(which node)
 
-# ── 4. 服务器进程切换 ──────────────────────────────────────────────
-echo ""
-echo "[4/4] 重启 PM2 服务..."
+# 启动新进程
+PORT="$PORT" HOSTNAME="0.0.0.0" pm2 start server.js \
+  --name "$SITE_NAME" \
+  --interpreter "$NODE_BIN" \
+  --restart-delay 3000
 
-ssh $SSH_OPTS "$REMOTE_USER@$REMOTE_HOST" \
-  "export SITE_NAME='$SITE_NAME'; export PORT='$PORT'; export REMOTE_DIR='$REMOTE_DIR'; bash -s" << 'REMOTE_EOF'
-  set -e
-  export NVM_DIR="$HOME/.nvm"
-  [ -s "$NVM_DIR/nvm.sh" ] && . "$NVM_DIR/nvm.sh"
-
-  # 彻底删除旧进程防止残留
-  pm2 delete "$SITE_NAME" &>/dev/null || true
-
-  cd "$REMOTE_DIR"
-  NODE_BIN=$(which node)
-  
-  # 启动新进程
-  PORT="$PORT" HOSTNAME="0.0.0.0" pm2 start server.js \
-    --name "$SITE_NAME" \
-    --interpreter "$NODE_BIN" \
-    --restart-delay 3000
-
-  pm2 save > /dev/null
-REMOTE_EOF
+pm2 save > /dev/null
 
 echo ""
-echo "✨ [$SITE_NAME] 部署任务圆满完成！"
-echo "   访问地址: http://$REMOTE_HOST:$PORT"
+echo "✨ [$SITE_NAME] 本地发布完成！"
+echo "   访问地址: http://localhost:$PORT"
 echo ""
