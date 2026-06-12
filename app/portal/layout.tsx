@@ -1,5 +1,6 @@
 import { TopNav } from "@/components/portal/top-nav"
 import { AuthProvider } from "@/contexts/auth-context"
+import { YiKnowAssistant } from "@/components/portal/yi-know-assistant"
 
 export default function PortalLayout({
   children,
@@ -13,6 +14,7 @@ export default function PortalLayout({
         <main>
           {children}
         </main>
+        <YiKnowAssistant />
       </div>
     </AuthProvider>
   )
