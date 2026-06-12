@@ -376,7 +376,7 @@ export default function PortalHomePage() {
   const currentPlatforms = version === "1.0" ? platforms : v2Platforms
 
   return (
-    <div className="min-h-[calc(100vh-3.5rem)] bg-[#f5f7fa] flex flex-col pt-16">
+    <div className="min-h-[calc(100vh-3.5rem)] bg-[#f5f7fa] flex flex-col pt-16 justify-between">
       {/* Main Content */}
       <div className="flex-1 px-8 py-5">
         {/* Title Section */}
@@ -440,7 +440,7 @@ export default function PortalHomePage() {
       </div>
 
       {/* Footer */}
-      <footer className="border-t border-border bg-background py-4 px-8">
+      <footer className="border-t border-border bg-background py-1 px-8">
         <div className="flex items-center justify-between text-xs text-muted-foreground">
           <div className="flex items-center gap-6">
             <span className="hover:text-primary cursor-pointer transition-colors">关于平台</span>
@@ -448,8 +448,7 @@ export default function PortalHomePage() {
             <span className="hover:text-primary cursor-pointer transition-colors">留言反馈</span>
           </div>
           <div className="text-right">
-            <div>杭州知与未来科技有限公司</div>
-            <div>浙ICP xxxxxxxx</div>
+            <span>杭州知与未来科技有限公司 · 浙ICP xxxxxxxx</span>
           </div>
         </div>
       </footer>

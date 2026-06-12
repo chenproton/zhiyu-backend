@@ -214,13 +214,13 @@ interface PromptTag {
 }
 
 const PROMPT_TAGS: PromptTag[] = [
+  { label: "建岗位", value: "我要建岗位" },
+  { label: "建场景", value: "我要建场景" },
+  { label: "AI建岗", value: "我要AI帮我建岗位" },
   { label: "网络安全", value: "我想做网络安全工程师，需要学什么？" },
   { label: "实训场景", value: "信息安全专业有哪些实训场景？" },
   { label: "岗位认证", value: "我距离岗位认证还差哪些能力？" },
   { label: "校企合作", value: "我们学校有哪些校企合作单位？" },
-  { label: "建岗位", value: "我要建岗位" },
-  { label: "建场景", value: "我要建场景" },
-  { label: "AI建岗", value: "我要AI帮我建岗位" },
 ]
 
 interface ChatMessage {
@@ -688,7 +688,7 @@ export function YiKnowAssistant() {
       <button
         onClick={() => handleOpenChange(!open)}
         className={cn(
-          "fixed bottom-6 right-6 z-[100] flex items-center gap-2 rounded-full pl-4 pr-3 py-3 shadow-xl transition-all hover:scale-105 active:scale-95",
+          "fixed bottom-10 right-6 z-[100] flex items-center gap-2 rounded-full pl-4 pr-3 py-3 shadow-xl transition-all hover:scale-105 active:scale-95",
           open
             ? "bg-foreground text-background"
             : "bg-primary text-primary-foreground hover:bg-primary/90"
@@ -702,7 +702,7 @@ export function YiKnowAssistant() {
 
       {/* Assistant panel */}
       {open && (
-        <div className="fixed bottom-24 right-6 z-[100] w-[420px] max-w-[calc(100vw-3rem)] h-[720px] max-h-[calc(100vh-8rem)] bg-background border rounded-2xl shadow-2xl flex flex-col overflow-hidden">
+        <div className="fixed bottom-28 right-6 z-[100] w-[420px] max-w-[calc(100vw-3rem)] h-[720px] max-h-[calc(100vh-8rem)] bg-background border rounded-2xl shadow-2xl flex flex-col overflow-hidden">
           {/* Header */}
           <div className="px-4 py-3 border-b bg-gradient-to-r from-primary/10 to-primary/5 flex items-center justify-between shrink-0">
             <div className="flex items-center gap-2">
@@ -771,14 +771,14 @@ export function YiKnowAssistant() {
                   <Sparkles className="w-3 h-3 text-primary" />
                   <span className="text-[11px] font-medium text-muted-foreground">示例问题：</span>
                 </div>
-                <div className="flex gap-2 overflow-x-auto no-scrollbar whitespace-nowrap"003e
+                <div className="flex gap-2 overflow-x-auto no-scrollbar whitespace-nowrap">
                   {PROMPT_TAGS.map((tag) => (
                     <PromptTagItem key={tag.label} tag={tag} onClick={handleFillPrompt} />
                   ))}
                 </div>
               </div>
             )}
-            <div className="p-2 bg-background border-t flex items-center gap-2">
+            <div className="p-2 pt-3 bg-background border-t flex items-center gap-2">
               <div className="relative flex-1">
                 <Search className="absolute left-3 top-1/2 -translate-y-1/2 w-4 h-4 text-muted-foreground" />
                 <Input
