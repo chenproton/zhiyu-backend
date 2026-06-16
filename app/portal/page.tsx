@@ -376,9 +376,9 @@ export default function PortalHomePage() {
   const currentPlatforms = version === "1.0" ? platforms : v2Platforms
 
   return (
-    <div className="min-h-[calc(100vh-3.5rem)] bg-[#f5f7fa] flex flex-col pt-16 justify-between">
+    <div className="relative min-h-screen bg-[#f5f7fa] pt-14 pb-12">
       {/* Main Content */}
-      <div className="flex-1 px-8 py-5">
+      <div className="px-8 py-5 min-h-[calc(100vh-3.5rem-48px)]">
         {/* Title Section */}
         <div className="text-center mb-5">
           <div className="flex items-center justify-center gap-3 mb-3">
@@ -440,16 +440,14 @@ export default function PortalHomePage() {
       </div>
 
       {/* Footer */}
-      <footer className="border-t border-border bg-background py-1 px-8">
-        <div className="flex items-center justify-between text-xs text-muted-foreground">
-          <div className="flex items-center gap-6">
-            <span className="hover:text-primary cursor-pointer transition-colors">关于平台</span>
-            <span className="hover:text-primary cursor-pointer transition-colors">使用帮助</span>
-            <span className="hover:text-primary cursor-pointer transition-colors">留言反馈</span>
+      <footer style={{ position: "fixed", bottom: 0, left: 0, right: 0, borderTop: "1px solid #d7d7d7", background: "#fff", height: "48px", zIndex: 40 }}>
+        <div style={{ maxWidth: "1280px", height: "100%", margin: "0 auto", padding: "0 32px", display: "flex", alignItems: "center", justifyContent: "space-between", fontSize: "12px", color: "#636363" }}>
+          <div style={{ display: "flex", alignItems: "center", gap: "24px" }}>
+            <span style={{ cursor: "pointer" }}>关于平台</span>
+            <span style={{ cursor: "pointer" }}>使用帮助</span>
+            <span style={{ cursor: "pointer" }}>留言反馈</span>
           </div>
-          <div className="text-right">
-            <span>杭州知与未来科技有限公司 · 浙ICP xxxxxxxx</span>
-          </div>
+          <div>杭州知与未来科技有限公司 · 浙ICP xxxxxxxx</div>
         </div>
       </footer>
     </div>
