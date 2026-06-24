@@ -106,10 +106,9 @@ function ModuleCard({
       <Tooltip>
         <TooltipTrigger asChild>
           <button
-            className="absolute top-4 right-4 w-6 h-6 flex items-center justify-center rounded-full hover:bg-amber-50 transition-colors opacity-0 group-hover:opacity-100"
+            className="absolute top-4 right-4 w-6 h-6 flex items-center justify-center rounded-full hover:bg-amber-50 transition-colors opacity-0 group-hover:opacity-100 z-10"
             onClick={(e) => {
               e.preventDefault()
-              e.stopPropagation()
             }}
           >
             <Star className="w-3.5 h-3.5 text-muted-foreground hover:text-amber-400 transition-colors" />
