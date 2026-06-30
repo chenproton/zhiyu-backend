@@ -9,7 +9,7 @@ export default function PortalLayout({
 }) {
   return (
     <AuthProvider>
-      <div className="min-h-screen bg-[#f5f7fa]">
+      <div className="min-h-screen pt-14">
         <TopNav />
         <main>
           {children}

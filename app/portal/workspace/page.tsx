@@ -210,7 +210,7 @@ function StudentWorkspace() {
   return (
     <div className="space-y-3">
       {/* Tab 导航 */}
-      <div className="bg-white border border-gray-100 rounded-xl shadow-sm p-1.5 sticky top-16 z-30">
+      <div className="bg-white border border-gray-100 rounded-xl shadow-sm p-1 sticky top-14 z-30">
         <div className="flex items-center gap-1 overflow-x-auto no-scrollbar">
           {studentTabs.map((tab) => {
             const Icon = tab.icon
@@ -219,7 +219,7 @@ function StudentWorkspace() {
               <button
                 key={tab.id}
                 onClick={() => setActiveTab(tab.id)}
-                className={`flex items-center gap-2 px-4 py-2.5 rounded-lg text-sm font-medium whitespace-nowrap transition-all ${
+                className={`flex items-center gap-2 px-4 py-2 rounded-lg text-sm font-medium whitespace-nowrap transition-all ${
                   isActive
                     ? "bg-blue-600 text-white shadow-sm"
                     : "text-gray-500 hover:text-gray-900 hover:bg-gray-50"
@@ -263,7 +263,7 @@ function TeacherWorkspace() {
   return (
     <div className="space-y-3">
       {/* Tab 导航 */}
-      <div className="bg-white border border-gray-100 rounded-xl shadow-sm p-1.5 sticky top-16 z-30">
+      <div className="bg-white border border-gray-100 rounded-xl shadow-sm p-1 sticky top-14 z-30">
         <div className="flex items-center gap-1 overflow-x-auto no-scrollbar">
           {teacherTabs.map((tab) => {
             const Icon = tab.icon
@@ -272,7 +272,7 @@ function TeacherWorkspace() {
               <button
                 key={tab.id}
                 onClick={() => setActiveTab(tab.id)}
-                className={`flex items-center gap-2 px-4 py-2.5 rounded-lg text-sm font-medium whitespace-nowrap transition-all ${
+                className={`flex items-center gap-2 px-4 py-2 rounded-lg text-sm font-medium whitespace-nowrap transition-all ${
                   isActive
                     ? "bg-blue-600 text-white shadow-sm"
                     : "text-gray-500 hover:text-gray-900 hover:bg-gray-50"
@@ -301,7 +301,7 @@ export default function WorkspacePage() {
   // 学生角色展示全新的学生工作台
   if (currentRole === "student") {
     return (
-      <div className="px-4 pt-16 pb-4 bg-gray-50 min-h-[calc(100vh-3.5rem)]">
+      <div className="px-4 pt-14 pb-2 bg-gray-50 min-h-[calc(100vh-3.5rem)]">
         <div className="flex flex-col sm:flex-row sm:items-center sm:justify-between gap-4">
           <div>
             <h1 className="text-2xl font-bold text-gray-900">学生工作台</h1>
@@ -322,7 +322,7 @@ export default function WorkspacePage() {
   // 教职工角色展示教师工作台
   if (currentRole === "teacher") {
     return (
-      <div className="px-4 pt-16 pb-4 bg-gray-50 min-h-[calc(100vh-3.5rem)]">
+      <div className="px-4 pt-14 pb-2 bg-gray-50 min-h-[calc(100vh-3.5rem)]">
         <div className="flex flex-col sm:flex-row sm:items-center sm:justify-between gap-4">
           <div>
             <h1 className="text-2xl font-bold text-gray-900">教师工作台</h1>
@@ -353,7 +353,7 @@ export default function WorkspacePage() {
   const RoleIcon = roleIcons[currentRole as keyof typeof roleIcons] || GraduationCap
 
   return (
-    <div className="px-4 pt-16 pb-4 bg-gray-50 min-h-[calc(100vh-3.5rem)]">
+    <div className="px-4 pt-14 pb-2 bg-gray-50 min-h-[calc(100vh-3.5rem)]">
       <div className="flex flex-col sm:flex-row sm:items-center sm:justify-between gap-4">
         <div>
           <h1 className="text-2xl font-bold text-gray-900">我的服务台</h1>

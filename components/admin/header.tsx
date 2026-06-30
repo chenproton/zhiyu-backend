@@ -1,6 +1,6 @@
 "use client"
 
-import { Bell, Search, Settings, User } from "lucide-react"
+import { Bell, Search, Settings, User, LayoutDashboard } from "lucide-react"
 import { Button } from "@/components/ui/button"
 import {
   DropdownMenu,
@@ -75,6 +75,17 @@ export function Header({ title, breadcrumb }: HeaderProps) {
             <DropdownMenuSeparator />
             <DropdownMenuItem>个人设置</DropdownMenuItem>
             <DropdownMenuItem>账户安全</DropdownMenuItem>
+            <DropdownMenuItem asChild>
+              <a
+                href="https://v0-saa-s-one-chi.vercel.app/"
+                target="_blank"
+                rel="noopener noreferrer"
+                className="cursor-pointer"
+              >
+                <LayoutDashboard className="w-4 h-4 mr-2" />
+                SaaS 统一管理后台
+              </a>
+            </DropdownMenuItem>
             <DropdownMenuSeparator />
             <DropdownMenuItem className="text-destructive">退出登录</DropdownMenuItem>
           </DropdownMenuContent>

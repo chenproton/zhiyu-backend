@@ -8,11 +8,9 @@ import {
   DropdownMenu,
   DropdownMenuContent,
   DropdownMenuItem,
+  DropdownMenuLabel,
   DropdownMenuSeparator,
   DropdownMenuTrigger,
-  DropdownMenuSub,
-  DropdownMenuSubTrigger,
-  DropdownMenuSubContent,
 } from "@/components/ui/dropdown-menu"
 import { Button } from "@/components/ui/button"
 import {
@@ -182,26 +180,25 @@ export function TopNav() {
                   </Link>
                 </DropdownMenuItem>
                 <DropdownMenuSeparator />
-                <DropdownMenuSub>
-                  <DropdownMenuSubTrigger>
+                <DropdownMenuLabel className="text-xs text-muted-foreground font-normal">
+                  切换身份
+                </DropdownMenuLabel>
+                {user.roles?.map((role) => (
+                  <DropdownMenuItem
+                    key={role.id}
+                    onSelect={(e) => {
+                      e.preventDefault()
+                      switchRole(role.id)
+                    }}
+                    className={cn(user.currentRole?.id === role.id && "bg-primary/10 text-primary")}
+                  >
                     <RefreshCw className="w-4 h-4 mr-2" />
-                    切换身份
-                  </DropdownMenuSubTrigger>
-                  <DropdownMenuSubContent>
-                    {user.roles?.map((role) => (
-                      <DropdownMenuItem 
-                        key={role.id} 
-                        onClick={() => switchRole(role.id)}
-                        className={cn(user.currentRole?.id === role.id && "bg-primary/10 text-primary")}
-                      >
-                        {role.label}
-                        {user.currentRole?.id === role.id && (
-                          <span className="ml-auto text-xs text-primary">当前</span>
-                        )}
-                      </DropdownMenuItem>
-                    ))}
-                  </DropdownMenuSubContent>
-                </DropdownMenuSub>
+                    {role.label}
+                    {user.currentRole?.id === role.id && (
+                      <span className="ml-auto text-xs text-primary">当前</span>
+                    )}
+                  </DropdownMenuItem>
+                ))}
                 <DropdownMenuSeparator />
                 <DropdownMenuItem className="text-destructive" onClick={handleLogout}>
                   <LogOut className="w-4 h-4 mr-2" />

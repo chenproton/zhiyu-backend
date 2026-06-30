@@ -68,7 +68,7 @@ export function TeacherDashboardTab({ onTabChange, prepAssociations = {}, onAsso
   const [gradeClassName, setGradeClassName] = useState("")
 
   return (
-    <div className="space-y-5">
+    <div className="space-y-3">
       {/* 顶部统计 */}
       <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-4">
         <StatCard title="授课课程" value={activeCourses} icon={BookOpen} trend="本学期共 5 门" color="blue"

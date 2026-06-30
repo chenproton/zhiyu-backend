@@ -60,7 +60,7 @@ export function SectionCard({
           </div>
         </CardHeader>
       )}
-      <CardContent className={cn("px-4 pb-4", title ? "pt-0" : "pt-4")}>
+      <CardContent className={cn("px-4 pb-4", title ? "pt-0" : "pt-3")}>
         {children}
       </CardContent>
     </Card>

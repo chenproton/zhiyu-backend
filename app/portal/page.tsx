@@ -1,22 +1,14 @@
 "use client"
 
-import { useState } from "react"
 import type { ReactNode } from "react"
 import { usePlatformLinks } from "@/hooks/use-platform-links"
-
-type Version = "1.0" | "2.0"
 
 const features = [
   { label: "以产业需求为牵引", active: true },
   { label: "以学生能力为中心", active: true },
   { label: "以场景实践为载体", active: true },
   { label: "以跨专业融合为特征", active: true },
-]
-
-const categories = [
-  { id: "scene", label: "场景应用生态", color: "bg-amber-400" },
-  { id: "resource", label: "资源保障生态", color: "bg-emerald-400" },
-  { id: "operate", label: "运营治理生态", color: "bg-rose-400" },
+  { label: "以数智技术为支撑", active: true },
 ]
 
 const platforms = [
@@ -27,9 +19,28 @@ const platforms = [
         id: "alliance",
         icon: "users",
         color: "bg-rose-50 text-rose-500 border border-rose-100",
-        title: "产业联盟与人资品牌服务平台",
+        title: "产业联盟与人才品牌运营平台",
         desc: "共建校企合作生态，打造具有行业影响力的人才培养品牌。",
       },
+      {
+        id: "ai",
+        icon: "sparkles",
+        color: "bg-indigo-50 text-indigo-500 border border-indigo-100",
+        title: "AI 服务平台",
+        desc: "融合前沿AI技术，为教学设计、资源建设、学习辅导、评价分析提供伴随式智能服务。",
+      },
+      {
+        id: "ability",
+        icon: "check-circle",
+        color: "bg-emerald-50 text-emerald-500 border border-emerald-100",
+        title: "能力测评认证平台",
+        desc: "基于统一评价量规，实现对实践过程与结果的精准量化评估与技能认证。",
+      },
+    ],
+  },
+  {
+    category: "resource",
+    items: [
       {
         id: "career",
         icon: "briefcase",
@@ -45,31 +56,17 @@ const platforms = [
         desc: "还原真实工作场景，让学生在解决实际问题中习得技能，培养做中学的实践本领。",
       },
       {
-        id: "ability",
-        icon: "check-circle",
-        color: "bg-emerald-50 text-emerald-500 border border-emerald-100",
-        title: "能力测评认证平台",
-        desc: "基于统一评价量规，实现对实践过程与结果的精准量化评估与技能认证。",
-      },
-    ],
-  },
-  {
-    category: "resource",
-    items: [
-      {
         id: "course",
         icon: "book",
         color: "bg-amber-50 text-amber-500 border border-amber-100",
         title: "数字课程服务平台",
-        desc: "以颗粒化课程资源支撑场景任务，实现'按需学习'与'查漏补缺'的知识高效获取。",
+        desc: "以颗粒课资源支撑体系课程，实现按需学习与查漏补缺的知识高效获取。",
       },
-      {
-        id: "ai",
-        icon: "sparkles",
-        color: "bg-indigo-50 text-indigo-500 border border-indigo-100",
-        title: "AI 服务平台",
-        desc: "融合前沿AI技术，为教学设计、资源建设、学习辅导、评价分析提供伴随式智能支持。",
-      },
+    ],
+  },
+  {
+    category: "operate",
+    items: [
       {
         id: "resource",
         icon: "share",
@@ -78,44 +75,18 @@ const platforms = [
         desc: "沉淀校本智力资产，构建共建共享、持续进化的场景化数智教学资源生态。",
       },
       {
-        id: "mall",
-        icon: "shopping-cart",
-        color: "bg-pink-50 text-pink-500 border border-pink-100",
-        title: "教学资源商城",
-        desc: "汇聚全网精品教学要素，促进教育智力资产的跨校流转、价值互换与生态繁荣。",
-      },
-    ],
-  },
-  {
-    category: "operate",
-    items: [
-      {
-        id: "research",
-        icon: "file-text",
-        color: "bg-orange-50 text-orange-500 border border-orange-100",
-        title: "教科研服务平台",
-        desc: "助力教师开展教学研究、经验交流与课题协作，推动师资队伍专业化发展。",
-      },
-      {
         id: "affairs",
         icon: "calendar",
         color: "bg-teal-50 text-teal-500 border border-teal-100",
         title: "教务服务平台",
-        desc: "统筹排课选岗、学分认定与学籍管理，保障教学秩序顺畅运行。",
+        desc: "统筹排课选班、学分认定与学籍管理，保障教学秩序顺畅运行。",
       },
       {
-        id: "decision",
-        icon: "bar-chart",
-        color: "bg-violet-50 text-violet-500 border border-violet-100",
-        title: "决策支持平台",
-        desc: "可视化呈现教学运行状态与质量数据，为学校各级管理提供科学、精准的决策依据。",
-      },
-      {
-        id: "employment",
-        icon: "graduation-cap",
-        color: "bg-sky-50 text-sky-500 border border-sky-100",
-        title: "就业服务平台",
-        desc: "基于学生能力画像与企业岗位画像的智能匹配，助力毕业生高质量就业。",
+        id: "mall",
+        icon: "shopping-cart",
+        color: "bg-pink-50 text-pink-500 border border-pink-100",
+        title: "教学资源商城",
+        desc: "汇聚精品教学资源，链接企业与院校，促进教育智力资产流转共享。",
       },
     ],
   },
@@ -189,263 +160,296 @@ function getIcon(name: string): ReactNode {
   return icons[name] || icons.book
 }
 
-function PlatformCard({
+/* ─── card style config ─── */
+interface CardConfig {
+  type: "feature" | "wide" | "tile"
+  gradient: string
+  shadow: string
+  icon: string
+}
+
+const CARD_STYLES: Record<string, CardConfig> = {
+  alliance: { type: "feature", gradient: "linear-gradient(145deg,#f43f5e,#be123c)", shadow: "rgba(190,18,60,0.32)", icon: "users" },
+  career: { type: "tile", gradient: "linear-gradient(145deg,#8b5cf6,#6d28d9)", shadow: "rgba(124,58,237,0.32)", icon: "briefcase" },
+  scene: { type: "wide", gradient: "linear-gradient(120deg,#3b82f6,#2563eb)", shadow: "rgba(59,130,246,0.32)", icon: "layers" },
+  course: { type: "tile", gradient: "linear-gradient(145deg,#22d3ee,#0891b2)", shadow: "rgba(8,182,212,0.32)", icon: "book" },
+  ability: { type: "tile", gradient: "linear-gradient(145deg,#34d399,#059669)", shadow: "rgba(5,150,105,0.32)", icon: "check-circle" },
+  affairs: { type: "tile", gradient: "linear-gradient(145deg,#fbbf24,#ea580c)", shadow: "rgba(234,88,12,0.32)", icon: "calendar" },
+  ai: { type: "wide", gradient: "linear-gradient(120deg,#f472b6,#db2777)", shadow: "rgba(219,39,119,0.32)", icon: "sparkles" },
+  research: { type: "tile", gradient: "linear-gradient(145deg,#fb923c,#c2410c)", shadow: "rgba(194,65,12,0.32)", icon: "file-text" },
+  decision: { type: "tile", gradient: "linear-gradient(145deg,#818cf8,#4f46e5)", shadow: "rgba(79,70,229,0.32)", icon: "bar-chart" },
+  employment: { type: "tile", gradient: "linear-gradient(145deg,#38bdf8,#0284c7)", shadow: "rgba(2,132,199,0.32)", icon: "graduation-cap" },
+}
+
+/* section-2 resource cards */
+const RESOURCE_STYLES: Record<string, CardConfig> = {
+  resource: { type: "wide", gradient: "linear-gradient(120deg,#6366f1,#4338ca)", shadow: "rgba(67,56,202,0.3)", icon: "share" },
+  mall: { type: "wide", gradient: "linear-gradient(120deg,#fb923c,#ea580c)", shadow: "rgba(234,88,12,0.3)", icon: "shopping-cart" },
+}
+
+/* ─── helpers ─── */
+function getFlatItems() {
+  return platforms.flatMap((g) => g.items)
+}
+
+function findByLabel(items: { id: string; icon: string; color: string; title: string; desc: string }[], id: string) {
+  return items.find((i) => i.id === id)
+}
+
+/* ─── Components ─── */
+
+function GradientTile({
+  item,
+  url,
+  enabled,
+  wide,
+  tall,
+}: {
+  item: NonNullable<ReturnType<typeof findByLabel>>
+  url: string
+  enabled: boolean
+  wide?: boolean
+  tall?: boolean
+}) {
+  const style = CARD_STYLES[item.id]
+  const Wrapper = url && enabled ? "a" : "div"
+  const wrapperProps =
+    url && enabled ? { href: url, target: "_blank", rel: "noopener noreferrer" as const } : {}
+
+  const sizeClass = tall ? "col-span-2 row-span-2" : wide ? "flex-row items-center gap-5 col-span-2" : ""
+
+  return (
+    <Wrapper
+      {...wrapperProps}
+      className={`group rounded-2xl p-6 text-white relative overflow-hidden cursor-pointer transition-all duration-[350ms] hover:-translate-y-1.5 flex flex-col ${sizeClass}`}
+      style={{
+        background: style?.gradient,
+        boxShadow: `0 14px 30px ${style?.shadow || "rgba(79,70,229,0.28)"}`,
+      }}
+    >
+      <div className="absolute rounded-full bg-white/18 pointer-events-none transition-all duration-500 group-hover:scale-[1.35]" style={{ width: 130, height: 130, top: -45, right: -30 }} />
+      <div className="absolute rounded-full bg-white/10 pointer-events-none" style={{ width: 80, height: 80, bottom: -30, right: 40 }} />
+
+      {tall && (
+        <>
+          <div className="absolute rounded-full bg-white/8 pointer-events-none" style={{ width: 200, height: 200, bottom: -60, left: -60 }} />
+          <div className="absolute rounded-full bg-white/6 pointer-events-none" style={{ width: 60, height: 60, top: 30, left: 30 }} />
+          <div className="absolute rounded-full bg-white/8 pointer-events-none" style={{ width: 40, height: 40, bottom: 60, right: 100 }} />
+        </>
+      )}
+
+      <div
+        className={`rounded-xl bg-white/22 backdrop-blur flex items-center justify-center relative transition-transform duration-[350ms] group-hover:scale-110 group-hover:-rotate-5 shrink-0 ${tall ? "w-16 h-16 text-3xl mb-4" : wide ? "w-14 h-14 mb-0" : "w-[50px] h-[50px] text-2xl mb-auto"}`} style={{ zIndex: 2 }}
+      >
+        {getIcon(item.icon)}
+      </div>
+
+      {tall ? (
+        <div className="relative flex flex-col flex-1" style={{ zIndex: 2 }}>
+          <h4 className="text-xl font-bold leading-tight mb-2">{item.title}</h4>
+          <p className="text-sm opacity-85 leading-relaxed">{item.desc}</p>
+          <div className="mt-auto pt-6 text-sm font-semibold opacity-95 flex items-center gap-1.5 transition-all duration-[250ms] group-hover:gap-2.5">
+            进入平台 →
+          </div>
+        </div>
+      ) : wide ? (
+        <>
+          <div className="relative flex-1" style={{ zIndex: 2 }}>
+            <h4 className="text-lg font-bold leading-tight mb-1">{item.title}</h4>
+            <p className="text-xs opacity-85 leading-relaxed">{item.desc}</p>
+          </div>
+          <span className="relative text-xl font-semibold opacity-95 transition-all duration-[250ms] group-hover:translate-x-1" style={{ zIndex: 2 }}>
+            →
+          </span>
+        </>
+      ) : (
+        <div className="relative mt-3.5" style={{ zIndex: 2 }}>
+          <h4 className="text-lg font-bold leading-tight mb-1">{item.title}</h4>
+          <p className="text-xs opacity-85 leading-relaxed">{item.desc}</p>
+          <div className="mt-3 text-sm font-semibold opacity-95 flex items-center gap-1.5 transition-all duration-[250ms] group-hover:gap-2.5">
+            进入平台 →
+          </div>
+        </div>
+      )}
+    </Wrapper>
+  )
+}
+
+function ResourceTile({
   item,
   url,
   enabled,
 }: {
-  item: (typeof platforms)[0]["items"][0]
+  item: NonNullable<ReturnType<typeof findByLabel>>
   url: string
   enabled: boolean
 }) {
-  const cardContent = (
-    <>
-      <div className="flex items-start gap-3 mb-3">
-        <div className={`w-11 h-11 rounded-xl ${item.color} flex items-center justify-center shrink-0`}>
-          {getIcon(item.icon)}
-        </div>
-        <h3 className="font-medium text-foreground text-sm leading-tight pt-1">
-          {item.title}
-        </h3>
-      </div>
-      <p className="text-xs text-muted-foreground leading-relaxed line-clamp-2">{item.desc}</p>
-    </>
-  )
-
-  if (url && enabled) {
-    return (
-      <a
-        href={url}
-        target="_blank"
-        rel="noopener noreferrer"
-        className="bg-card rounded-xl p-4 border border-border cursor-pointer hover:shadow-md hover:border-primary/30 transition-all block"
-      >
-        {cardContent}
-      </a>
-    )
-  }
+  const style = RESOURCE_STYLES[item.id]
+  const Wrapper = url && enabled ? "a" : "div"
+  const wrapperProps =
+    url && enabled ? { href: url, target: "_blank", rel: "noopener noreferrer" as const } : {}
 
   return (
-    <div className="bg-card rounded-xl p-4 border border-border cursor-default opacity-70">
-      {cardContent}
-    </div>
-  )
-}
-
-/* ===== 2.0 Data ===== */
-const v2Categories = [
-  { id: "scene", label: "场景应用生态", color: "bg-amber-400" },
-  { id: "resource", label: "资源保障生态", color: "bg-emerald-400" },
-]
-
-const v2Platforms = [
-  {
-    category: "scene",
-    items: [
-      {
-        id: "alliance",
-        icon: "users",
-        color: "bg-rose-50 text-rose-500 border border-rose-100",
-        title: "产业联盟与人才品牌运营平台",
-        desc: "共建校企合作生态，打造具有行业影响力的人才培养品牌。",
-      },
-      {
-        id: "career",
-        icon: "briefcase",
-        color: "bg-purple-50 text-purple-500 border border-purple-100",
-        title: "职业岗位学习平台",
-        desc: "清晰呈现岗位能力图谱，为学生提供目标清晰、路径可视的职业生涯导航。",
-      },
-      {
-        id: "scene",
-        icon: "layers",
-        color: "bg-cyan-50 text-cyan-500 border border-cyan-100",
-        title: "实践场景学习平台",
-        desc: "还原真实工作场景，让学生在解决实际问题中习得技能，培养做中学的实践本领。",
-      },
-      {
-        id: "ability",
-        icon: "check-circle",
-        color: "bg-emerald-50 text-emerald-500 border border-emerald-100",
-        title: "能力测评认证平台",
-        desc: "基于统一评价量规，实现对实践过程与结果的精准量化评估与技能认证。",
-      },
-    ],
-  },
-  {
-    category: "resource",
-    items: [
-      {
-        id: "course",
-        icon: "book",
-        color: "bg-amber-50 text-amber-500 border border-amber-100",
-        title: "数字课程服务平台",
-        desc: "以颗粒化课程资源支撑场景任务，实现\"按需学习\"与\"查漏补缺\"的知识高效获取。",
-      },
-      {
-        id: "ai",
-        icon: "sparkles",
-        color: "bg-indigo-50 text-indigo-500 border border-indigo-100",
-        title: "AI 服务平台",
-        desc: "融合前沿AI技术，为教学设计、资源建设、学习辅导、评价分析提供伴随式智能服务。",
-      },
-      {
-        id: "resource",
-        icon: "share",
-        color: "bg-blue-50 text-blue-500 border border-blue-100",
-        title: "教学资源共享服务平台",
-        desc: "沉淀校本智力资产，构建共建共享、持续进化的场景化数智教学资源生态。",
-      },
-      {
-        id: "affairs",
-        icon: "calendar",
-        color: "bg-teal-50 text-teal-500 border border-teal-100",
-        title: "教务服务平台",
-        desc: "统筹排课选班、学分认定与学籍管理，保障教学秩序顺畅运行。",
-      },
-    ],
-  },
-]
-
-const v2Mall = {
-  id: "mall",
-  icon: "shopping-cart" as const,
-  title: "教学资源商城",
-  desc: "汇聚精品教学资源，链接企业与院校，促进教育智力资产流转共享",
-}
-
-/* ===== Version Tag ===== */
-function VersionTag({
-  version,
-  onChange,
-}: {
-  version: Version
-  onChange: (v: Version) => void
-}) {
-  const nextVersion = version === "1.0" ? "2.0" : "1.0"
-  return (
-    <button
-      onClick={() => onChange(nextVersion)}
-      className="inline-flex items-center px-2.5 py-0.5 text-xs font-semibold rounded-full bg-primary text-primary-foreground hover:bg-primary/90 transition-colors cursor-pointer"
-      title={`切换到 ${nextVersion}`}
+    <Wrapper
+      {...wrapperProps}
+      className="group col-span-2 rounded-2xl p-6 text-white relative overflow-hidden cursor-pointer transition-all duration-[350ms] hover:-translate-y-1.5 flex flex-row items-center gap-5"
+      style={{
+        background: style?.gradient,
+        boxShadow: `0 14px 30px ${style?.shadow || "rgba(67,56,202,0.3)"}`,
+      }}
     >
-      {version}
-    </button>
+      <div className="absolute rounded-full bg-white/18 pointer-events-none transition-all duration-500 group-hover:scale-[1.35]" style={{ width: 130, height: 130, top: -45, right: -30 }} />
+
+      <div className="w-14 h-14 rounded-xl bg-white/22 backdrop-blur flex items-center justify-center text-2xl relative transition-transform duration-[350ms] group-hover:scale-110 group-hover:-rotate-5 shrink-0" style={{ zIndex: 2 }}>
+        {getIcon(item.icon)}
+      </div>
+
+      <div className="relative flex-1" style={{ zIndex: 2 }}>
+        <h4 className="text-lg font-bold leading-tight mb-1">{item.title}</h4>
+        <p className="text-xs opacity-85 leading-relaxed">{item.desc}</p>
+      </div>
+      <span className="relative text-xl font-semibold opacity-95 transition-all duration-[250ms] group-hover:translate-x-1" style={{ zIndex: 2 }}>
+        →
+      </span>
+    </Wrapper>
   )
 }
 
-/* ===== 2.0 Mall Bar ===== */
-function MallBar({
-  url,
-  enabled,
-}: {
-  url: string
-  enabled: boolean
-}) {
+/* ─── Section label ─── */
+function SectionLabel({ title, tag }: { title: string; tag: string }) {
   return (
-    <div className="mt-2 bg-card rounded-xl px-5 py-2 border border-border flex items-center justify-between gap-4 hover:shadow-md hover:border-primary/30 transition-all">
-      <div className="flex items-center gap-3.5 flex-wrap">
-        <div className="w-9 h-9 rounded-lg bg-pink-50 text-pink-500 border border-pink-100 flex items-center justify-center shrink-0">
-          {getIcon(v2Mall.icon)}
-        </div>
-        <h3 className="font-medium text-sm text-foreground">{v2Mall.title}</h3>
-        <div className="w-px h-3.5 bg-border hidden sm:block" />
-        <p className="text-xs text-muted-foreground">{v2Mall.desc}</p>
-      </div>
-      {url && enabled ? (
-        <a
-          href={url}
-          target="_blank"
-          rel="noopener noreferrer"
-          className="text-sm text-primary hover:text-primary/80 transition-colors shrink-0"
-        >
-          进入商城 →
-        </a>
-      ) : (
-        <span className="text-sm text-muted-foreground shrink-0">进入商城 →</span>
-      )}
+    <div className="flex items-center gap-3 mb-[18px] mt-9">
+      <h3 className="text-base font-bold text-[#141a2e] flex items-center gap-2.5">
+        <span className="w-1 h-[18px] rounded-sm bg-gradient-to-b from-violet-600 to-cyan-400 inline-block" />
+        {title}
+      </h3>
+      <span className="flex-1 h-px bg-[#e9edf4]" />
+      <span className="text-xs text-[#8590a6] bg-white/70 border border-[#e9edf4] px-3 py-0.5 rounded-full">
+        {tag}
+      </span>
     </div>
   )
 }
 
+/* ─── Page ─── */
 export default function PortalHomePage() {
-  const [version, setVersion] = useState<Version>("1.0")
   const { getUrl, isEnabled } = usePlatformLinks()
 
-  const currentCategories = version === "1.0" ? categories : v2Categories
-  const currentPlatforms = version === "1.0" ? platforms : v2Platforms
+  const items = getFlatItems()
+
+  /* Card order matching the bento grid layout */
+  const cardOrder = ['alliance', 'career', 'course', 'scene', 'ability', 'affairs', 'ai']
+
+  /* section 2: resource & mall */
+  const resourceIds = items.filter((i) => i.id === "resource" || i.id === "mall").map((i) => i.id)
+
+  /* ordered ids for section 1 */
+  const section1Ids = cardOrder.filter((id) => items.some((i) => i.id === id))
 
   return (
-    <div className="relative min-h-screen bg-[#f5f7fa] pt-14 pb-12">
-      {/* Main Content */}
-      <div className="px-8 py-5 min-h-[calc(100vh-3.5rem-48px)]">
-        {/* Title Section */}
-        <div className="text-center mb-5">
-          <div className="flex items-center justify-center gap-3 mb-3">
-            <h1 className="text-2xl font-bold text-foreground">
-              场景化数智教学服务体系
-            </h1>
-            <VersionTag version={version} onChange={setVersion} />
-          </div>
-          <div className="w-16 h-1 bg-primary mx-auto mb-3 rounded-full" />
-          <div className="flex items-center justify-center gap-6">
-            {features.map((feature, index) => (
-              <div key={index} className="flex items-center gap-2 text-sm text-muted-foreground">
-                <span className={`w-2 h-2 rounded-full ${feature.active ? "bg-primary" : "bg-muted"}`} />
-                {feature.label}
-              </div>
+    <div className="min-h-screen relative">
+      {/* Background: base color + radial gradients + grid pattern */}
+      <div
+        className="fixed inset-0 pointer-events-none"
+        style={{
+          zIndex: -2,
+          background: `
+            radial-gradient(circle at 5% 8%, rgba(124,58,237,0.16), transparent 28%),
+            radial-gradient(circle at 95% 6%, rgba(236,72,153,0.13), transparent 30%),
+            radial-gradient(circle at 88% 92%, rgba(6,182,212,0.13), transparent 32%),
+            radial-gradient(circle at 10% 95%, rgba(245,158,11,0.1), transparent 30%),
+            #eef1f8
+          `,
+        }}
+      />
+      <div
+        className="fixed inset-0 pointer-events-none"
+        style={{
+          zIndex: -1,
+          backgroundImage: `
+            linear-gradient(rgba(79,70,229,0.03) 1px, transparent 1px),
+            linear-gradient(90deg, rgba(79,70,229,0.03) 1px, transparent 1px)
+          `,
+          backgroundSize: "56px 56px",
+          WebkitMaskImage: "linear-gradient(180deg, #000 0%, transparent 75%)",
+          maskImage: "linear-gradient(180deg, #000 0%, transparent 75%)",
+        }}
+      />
+
+      {/* Hero */}
+      <section className="relative pt-12 pb-6 text-center px-10">
+        <div className="relative max-w-3xl mx-auto" style={{ zIndex: 2 }}>
+          <span className="inline-flex items-center gap-2 px-[18px] py-1.5 bg-white/80 border border-violet-600/18 rounded-full text-sm font-semibold text-violet-600 mb-4 shadow-lg" style={{ boxShadow: "0 6px 20px rgba(124,58,237,0.1)" }}>
+            <span className="w-1.5 h-1.5 rounded-full bg-violet-600" style={{ boxShadow: "0 0 0 3px rgba(124,58,237,0.2)" }} />
+            产教融合 · AI 赋能 · 场景育人
+          </span>
+          <h1 className="text-4xl font-extrabold text-[#141a2e] tracking-wide leading-tight mb-3">
+            <span className="bg-gradient-to-r from-violet-600 via-indigo-600 to-cyan-400 bg-clip-text text-transparent">
+              场景化数智
+            </span>
+            教学服务体系
+          </h1>
+          <div className="flex items-center justify-center gap-1.5">
+            {features.map((f, i) => (
+              <span key={i} className="relative text-sm text-[#8590a6] px-4">
+                {f.label}
+                {i < features.length - 1 && (
+                  <span className="absolute right-0 top-1/2 -translate-y-1/2 w-1 h-1 rounded-full bg-[#c5cede]" />
+                )}
+              </span>
             ))}
           </div>
+
         </div>
+      </section>
 
-        {/* Platform Cards */}
-        <div className="max-w-6xl mx-auto">
-          {currentCategories.map((cat) => {
-            const platform = currentPlatforms.find((p) => p.category === cat.id)
-            if (!platform) return null
+      {/* Main content */}
+      <main className="max-w-6xl mx-auto px-10 pb-24 relative" style={{ zIndex: 2 }}>
 
+        {/* Section 1: 应用服务中心 */}
+        <SectionLabel title="应用服务中心" tag="9 个平台 一站直达" />
+
+        <div className="grid grid-cols-4 gap-[18px]" style={{ gridAutoRows: "168px" }}>
+          {section1Ids.map((id) => {
+            const item = findByLabel(items, id)
+            if (!item) return null
+            const style_ = CARD_STYLES[id]
             return (
-              <div key={cat.id} className="flex items-stretch gap-5 mb-3">
-                {/* Left Category Label */}
-                <div className="w-7 flex flex-col items-center justify-center py-4">
-                  <div className={`w-1 flex-1 rounded-full ${cat.color} max-h-20`} />
-                  <span
-                    className="text-xs text-muted-foreground mt-2 whitespace-nowrap"
-                    style={{ writingMode: "vertical-rl", textOrientation: "mixed" }}
-                  >
-                    {cat.label}
-                  </span>
-                </div>
-
-                {/* Cards Row */}
-                <div className="flex-1 grid grid-cols-4 gap-4">
-                  {platform.items.map((item, index) => (
-                    <PlatformCard
-                      key={index}
-                      item={item}
-                      url={getUrl(item.id)}
-                      enabled={isEnabled(item.id)}
-                    />
-                  ))}
-                </div>
-              </div>
+              <GradientTile
+                key={id}
+                item={item}
+                url={getUrl(id)}
+                enabled={isEnabled(id)}
+                wide={style_?.type === "wide"}
+                tall={style_?.type === "feature"}
+              />
             )
           })}
-
-          {/* 2.0 Mall Bar */}
-          <div className={`mt-2 ${version !== "2.0" ? "opacity-0 pointer-events-none" : ""}`}>
-            <MallBar url={getUrl(v2Mall.id)} enabled={isEnabled(v2Mall.id)} />
-          </div>
         </div>
-      </div>
+
+        {/* Section 2: 资源共享与转化 */}
+        {resourceIds.length > 0 && (
+          <>
+            <SectionLabel title="资源共享与转化" tag="开放共享 · 资源交易" />
+            <div className="grid grid-cols-4 gap-[18px]" style={{ gridAutoRows: "138px" }}>
+              {resourceIds.map((id) => {
+                const item = findByLabel(items, id)
+                if (!item) return null
+                return <ResourceTile key={id} item={item} url={getUrl(id)} enabled={isEnabled(id)} />
+              })}
+            </div>
+          </>
+        )}
+
+      </main>
 
       {/* Footer */}
-      <footer style={{ position: "fixed", bottom: 0, left: 0, right: 0, borderTop: "1px solid #d7d7d7", background: "#fff", height: "48px", zIndex: 40 }}>
-        <div style={{ maxWidth: "1280px", height: "100%", margin: "0 auto", padding: "0 32px", display: "flex", alignItems: "center", justifyContent: "space-between", fontSize: "12px", color: "#636363" }}>
-          <div style={{ display: "flex", alignItems: "center", gap: "24px" }}>
-            <span style={{ cursor: "pointer" }}>关于平台</span>
-            <span style={{ cursor: "pointer" }}>使用帮助</span>
-            <span style={{ cursor: "pointer" }}>留言反馈</span>
+      <footer className="fixed bottom-0 left-0 right-0 h-12 z-40 bg-white border-t border-[#d7d7d7]">
+        <div className="max-w-6xl mx-auto px-8 h-full flex items-center justify-between text-xs text-[#636363]">
+          <div className="flex items-center gap-6">
+            <span className="cursor-pointer">关于平台</span>
+            <span className="cursor-pointer">使用帮助</span>
+            <span className="cursor-pointer">留言反馈</span>
           </div>
           <div>杭州知与未来科技有限公司 · 浙ICP xxxxxxxx</div>
         </div>
