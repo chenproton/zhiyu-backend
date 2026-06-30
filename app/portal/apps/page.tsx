@@ -238,7 +238,7 @@ export default function AppsPage() {
     <TooltipProvider>
       <div className="min-h-[calc(100vh-3.5rem)] bg-[#f5f7fa] pt-14">
         {/* Quick Access Bar */}
-        <div className="bg-background border-b border-border px-6 py-3.5 sticky top-14 z-10 shadow-sm">
+        <div className="bg-background border-b border-border px-6 py-2 sticky top-14 z-10 shadow-sm">
           <div className="flex items-center gap-4">
             <div className="flex items-center gap-2 text-sm text-muted-foreground shrink-0">
               <Sparkles className="w-4 h-4 text-amber-500" />
@@ -249,7 +249,7 @@ export default function AppsPage() {
                 <Link
                   key={index}
                   href={item.href}
-                  className="flex items-center gap-2 px-4 py-2 bg-muted rounded-lg hover:bg-primary/5 hover:text-primary transition-all shrink-0 group border border-border"
+                      className="flex items-center gap-2 px-3 py-1.5 bg-muted rounded-lg hover:bg-primary/5 hover:text-primary transition-all shrink-0 group border border-border"
                 >
                   <item.icon className="w-4 h-4 text-muted-foreground group-hover:text-primary transition-colors" />
                   <span className="text-sm text-muted-foreground group-hover:text-primary transition-colors">{item.label}</span>
@@ -262,7 +262,7 @@ export default function AppsPage() {
         <div className="flex">
           {/* Left Sidebar */}
           <aside className="w-56 bg-background shrink-0 min-h-[calc(100vh-3.5rem-57px)] sticky top-[113px] self-start border-r border-border shadow-sm">
-            <nav className="p-3 space-y-1">
+            <nav className="p-2 space-y-1">
               {menuItems.map((item) => {
                 const Icon = item.icon
                 const isActive = activeMenu === item.id
@@ -271,7 +271,7 @@ export default function AppsPage() {
                     key={item.id}
                     onClick={() => scrollToSection(item.id)}
                     className={cn(
-                      "w-full flex items-center gap-3 px-3 py-2.5 rounded-lg text-sm transition-all text-left group",
+                      "w-full flex items-center gap-3 px-2 py-2 rounded-lg text-sm transition-all text-left group",
                       isActive
                         ? "bg-primary text-white shadow-md shadow-primary/20"
                         : "text-muted-foreground hover:bg-muted hover:text-foreground"
@@ -292,7 +292,7 @@ export default function AppsPage() {
           </aside>
 
           {/* Main Content */}
-          <main ref={contentRef} className="flex-1 p-6 overflow-y-auto max-h-[calc(100vh-3.5rem-57px)]">
+          <main ref={contentRef} className="flex-1 px-4 pb-4 overflow-y-auto max-h-[calc(100vh-3.5rem-57px)]">
             {modulesLoading ? (
               <div className="flex items-center justify-center h-64">
                 <div className="text-sm text-muted-foreground">加载中...</div>
@@ -307,10 +307,10 @@ export default function AppsPage() {
                     ref={(el) => {
                       sectionRefs.current[section.id] = el
                     }}
-                    className="mb-8"
+                    className="mb-5"
                   >
                     {/* Section Title */}
-                    <div className="flex items-center gap-3 mb-4">
+                    <div className="flex items-center gap-3 mb-3">
                       <div className={cn("w-9 h-9 rounded-lg flex items-center justify-center", section.iconBg)}>
                         <SectionIcon className={cn("w-5 h-5", section.iconColor)} />
                       </div>

@@ -1,16 +1,52 @@
 "use client"
 
 import { useState } from "react"
-import { Bell, Calendar, CheckSquare, Shield, Users, ChevronRight, ChevronLeft, TrendingUp, BarChart3, PieChart, BookOpen, GraduationCap, Briefcase, Building2 } from "lucide-react"
+import {
+  Bell,
+  Calendar,
+  CheckSquare,
+  Shield,
+  Users,
+  ChevronRight,
+  ChevronLeft,
+  TrendingUp,
+  BarChart3,
+  PieChart,
+  BookOpen,
+  GraduationCap,
+  Briefcase,
+  Building2,
+  LayoutDashboard,
+  Layers,
+  Compass,
+  Award,
+  MessageSquare,
+  User,
+} from "lucide-react"
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card"
 import { Badge } from "@/components/ui/badge"
 import { Button } from "@/components/ui/button"
 import { ScrollArea } from "@/components/ui/scroll-area"
 import { Bar, BarChart, Pie, PieChart as RePieChart, Cell, XAxis, YAxis, CartesianGrid, Area, AreaChart } from "recharts"
 import { ChartContainer, ChartTooltip, ChartTooltipContent } from "@/components/ui/chart"
+import { Tabs, TabsList, TabsTrigger } from "@/components/ui/tabs"
 import { useAuth } from "@/contexts/auth-context"
 
-// 不同身份的服务台内容
+import { DashboardTab } from "./_components/dashboard-tab"
+import { LearningTab } from "./_components/learning-tab"
+import { CareerTab } from "./_components/career-tab"
+import { AssessmentTab } from "./_components/assessment-tab"
+import { PortraitTab } from "./_components/portrait-tab"
+import { CommunityTab } from "./_components/community-tab"
+import { ProfileTab } from "./_components/profile-tab"
+
+import type { PrepAssociationRecord } from "./_data/mock-teacher-data"
+import { TeacherDashboardTab } from "./_components/teacher-dashboard-tab"
+import { TeacherCoursesTab } from "./_components/teacher-courses-tab"
+import { TeacherPortraitsTab } from "./_components/teacher-portraits-tab"
+import { TeacherProfileTab } from "./_components/teacher-profile-tab"
+
+// 不同身份的服务台内容（非学生角色保留原展示）
 const roleConfigs = {
   teacher: {
     welcomeText: "欢迎回来，张老师。",
@@ -32,27 +68,6 @@ const roleConfigs = {
       { id: 3, title: "学生答疑", time: "10:00", date: 15, color: "bg-emerald-500" },
     ],
     stats: { label1: "授课课程", value1: 8, label2: "学生人数", value2: 256 },
-  },
-  student: {
-    welcomeText: "欢迎回来，同学。",
-    announcements: [
-      { id: 1, title: "期中考试安排通知", date: "2026-04-10", isNew: true, type: "重要" },
-      { id: 2, title: "图书馆延长开放时间通知", date: "2026-04-08", isNew: true, type: "通知" },
-      { id: 3, title: "社团招新活动公告", date: "2026-04-05", isNew: false, type: "公告" },
-      { id: 4, title: "奖学金评选通知", date: "2026-04-01", isNew: false, type: "重要" },
-    ],
-    todoItems: [
-      { id: 1, title: "待完成作业", count: 5, urgent: true, color: "#ef4444" },
-      { id: 2, title: "待学习课程", count: 3, urgent: false, color: "#3b82f6" },
-      { id: 3, title: "待参加考试", count: 2, urgent: true, color: "#f59e0b" },
-      { id: 4, title: "待提交报告", count: 1, urgent: false, color: "#10b981" },
-    ],
-    calendarEvents: [
-      { id: 1, title: "高数课程", time: "08:00", date: 14, color: "bg-primary" },
-      { id: 2, title: "英语听力", time: "10:00", date: 14, color: "bg-amber-500" },
-      { id: 3, title: "实验课", time: "14:00", date: 15, color: "bg-emerald-500" },
-    ],
-    stats: { label1: "在修课程", value1: 12, label2: "已获学分", value2: 86 },
   },
   enterprise: {
     welcomeText: "欢迎回来，企业用户。",
@@ -136,17 +151,9 @@ function generateCalendarDays(year: number, month: number) {
   const lastDay = new Date(year, month + 1, 0)
   const daysInMonth = lastDay.getDate()
   const startDayOfWeek = firstDay.getDay()
-  
   const days: (number | null)[] = []
-  
-  for (let i = 0; i < startDayOfWeek; i++) {
-    days.push(null)
-  }
-  
-  for (let i = 1; i <= daysInMonth; i++) {
-    days.push(i)
-  }
-  
+  for (let i = 0; i < startDayOfWeek; i++) days.push(null)
+  for (let i = 1; i <= daysInMonth; i++) days.push(i)
   return days
 }
 
@@ -157,33 +164,204 @@ const roleIcons = {
   admin: Briefcase,
 }
 
+// 教师工作台 Tab 配置
+const teacherTabs = [
+  { id: "dashboard", label: "工作台首页", icon: LayoutDashboard },
+  { id: "courses", label: "我的课程", icon: BookOpen },
+  { id: "portraits", label: "我的学生", icon: BarChart3 },
+  { id: "profile", label: "个人中心", icon: User },
+]
+
+// 学生工作台 Tab 配置
+const studentTabs = [
+  { id: "dashboard", label: "工作台首页", icon: LayoutDashboard },
+  { id: "learning", label: "我的学习", icon: Layers },
+  { id: "career", label: "我的收藏", icon: Compass },
+  { id: "assessment", label: "测评认证", icon: Award },
+  { id: "portrait", label: "能力画像", icon: BarChart3 },
+  { id: "community", label: "学习社区", icon: MessageSquare },
+  { id: "profile", label: "个人中心", icon: User },
+]
+
+function StudentWorkspace() {
+  const [activeTab, setActiveTab] = useState("dashboard")
+
+  const renderTabContent = () => {
+    switch (activeTab) {
+      case "dashboard":
+        return <DashboardTab onTabChange={setActiveTab} />
+      case "learning":
+        return <LearningTab />
+      case "career":
+        return <CareerTab />
+      case "assessment":
+        return <AssessmentTab />
+      case "portrait":
+        return <PortraitTab />
+      case "community":
+        return <CommunityTab />
+      case "profile":
+        return <ProfileTab />
+      default:
+        return <DashboardTab onTabChange={setActiveTab} />
+    }
+  }
+
+  return (
+    <div className="space-y-3">
+      {/* Tab 导航 */}
+      <div className="bg-white border border-gray-100 rounded-xl shadow-sm p-1.5 sticky top-16 z-30">
+        <div className="flex items-center gap-1 overflow-x-auto no-scrollbar">
+          {studentTabs.map((tab) => {
+            const Icon = tab.icon
+            const isActive = activeTab === tab.id
+            return (
+              <button
+                key={tab.id}
+                onClick={() => setActiveTab(tab.id)}
+                className={`flex items-center gap-2 px-4 py-2.5 rounded-lg text-sm font-medium whitespace-nowrap transition-all ${
+                  isActive
+                    ? "bg-blue-600 text-white shadow-sm"
+                    : "text-gray-500 hover:text-gray-900 hover:bg-gray-50"
+                }`}
+              >
+                <Icon className="w-4 h-4" />
+                {tab.label}
+              </button>
+            )
+          })}
+        </div>
+      </div>
+
+      {/* Tab 内容 */}
+      <div className="animate-in fade-in slide-in-from-bottom-2 duration-300">
+        {renderTabContent()}
+      </div>
+    </div>
+  )
+}
+
+function TeacherWorkspace() {
+  const [activeTab, setActiveTab] = useState("dashboard")
+  const [prepAssociations, setPrepAssociations] = useState<Record<string, PrepAssociationRecord>>({})
+
+  const renderTabContent = () => {
+    switch (activeTab) {
+      case "dashboard":
+        return <TeacherDashboardTab onTabChange={setActiveTab} prepAssociations={prepAssociations} onAssociate={setPrepAssociations} />
+      case "courses":
+        return <TeacherCoursesTab prepAssociations={prepAssociations} onAssociate={setPrepAssociations} />
+      case "portraits":
+        return <TeacherPortraitsTab />
+      case "profile":
+        return <TeacherProfileTab />
+      default:
+        return <TeacherDashboardTab onTabChange={setActiveTab} prepAssociations={prepAssociations} onAssociate={setPrepAssociations} />
+    }
+  }
+
+  return (
+    <div className="space-y-3">
+      {/* Tab 导航 */}
+      <div className="bg-white border border-gray-100 rounded-xl shadow-sm p-1.5 sticky top-16 z-30">
+        <div className="flex items-center gap-1 overflow-x-auto no-scrollbar">
+          {teacherTabs.map((tab) => {
+            const Icon = tab.icon
+            const isActive = activeTab === tab.id
+            return (
+              <button
+                key={tab.id}
+                onClick={() => setActiveTab(tab.id)}
+                className={`flex items-center gap-2 px-4 py-2.5 rounded-lg text-sm font-medium whitespace-nowrap transition-all ${
+                  isActive
+                    ? "bg-blue-600 text-white shadow-sm"
+                    : "text-gray-500 hover:text-gray-900 hover:bg-gray-50"
+                }`}
+              >
+                <Icon className="w-4 h-4" />
+                {tab.label}
+              </button>
+            )
+          })}
+        </div>
+      </div>
+
+      {/* Tab 内容 */}
+      <div className="animate-in fade-in slide-in-from-bottom-2 duration-300">
+        {renderTabContent()}
+      </div>
+    </div>
+  )
+}
+
 export default function WorkspacePage() {
   const { user } = useAuth()
   const currentRole = user?.currentRole?.name || "teacher"
+
+  // 学生角色展示全新的学生工作台
+  if (currentRole === "student") {
+    return (
+      <div className="px-4 pt-16 pb-4 bg-gray-50 min-h-[calc(100vh-3.5rem)]">
+        <div className="flex flex-col sm:flex-row sm:items-center sm:justify-between gap-4">
+          <div>
+            <h1 className="text-2xl font-bold text-gray-900">学生工作台</h1>
+            <p className="text-sm text-gray-500 mt-1">
+              欢迎回来，同学。今天是2026年4月14日，星期二。管理你的学习、岗位、测评与成长。
+            </p>
+          </div>
+          <div className="flex items-center gap-2 px-4 py-2 bg-white rounded-xl border border-gray-100 shadow-sm">
+            <BookOpen className="w-5 h-5 text-blue-600" />
+            <span className="text-sm font-medium text-gray-700">当前身份：{user?.currentRole?.label || "学生"}</span>
+          </div>
+        </div>
+        <StudentWorkspace />
+      </div>
+    )
+  }
+
+  // 教职工角色展示教师工作台
+  if (currentRole === "teacher") {
+    return (
+      <div className="px-4 pt-16 pb-4 bg-gray-50 min-h-[calc(100vh-3.5rem)]">
+        <div className="flex flex-col sm:flex-row sm:items-center sm:justify-between gap-4">
+          <div>
+            <h1 className="text-2xl font-bold text-gray-900">教师工作台</h1>
+            <p className="text-sm text-gray-500 mt-1">
+              欢迎回来，张老师。今天是2026年4月14日，星期二。管理你的课程、教学跟踪与测评。
+            </p>
+          </div>
+          <div className="flex items-center gap-2 px-4 py-2 bg-white rounded-xl border border-gray-100 shadow-sm">
+            <GraduationCap className="w-5 h-5 text-blue-600" />
+            <span className="text-sm font-medium text-gray-700">当前身份：{user?.currentRole?.label || "教职工"}</span>
+          </div>
+        </div>
+        <TeacherWorkspace />
+      </div>
+    )
+  }
+
+  // 非学生角色保持原有通用工作台
   const config = roleConfigs[currentRole as keyof typeof roleConfigs] || roleConfigs.teacher
-  
   const calendarDays = generateCalendarDays(2026, 3)
   const weekDays = ["日", "一", "二", "三", "四", "五", "六"]
-  
-  const todoPieData = config.todoItems.map(item => ({
+  const todoPieData = config.todoItems.map((item) => ({
     name: item.title,
     value: item.count,
     color: item.color,
   }))
-  
   const totalTodo = config.todoItems.reduce((acc, item) => acc + item.count, 0)
   const RoleIcon = roleIcons[currentRole as keyof typeof roleIcons] || GraduationCap
 
   return (
-    <div className="p-6 bg-gradient-to-br from-slate-50 via-blue-50/30 to-indigo-50/20 min-h-[calc(100vh-3.5rem)] pt-20">
-      <div className="mb-6 flex items-center justify-between">
+    <div className="px-4 pt-16 pb-4 bg-gray-50 min-h-[calc(100vh-3.5rem)]">
+      <div className="flex flex-col sm:flex-row sm:items-center sm:justify-between gap-4">
         <div>
-          <h1 className="text-xl font-semibold text-foreground">我的服务台</h1>
-          <p className="text-sm text-muted-foreground mt-1">{config.welcomeText}今天是2026年4月14日，星期二。</p>
+          <h1 className="text-2xl font-bold text-gray-900">我的服务台</h1>
+          <p className="text-sm text-gray-500 mt-1">{config.welcomeText}今天是2026年4月14日，星期二。</p>
         </div>
-        <div className="flex items-center gap-2 px-4 py-2 bg-card rounded-lg border border-border shadow-sm">
-          <RoleIcon className="w-5 h-5 text-primary" />
-          <span className="text-sm font-medium text-foreground">当前身份：{user?.currentRole?.label || "教职工"}</span>
+        <div className="flex items-center gap-2 px-4 py-2 bg-white rounded-xl border border-gray-100 shadow-sm">
+          <RoleIcon className="w-5 h-5 text-blue-600" />
+          <span className="text-sm font-medium text-gray-700">当前身份：{user?.currentRole?.label || "教职工"}</span>
         </div>
       </div>
 
@@ -226,7 +404,7 @@ export default function WorkspacePage() {
           <CardContent className="p-4 flex items-center justify-between">
             <div>
               <p className="text-purple-100 text-sm">消息通知</p>
-              <p className="text-2xl font-bold">{config.announcements.filter(a => a.isNew).length}</p>
+              <p className="text-2xl font-bold">{config.announcements.filter((a) => a.isNew).length}</p>
             </div>
             <div className="w-12 h-12 bg-card/20 rounded-lg flex items-center justify-center">
               <Bell className="w-6 h-6" />
@@ -304,7 +482,7 @@ export default function WorkspacePage() {
                 <div key={day} className="text-center text-xs text-muted-foreground py-1">{day}</div>
               ))}
               {calendarDays.map((day, index) => {
-                const hasEvent = day && config.calendarEvents.some(e => e.date === day)
+                const hasEvent = day && config.calendarEvents.some((e) => e.date === day)
                 const isToday = day === 14
                 return (
                   <div
@@ -325,7 +503,7 @@ export default function WorkspacePage() {
             <div className="border-t border-border pt-2">
               <div className="text-xs text-muted-foreground mb-2">今日日程</div>
               <div className="space-y-1.5">
-                {config.calendarEvents.filter(e => e.date === 14).map((event) => (
+                {config.calendarEvents.filter((e) => e.date === 14).map((event) => (
                   <div key={event.id} className="flex items-center gap-2 text-xs">
                     <span className={`w-1.5 h-1.5 rounded-full ${event.color}`} />
                     <span className="text-muted-foreground">{event.time}</span>
@@ -346,9 +524,7 @@ export default function WorkspacePage() {
                   <CheckSquare className="w-4 h-4 text-emerald-500" />
                 </div>
                 待办事项
-                <Badge className="ml-1 text-xs px-1.5 py-0 bg-rose-500">
-                  {totalTodo}
-                </Badge>
+                <Badge className="ml-1 text-xs px-1.5 py-0 bg-rose-500">{totalTodo}</Badge>
               </CardTitle>
               <Button variant="ghost" size="sm" className="text-xs text-primary h-auto p-0 hover:bg-transparent">
                 查看全部
@@ -390,9 +566,7 @@ export default function WorkspacePage() {
                       <span className="w-2 h-2 rounded-full" style={{ backgroundColor: item.color }} />
                       <span className="text-muted-foreground text-xs">{item.title}</span>
                     </div>
-                    <Badge variant="secondary" className="text-xs h-5">
-                      {item.count}
-                    </Badge>
+                    <Badge variant="secondary" className="text-xs h-5">{item.count}</Badge>
                   </div>
                 ))}
               </div>
@@ -451,9 +625,7 @@ export default function WorkspacePage() {
                 </div>
                 本周活跃度
               </CardTitle>
-              <Badge variant="secondary" className="text-xs">
-                +12.5%
-              </Badge>
+              <Badge variant="secondary" className="text-xs">+12.5%</Badge>
             </div>
           </CardHeader>
           <CardContent>
@@ -461,8 +633,8 @@ export default function WorkspacePage() {
               <AreaChart data={weeklyData}>
                 <defs>
                   <linearGradient id="colorValue" x1="0" y1="0" x2="0" y2="1">
-                    <stop offset="5%" stopColor="#3b82f6" stopOpacity={0.3}/>
-                    <stop offset="95%" stopColor="#3b82f6" stopOpacity={0}/>
+                    <stop offset="5%" stopColor="#3b82f6" stopOpacity={0.3} />
+                    <stop offset="95%" stopColor="#3b82f6" stopOpacity={0} />
                   </linearGradient>
                 </defs>
                 <CartesianGrid strokeDasharray="3 3" stroke="#f0f0f0" />
