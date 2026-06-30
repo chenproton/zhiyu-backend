@@ -301,9 +301,9 @@ export default function WorkspacePage() {
   // 学生角色展示全新的学生工作台
   if (currentRole === "student") {
     return (
-      <div className="px-4 pt-3 pb-2 bg-gray-50 min-h-[calc(100vh-3.5rem)]">
-        <div className="flex flex-col sm:flex-row sm:items-center sm:justify-between gap-4">
-          <div>
+    <div className="px-4 pt-6 pb-2 bg-gray-50 min-h-[calc(100vh-3.5rem)]">
+      <div className="flex flex-col sm:flex-row sm:items-center sm:justify-between gap-4 mb-4">
+        <div>
             <h1 className="text-2xl font-bold text-gray-900">学生工作台</h1>
             <p className="text-sm text-gray-500 mt-1">
               欢迎回来，同学。今天是2026年4月14日，星期二。管理你的学习、岗位、测评与成长。
@@ -322,8 +322,8 @@ export default function WorkspacePage() {
   // 教职工角色展示教师工作台
   if (currentRole === "teacher") {
     return (
-      <div className="px-4 pt-3 pb-2 bg-gray-50 min-h-[calc(100vh-3.5rem)]">
-        <div className="flex flex-col sm:flex-row sm:items-center sm:justify-between gap-4">
+      <div className="px-4 pt-6 pb-2 bg-gray-50 min-h-[calc(100vh-3.5rem)]">
+        <div className="flex flex-col sm:flex-row sm:items-center sm:justify-between gap-4 mb-4">
           <div>
             <h1 className="text-2xl font-bold text-gray-900">教师工作台</h1>
             <p className="text-sm text-gray-500 mt-1">
@@ -353,8 +353,8 @@ export default function WorkspacePage() {
   const RoleIcon = roleIcons[currentRole as keyof typeof roleIcons] || GraduationCap
 
   return (
-    <div className="px-4 pt-3 pb-2 bg-gray-50 min-h-[calc(100vh-3.5rem)]">
-      <div className="flex flex-col sm:flex-row sm:items-center sm:justify-between gap-4">
+      <div className="px-4 pt-6 pb-2 bg-gray-50 min-h-[calc(100vh-3.5rem)]">
+        <div className="flex flex-col sm:flex-row sm:items-center sm:justify-between gap-4 mb-4">
         <div>
           <h1 className="text-2xl font-bold text-gray-900">我的服务台</h1>
           <p className="text-sm text-gray-500 mt-1">{config.welcomeText}今天是2026年4月14日，星期二。</p>

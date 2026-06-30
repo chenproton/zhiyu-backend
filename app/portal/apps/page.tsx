@@ -236,7 +236,7 @@ export default function AppsPage() {
 
   return (
     <TooltipProvider>
-      <div className="min-h-[calc(100vh-3.5rem)] bg-[#f5f7fa] pt-3">
+      <div className="min-h-[calc(100vh-3.5rem)] bg-[#f5f7fa] pt-6">
         {/* Quick Access Bar */}
         <div className="bg-background border-b border-border px-4 py-1.5 sticky top-14 z-10 shadow-sm">
           <div className="flex items-center gap-4">
