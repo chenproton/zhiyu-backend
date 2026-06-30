@@ -167,7 +167,7 @@ const roleIcons = {
 // 教师工作台 Tab 配置
 const teacherTabs = [
   { id: "dashboard", label: "工作台首页", icon: LayoutDashboard },
-  { id: "courses", label: "我的课程", icon: BookOpen },
+  { id: "courses", label: "我的场景/课程", icon: BookOpen },
   { id: "portraits", label: "我的学生", icon: BarChart3 },
   { id: "profile", label: "个人中心", icon: User },
 ]

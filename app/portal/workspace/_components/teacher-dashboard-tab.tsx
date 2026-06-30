@@ -4,7 +4,7 @@ import { useState, useMemo } from "react"
 import type { LucideIcon } from "lucide-react"
 import {
   Bell, BookOpen, Calendar, CheckSquare, ChevronLeft, ChevronRight,
-  Clock, GraduationCap, Users, ClipboardList, AlertCircle,
+  Clock, GraduationCap, ClipboardList,
   ExternalLink, PlayCircle, TrendingUp, FileCheck, PenLine,
 } from "lucide-react"
 import { Badge } from "@/components/ui/badge"
@@ -17,14 +17,12 @@ import {
 } from "@/components/ui/popover"
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@/components/ui/select"
 import { SectionCard } from "./section-card"
-import { StatCard } from "./stat-card"
 import { CourseDetailDialog } from "./teacher-courses-tab"
 import { PrepAssociateDialog } from "./prep-associate-dialog"
 import { GradeEntryDialog } from "./grade-entry-dialog"
 import {
   mockTeacherAnnouncements,
   mockTeacherTodos,
-  mockTeacherCourses,
   mockClassPlans,
   mockClassSessions,
   mockTeacherSchedule,
@@ -53,9 +51,6 @@ interface TeacherDashboardTabProps {
 }
 
 export function TeacherDashboardTab({ onTabChange, prepAssociations = {}, onAssociate }: TeacherDashboardTabProps) {
-  const activeCourses = mockTeacherCourses.filter(c => c.status === "进行中").length
-  const todoUrgentCount = mockTeacherTodos.filter(t => t.urgent).length
-
   const [prepDialogOpen, setPrepDialogOpen] = useState(false)
   const [prepPlanId, setPrepPlanId] = useState("")
   const [prepSessionId, setPrepSessionId] = useState("")
@@ -66,21 +61,20 @@ export function TeacherDashboardTab({ onTabChange, prepAssociations = {}, onAsso
   const [gradeDialogOpen, setGradeDialogOpen] = useState(false)
   const [gradeSessionTitle, setGradeSessionTitle] = useState("")
   const [gradeClassName, setGradeClassName] = useState("")
+  const [prepSessionLabels, setPrepSessionLabels] = useState<Record<string, string>>({})
+
+  const usageMap: Record<string, string> = {}
+  for (const [sessionKey, assoc] of Object.entries(prepAssociations)) {
+    if (sessionKey === prepSessionId) continue
+    if (assoc.planId !== prepPlanId) continue
+    const label = prepSessionLabels[sessionKey] || sessionKey
+    for (const sub of assoc.subItems) {
+      usageMap[sub.id] = label
+    }
+  }
 
   return (
     <div className="space-y-3">
-      {/* 顶部统计 */}
-      <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-4">
-        <StatCard title="授课课程" value={activeCourses} icon={BookOpen} trend="本学期共 5 门" color="blue"
-          onClick={() => onTabChange("courses")} />
-        <StatCard title="学生人数" value={186} icon={Users} trend="覆盖 3 个班级" color="green"
-          onClick={() => onTabChange("portraits")} />
-        <StatCard title="待批改作业" value={38} icon={ClipboardList} trend="2 门课程待批改" color="amber"
-          onClick={() => onTabChange("assessment")} />
-        <StatCard title="紧急待办" value={todoUrgentCount} icon={AlertCircle} trend="成绩提交截止临近" trendUp color="rose"
-          onClick={() => onTabChange("courses")} />
-      </div>
-
       {/* 主体：课程表 + 右侧边栏 */}
       <div className="grid grid-cols-1 lg:grid-cols-4 gap-4">
         {/* 课程日历 */}
@@ -89,10 +83,11 @@ export function TeacherDashboardTab({ onTabChange, prepAssociations = {}, onAsso
             <CourseScheduleTable
               prepAssociations={prepAssociations}
               onAssociate={onAssociate}
-              onPrepRequest={(planId, sessionId, planName, isHybrid, url) => {
+              onPrepRequest={(planId, sessionId, planName, isHybrid, url, sessionLabel) => {
                 setPrepPlanId(planId); setPrepSessionId(sessionId)
                 setPrepPlanName(planName)
                 setPrepIsHybrid(isHybrid); setPrepUrl(url); setPrepDialogOpen(true)
+                if (sessionLabel) setPrepSessionLabels(prev => ({ ...prev, [sessionId]: sessionLabel }))
               }}
               onGradeRequest={(title, className) => {
                 setGradeSessionTitle(title); setGradeClassName(className || "")
@@ -185,6 +180,7 @@ export function TeacherDashboardTab({ onTabChange, prepAssociations = {}, onAsso
         planName={prepPlanName}
         isHybrid={prepIsHybrid}
         currentSubItemIds={prepAssociations[prepSessionId]?.subItems.map(s => s.id)}
+        usageMap={usageMap}
         onConfirm={(subItems) => {
           if (onAssociate) {
             onAssociate((prev) => ({
@@ -269,7 +265,7 @@ function getCourseUrls(event: TeacherScheduleEvent) {
 interface CourseScheduleTableProps {
   prepAssociations?: Record<string, PrepAssociationRecord>
   onAssociate?: (fn: (prev: Record<string, PrepAssociationRecord>) => Record<string, PrepAssociationRecord>) => void
-  onPrepRequest?: (planId: string, sessionId: string, planName: string, isHybrid: boolean, url: string) => void
+  onPrepRequest?: (planId: string, sessionId: string, planName: string, isHybrid: boolean, url: string, sessionLabel?: string) => void
   onGradeRequest?: (title: string, className: string) => void
 }
 
@@ -465,9 +461,9 @@ function CourseScheduleTable({ prepAssociations = {}, onAssociate, onPrepRequest
                                 <Button size="sm" variant="link"
                                   className="text-[10px] h-5 p-0 text-blue-600"
                                   onClick={() => {
-                                    if (onPrepRequest) onPrepRequest(pid, sessionKey, event.title, urls.isHybrid, urls.prepUrl)
+                                    if (onPrepRequest) onPrepRequest(pid, sessionKey, event.title, urls.isHybrid, urls.prepUrl, `${days[event.dayOfWeek - 1]} ${event.period}`)
                                   }}>
-                                  修改关联
+                                   修改关联
                                 </Button>
                               </div>
                             )
@@ -478,11 +474,11 @@ function CourseScheduleTable({ prepAssociations = {}, onAssociate, onPrepRequest
                         <div className="flex items-center gap-2">
                           <Button size="sm" variant="outline"
                             className={`flex-1 justify-center text-[11px] h-7 px-2 ${urls.isHybrid ? "border-blue-200 text-blue-600 hover:bg-blue-50" : "border-emerald-200 text-emerald-600 hover:bg-emerald-50"}`}
-                            onClick={() => {
+                              onClick={() => {
                               if (existingAssoc && existingAssoc.subItems.length > 0) {
                                 window.open(urls.prepUrl, "_blank")
                               } else if (onPrepRequest) {
-                                onPrepRequest(pid, sessionKey, event.title, urls.isHybrid, urls.prepUrl)
+                                onPrepRequest(pid, sessionKey, event.title, urls.isHybrid, urls.prepUrl, `${days[event.dayOfWeek - 1]} ${event.period}`)
                               } else {
                                 window.open(urls.prepUrl, "_blank")
                               }

@@ -230,6 +230,12 @@
   100% { transform: translateY(60px); opacity: 0; }
 }
 
+/* ─── YI KNOW panel entry ─── */
+@keyframes rb-slideUp {
+  0% { opacity: 0; transform: translateY(12px) scale(0.96); }
+  100% { opacity: 1; transform: translateY(0) scale(1); }
+}
+
 /* ─── YI KNOW bubble animations ─── */
 @keyframes rb-pop {
   0% { opacity: 0; transform: scale(.7) translateX(-20px); }
@@ -240,4 +246,22 @@
   15% { transform: rotate(18deg); }
   30% { transform: rotate(-8deg); }
   45% { transform: rotate(14deg); }
+}
+
+/* ─── Custom thin scrollbar for YI KNOW panel ─── */
+.scrollbar-thin::-webkit-scrollbar {
+  width: 4px;
+}
+.scrollbar-thin::-webkit-scrollbar-track {
+  background: transparent;
+}
+.scrollbar-thin::-webkit-scrollbar-thumb {
+  background: oklch(0 0 0 / 0.08);
+  border-radius: 4px;
+}
+.scrollbar-thin::-webkit-scrollbar-thumb:hover {
+  background: oklch(0 0 0 / 0.15);
+}
+.scrollbar-none::-webkit-scrollbar {
+  display: none;
 }

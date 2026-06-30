@@ -141,7 +141,7 @@ export function LearningTab() {
           </SectionCard>
 
           {/* 混合课（右侧） */}
-          <SectionCard title="我的混合课" icon={BookOpen} iconColor="blue" action={{ label: "全部课程" }}>
+           <SectionCard title="我的课程" icon={BookOpen} iconColor="blue" action={{ label: "全部课程" }}>
             <Tabs value={courseFilter} onValueChange={setCourseFilter}>
               <TabsList className="h-8 bg-gray-100 mb-4">
                 <TabsTrigger value="all" className="text-xs px-3 data-[state=active]:bg-white data-[state=active]:shadow-sm">全部</TabsTrigger>

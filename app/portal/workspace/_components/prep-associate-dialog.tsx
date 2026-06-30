@@ -25,6 +25,7 @@ interface PrepAssociateDialogProps {
   planName: string
   isHybrid: boolean
   currentSubItemIds?: string[]
+  usageMap?: Record<string, string>
   onConfirm: (subItems: PrepSubItem[]) => void
 }
 
@@ -35,6 +36,7 @@ export function PrepAssociateDialog({
   planName,
   isHybrid,
   currentSubItemIds,
+  usageMap = {},
   onConfirm,
 }: PrepAssociateDialogProps) {
   const subItems = isHybrid
@@ -107,28 +109,36 @@ export function PrepAssociateDialog({
               <div className="space-y-1 max-h-[280px] overflow-y-auto pr-1">
                 {subItems.map((item) => {
                   const isSelected = selectedIds.has(item.id)
+                  const usedBy = usageMap[item.id]
                   return (
                     <div
                       key={item.id}
-                      onClick={() => toggleItem(item.id)}
+                      onClick={() => !usedBy && toggleItem(item.id)}
                       className={`flex items-center gap-3 px-3 py-2.5 rounded-lg border cursor-pointer transition-all ${
                         isSelected
                           ? isHybrid
                             ? "border-blue-300 bg-blue-50"
                             : "border-emerald-300 bg-emerald-50"
-                          : "border-gray-100 bg-white hover:border-gray-200 hover:bg-gray-50"
+                          : usedBy
+                            ? "border-gray-200 bg-gray-50/50 opacity-70 cursor-not-allowed"
+                            : "border-gray-100 bg-white hover:border-gray-200 hover:bg-gray-50"
                       }`}
                     >
                       <Checkbox
                         checked={isSelected}
+                        disabled={!!usedBy}
                         className="pointer-events-none"
                       />
-                      <span className={`text-sm flex-1 ${isSelected ? "font-semibold text-gray-900" : "text-gray-700"}`}>
+                      <span className={`text-sm flex-1 ${isSelected ? "font-semibold text-gray-900" : usedBy ? "text-gray-400" : "text-gray-700"}`}>
                         {item.name}
                       </span>
-                      {isSelected && (
+                      {usedBy ? (
+                        <span className="text-[10px] text-amber-600 bg-amber-50 border border-amber-200 px-1.5 py-0.5 rounded shrink-0">
+                          已被 {usedBy} 关联
+                        </span>
+                      ) : isSelected ? (
                         <Check className={`h-4 w-4 shrink-0 ${isHybrid ? "text-blue-600" : "text-emerald-600"}`} />
-                      )}
+                      ) : null}
                     </div>
                   )
                 })}

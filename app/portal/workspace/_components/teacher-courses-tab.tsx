@@ -506,6 +506,7 @@ export function TeacherCoursesTab({ prepAssociations = {}, onAssociate }: Teache
   const [prepPlanName, setPrepPlanName] = useState("")
   const [prepIsHybrid, setPrepIsHybrid] = useState(true)
   const [prepUrl, setPrepUrl] = useState("")
+  const [prepSessionLabels, setPrepSessionLabels] = useState<Record<string, string>>({})
 
   const [gradeDialogOpen, setGradeDialogOpen] = useState(false)
   const [gradeSessionTitle, setGradeSessionTitle] = useState("")
@@ -519,6 +520,16 @@ export function TeacherCoursesTab({ prepAssociations = {}, onAssociate }: Teache
   const termPlans = mockClassPlans.filter((p) => p.term === selectedTerm)
   const planCourseIds = new Set(termPlans.map((p) => p.id))
   const termSessions = mockClassSessions.filter((s) => planCourseIds.has(s.courseId))
+
+  const usageMap: Record<string, string> = {}
+  for (const [sessionKey, assoc] of Object.entries(prepAssociations)) {
+    if (sessionKey === prepSessionId) continue
+    if (assoc.planId !== prepPlanId) continue
+    const label = prepSessionLabels[sessionKey] || sessionKey
+    for (const sub of assoc.subItems) {
+      usageMap[sub.id] = label
+    }
+  }
 
   const openCourseDialog = (course: typeof mockTeacherCourses[0], tab: string) => {
     setSelectedCourse({
@@ -690,6 +701,7 @@ export function TeacherCoursesTab({ prepAssociations = {}, onAssociate }: Teache
                                                 setPrepIsHybrid(isHybrid)
                                                 setPrepUrl(accentColors.prepUrl)
                                                 setPrepDialogOpen(true)
+                                                setPrepSessionLabels(prev => ({ ...prev, [session.id]: `${session.weekday} ${session.period}` }))
                                               }}>
                                               修改关联
                                             </Button>
@@ -713,6 +725,7 @@ export function TeacherCoursesTab({ prepAssociations = {}, onAssociate }: Teache
                                             setPrepIsHybrid(isHybrid)
                                             setPrepUrl(accentColors.prepUrl)
                                             setPrepDialogOpen(true)
+                                            setPrepSessionLabels(prev => ({ ...prev, [session.id]: `${session.weekday} ${session.period}` }))
                                           }
                                         }}>
                                         <ExternalLink className="h-3 w-3 mr-0.5" />
@@ -780,6 +793,7 @@ export function TeacherCoursesTab({ prepAssociations = {}, onAssociate }: Teache
         planName={prepPlanName}
         isHybrid={prepIsHybrid}
         currentSubItemIds={prepAssociations[prepSessionId]?.subItems.map(s => s.id)}
+        usageMap={usageMap}
         onConfirm={(subItems) => {
           if (onAssociate) {
             onAssociate((prev) => ({

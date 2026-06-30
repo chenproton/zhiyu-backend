@@ -236,7 +236,7 @@ export default function AppsPage() {
 
   return (
     <TooltipProvider>
-      <div className="min-h-[calc(100vh-3.5rem)] bg-[#f5f7fa] pt-6">
+      <div className="min-h-[calc(100vh-3.5rem)] bg-[#f5f7fa] pt-0">
         {/* Quick Access Bar */}
         <div className="bg-background border-b border-border px-4 py-1.5 sticky top-14 z-10 shadow-sm">
           <div className="flex items-center gap-4">
@@ -292,7 +292,7 @@ export default function AppsPage() {
           </aside>
 
           {/* Main Content */}
-          <main ref={contentRef} className="flex-1 px-4 pb-4 overflow-y-auto max-h-[calc(100vh-3.5rem-40px)]">
+          <main ref={contentRef} className="flex-1 px-4 pb-4 pt-4 overflow-y-auto max-h-[calc(100vh-3.5rem-40px)]">
             {modulesLoading ? (
               <div className="flex items-center justify-center h-64">
                 <div className="text-sm text-muted-foreground">加载中...</div>

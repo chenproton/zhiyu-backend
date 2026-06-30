@@ -62,6 +62,8 @@ const RESOURCES: Resource[] = [
     tags: ["金融", "专业"],
     icon: "book",
     color: "bg-amber-50 text-amber-600 border-amber-100",
+    originalId: 1,
+    originalType: "kb",
   },
   {
     id: "logistics-kb",
@@ -71,6 +73,8 @@ const RESOURCES: Resource[] = [
     tags: ["物流", "专业"],
     icon: "book",
     color: "bg-emerald-50 text-emerald-600 border-emerald-100",
+    originalId: 2,
+    originalType: "kb",
   },
   {
     id: "cnc-kb",
@@ -80,6 +84,8 @@ const RESOURCES: Resource[] = [
     tags: ["数控", "实训"],
     icon: "book",
     color: "bg-blue-50 text-blue-600 border-blue-100",
+    originalId: 3,
+    originalType: "kb",
   },
   {
     id: "hotel-kb",
@@ -89,6 +95,8 @@ const RESOURCES: Resource[] = [
     tags: ["酒店", "案例"],
     icon: "book",
     color: "bg-rose-50 text-rose-600 border-rose-100",
+    originalId: 4,
+    originalType: "kb",
   },
   {
     id: "position-agent",
@@ -98,6 +106,8 @@ const RESOURCES: Resource[] = [
     tags: ["岗位", "创建"],
     icon: "bot",
     color: "bg-indigo-50 text-indigo-600 border-indigo-100",
+    originalId: 5,
+    originalType: "bot",
   },
   {
     id: "scene-agent",
@@ -107,6 +117,8 @@ const RESOURCES: Resource[] = [
     tags: ["场景", "创建"],
     icon: "bot",
     color: "bg-cyan-50 text-cyan-600 border-cyan-100",
+    originalId: 6,
+    originalType: "bot",
   },
   {
     id: "qa-robot",
@@ -116,6 +128,8 @@ const RESOURCES: Resource[] = [
     tags: ["答疑", "课程"],
     icon: "bot",
     color: "bg-violet-50 text-violet-600 border-violet-100",
+    originalId: 7,
+    originalType: "bot",
   },
   {
     id: "custom-robot",
@@ -125,6 +139,8 @@ const RESOURCES: Resource[] = [
     tags: ["自建", "自定义"],
     icon: "bot",
     color: "bg-fuchsia-50 text-fuchsia-600 border-fuchsia-100",
+    originalId: 8,
+    originalType: "bot",
   },
   {
     id: "brand-platform",
@@ -310,9 +326,9 @@ function ResourceItem({
   return (
     <div
       className={cn(
-        "rounded-xl border transition-all overflow-hidden",
+        "rounded-xl border transition-all duration-200 overflow-hidden",
         resource.color.replace(/text-\w+-600/g, "").trim(),
-        isExpandable ? "hover:shadow-sm hover:border-primary/40 cursor-pointer" : isClickable ? "hover:shadow-sm hover:border-primary/40 cursor-pointer" : "opacity-80"
+        isExpandable ? "hover:shadow-md hover:border-primary/40 hover:-translate-y-0.5 cursor-pointer" : isClickable ? "hover:shadow-md hover:border-primary/40 hover:-translate-y-0.5 cursor-pointer" : "opacity-80"
       )}
     >
       <button
@@ -323,7 +339,7 @@ function ResourceItem({
         <div className="flex items-start gap-3">
           <div
             className={cn(
-              "w-9 h-9 rounded-lg border flex items-center justify-center shrink-0",
+              "w-9 h-9 rounded-xl border flex items-center justify-center shrink-0 transition-transform duration-200 group-hover:scale-110",
               resource.color
             )}
           >
@@ -331,7 +347,7 @@ function ResourceItem({
           </div>
           <div className="flex-1 min-w-0">
             <div className="flex items-center gap-2">
-              <h4 className="font-medium text-sm text-foreground truncate">
+              <h4 className="font-medium text-sm text-foreground truncate group-hover:text-primary transition-colors duration-200">
                 {resource.title}
               </h4>
             </div>
@@ -377,13 +393,13 @@ function QuickActionItem({ action }: { action: QuickAction }) {
       target="_blank"
       rel="noopener noreferrer"
       className={cn(
-        "flex items-center gap-2 px-3 py-2 rounded-lg border text-xs font-medium transition-colors group",
+        "flex items-center gap-2 px-3 py-2 rounded-lg border text-xs font-medium transition-all duration-200 group hover:shadow-sm active:scale-[0.98]",
         action.color
       )}
     >
       {getIcon(action.icon)}
       <span>{action.label}</span>
-      <ExternalLink className="w-3 h-3 ml-auto opacity-60 group-hover:opacity-100" />
+      <ExternalLink className="w-3 h-3 ml-auto opacity-40 group-hover:opacity-100 transition-opacity" />
     </a>
   )
 }
@@ -606,11 +622,14 @@ export function YiKnowAssistant() {
         if (items.length === 0) return null
         return (
           <div key={cat}>
-            <div className="flex items-center gap-2 mb-2">
-              {getIcon(CATEGORY_META[cat].icon)}
-              <h4 className="text-xs font-semibold text-muted-foreground uppercase tracking-wider">
+            <div className="flex items-center gap-2 mb-2.5">
+              <div className="w-5 h-5 rounded-md bg-muted/60 flex items-center justify-center">
+                {getIcon(CATEGORY_META[cat].icon)}
+              </div>
+              <h4 className="text-xs font-semibold text-muted-foreground/70 uppercase tracking-wider">
                 {CATEGORY_META[cat].label}
               </h4>
+              <div className="flex-1 h-px bg-gradient-to-r from-border/60 to-transparent ml-1" />
             </div>
             <div className="space-y-2">
               {items.map((r) => (
@@ -636,20 +655,20 @@ export function YiKnowAssistant() {
 
   const chatView = (
     <div className="h-full flex flex-col">
-      <div className="flex items-center justify-between px-3 py-2 border-b bg-background shrink-0">
+      <div className="flex items-center justify-between px-3 py-2 border-b bg-gradient-to-r from-primary/[0.04] to-transparent shrink-0">
         <div className="flex items-center gap-2">
           <MessageCircle className="w-4 h-4 text-primary" />
-          <span className="text-xs font-medium">AI 引导对话（演示）</span>
+          <span className="text-xs font-medium">AI 对话</span>
         </div>
         <button
           onClick={handleCloseChat}
-          className="w-6 h-6 rounded-full hover:bg-muted flex items-center justify-center transition-colors"
+          className="w-6 h-6 rounded-full hover:bg-muted/80 flex items-center justify-center transition-all duration-200 hover:scale-105 active:scale-95"
           title="返回导航面板"
         >
-          <X className="w-3.5 h-3.5" />
+          <X className="w-3.5 h-3.5 text-muted-foreground" />
         </button>
       </div>
-      <div className="flex-1 h-full overflow-y-auto px-3 py-2" ref={scrollRef}>
+      <div className="flex-1 h-full overflow-y-auto scrollbar-thin px-3 py-2" ref={scrollRef}>
         <div className="space-y-3">
           {chatMessages.map((msg) => (
             <div
@@ -666,10 +685,10 @@ export function YiKnowAssistant() {
               )}
               <div
                 className={cn(
-                  "max-w-[90%] rounded-2xl px-3 py-2 text-xs leading-relaxed",
+                  "max-w-[90%] rounded-2xl px-3 py-2 text-xs leading-relaxed shadow-sm",
                   msg.role === "user"
-                    ? "bg-primary text-primary-foreground rounded-br-none"
-                    : "bg-background border rounded-bl-none shadow-sm"
+                    ? "bg-gradient-to-br from-primary to-primary/90 text-primary-foreground rounded-br-none"
+                    : "bg-background border rounded-bl-none"
                 )}
               >
                 {msg.content}
@@ -712,8 +731,13 @@ export function YiKnowAssistant() {
               <div className="w-6 h-6 rounded-full bg-primary text-primary-foreground flex items-center justify-center shrink-0 mt-0.5">
                 <Sparkles className="w-3 h-3" />
               </div>
-              <div className="bg-background border rounded-2xl rounded-bl-none px-3 py-2 text-xs text-muted-foreground shadow-sm">
-                正在思考…
+              <div className="bg-background border rounded-2xl rounded-bl-none px-3 py-2 text-xs text-muted-foreground shadow-sm flex items-center gap-1.5">
+                <span className="inline-flex gap-0.5">
+                  <span className="w-1 h-1 rounded-full bg-primary/40 animate-bounce" style={{ animationDelay: "0ms", animationDuration: "1.2s" }} />
+                  <span className="w-1 h-1 rounded-full bg-primary/40 animate-bounce" style={{ animationDelay: "200ms", animationDuration: "1.2s" }} />
+                  <span className="w-1 h-1 rounded-full bg-primary/40 animate-bounce" style={{ animationDelay: "400ms", animationDuration: "1.2s" }} />
+                </span>
+                <span>思考中</span>
               </div>
             </div>
           )}
@@ -729,13 +753,14 @@ export function YiKnowAssistant() {
         {/* Speech bubble */}
         {!open && (
           <div
-            className="relative bg-white rounded-2xl px-5 py-3.5 shadow-lg border border-blue-200/15 max-w-[200px]"
+            className="relative bg-white rounded-2xl px-5 py-3.5 shadow-lg max-w-[210px]"
             style={{
-              boxShadow: "0 16px 40px rgba(90,120,180,.22)",
+              boxShadow: "0 20px 48px -8px rgba(60,80,140,0.2), 0 4px 12px rgba(60,80,140,0.06)",
               animation: "rb-pop 0.6s cubic-bezier(.2,1.3,.4,1) both",
               animationDelay: ".5s",
             }}
           >
+            <div className="absolute -top-px left-6 right-6 h-[2px] bg-gradient-to-r from-transparent via-primary/30 to-transparent rounded-full" />
             <span className="text-lg font-extrabold text-[#1a73e8] inline-flex items-center gap-1.5">
               <span style={{ animation: "rb-wave 1.6s ease-in-out infinite", transformOrigin: "70% 70%" }}>
                 👋
@@ -861,23 +886,39 @@ export function YiKnowAssistant() {
 
       {/* Assistant panel */}
       {open && (
-        <div className="fixed bottom-[130px] right-6 z-[100] w-[420px] max-w-[calc(100vw-3rem)] h-[580px] max-h-[calc(100vh-10rem)] bg-background border rounded-2xl shadow-2xl flex flex-col overflow-hidden">
+        <div
+          className="fixed bottom-[130px] right-6 z-[100] w-[420px] max-w-[calc(100vw-3rem)] h-[580px] max-h-[calc(100vh-10rem)] flex flex-col overflow-hidden rounded-2xl border shadow-2xl"
+          style={{
+            background: "oklch(from var(--background) l c h / 0.82)",
+            backdropFilter: "blur(20px) saturate(1.4)",
+            WebkitBackdropFilter: "blur(20px) saturate(1.4)",
+            boxShadow: "0 25px 60px -12px oklch(0 0 0 / 0.25), 0 8px 24px -6px oklch(0 0 0 / 0.08), inset 0 1px 0 oklch(1 1 0 / 0.06)",
+            animation: "rb-slideUp 0.35s cubic-bezier(0.16, 1, 0.3, 1)",
+          }}
+        >
+          {/* Top decorative gradient line */}
+          <div className="absolute top-0 left-0 right-0 h-[2px] bg-gradient-to-r from-primary/20 via-primary/60 to-primary/20 rounded-t-2xl" />
+
           {/* Header */}
-          <div className="px-4 py-3 border-b bg-gradient-to-r from-primary/10 to-primary/5 flex items-center justify-between shrink-0">
-            <div className="flex items-center gap-2">
-              <div className="w-8 h-8 rounded-full bg-primary text-primary-foreground flex items-center justify-center">
+          <div className="relative px-4 py-3 border-b bg-gradient-to-r from-primary/[0.08] to-transparent flex items-center justify-between shrink-0">
+            <div className="flex items-center gap-2.5">
+              <div className="relative w-8 h-8 rounded-full bg-gradient-to-br from-primary to-primary/70 text-primary-foreground flex items-center justify-center shadow-sm">
                 <Sparkles className="w-4 h-4" />
+                <div className="absolute -inset-0.5 rounded-full bg-primary/20 animate-pulse" style={{ animationDuration: "3s" }} />
               </div>
               <div>
-                <h3 className="font-semibold text-sm">YI KNOW</h3>
-                <p className="text-[10px] text-muted-foreground">职业教育场景化教学智能助理</p>
+                <h3 className="font-semibold text-sm tracking-wide">
+                  <span className="text-primary">YI</span>{" "}
+                  <span>KNOW</span>
+                </h3>
+                <p className="text-[10px] text-muted-foreground/80">职业教育场景化教学智能助理</p>
               </div>
             </div>
             <button
               onClick={() => handleOpenChange(false)}
-              className="w-7 h-7 rounded-full hover:bg-muted flex items-center justify-center transition-colors"
+              className="w-7 h-7 rounded-full hover:bg-muted/80 flex items-center justify-center transition-all duration-200 hover:scale-105 active:scale-95"
             >
-              <X className="w-4 h-4" />
+              <X className="w-4 h-4 text-muted-foreground" />
             </button>
           </div>
 
@@ -890,17 +931,17 @@ export function YiKnowAssistant() {
             }}
             className="px-4 pt-3 pb-2 shrink-0"
           >
-            <TabsList className="w-full grid grid-cols-4 h-9">
-              <TabsTrigger value="all" className="text-xs">
+            <TabsList className="w-full grid grid-cols-4 h-9 bg-muted/60 p-0.5 rounded-xl">
+              <TabsTrigger value="all" className="text-xs data-[state=active]:shadow-sm data-[state=active]:bg-background rounded-lg transition-all duration-200">
                 全部
               </TabsTrigger>
-              <TabsTrigger value="knowledge" className="text-xs">
+              <TabsTrigger value="knowledge" className="text-xs data-[state=active]:shadow-sm data-[state=active]:bg-background rounded-lg transition-all duration-200">
                 知识库
               </TabsTrigger>
-              <TabsTrigger value="agent" className="text-xs">
+              <TabsTrigger value="agent" className="text-xs data-[state=active]:shadow-sm data-[state=active]:bg-background rounded-lg transition-all duration-200">
                 智能体
               </TabsTrigger>
-              <TabsTrigger value="platform" className="text-xs">
+              <TabsTrigger value="platform" className="text-xs data-[state=active]:shadow-sm data-[state=active]:bg-background rounded-lg transition-all duration-200">
                 教学平台
               </TabsTrigger>
             </TabsList>
@@ -911,31 +952,31 @@ export function YiKnowAssistant() {
             {isChatMode ? (
               chatView
             ) : activeTab === "all" ? (
-              <div className="h-full overflow-y-auto pr-2">
+              <div className="h-full overflow-y-auto scrollbar-thin pr-1.5">
                 {groupedResourceList}
               </div>
             ) : (
-              <div className="h-full overflow-y-auto pr-2">
+              <div className="h-full overflow-y-auto scrollbar-thin pr-1.5">
                 {resourceList}
               </div>
             )}
           </div>
-          <Separator />
+          <Separator className="opacity-50" />
 
           {/* Bottom unified input area */}
-          <div className="shrink-0 bg-muted/30">
+          <div className="shrink-0 bg-gradient-to-t from-muted/20 to-transparent">
             {!isChatMode && (
               <div className="px-4 pt-3 pb-0">
-                <div className="flex items-center gap-1.5 mb-2 text-[11px] text-muted-foreground">
-                  <Sparkles className="w-3 h-3 text-primary" />
-                  <span>示例问题：</span>
+                <div className="flex items-center gap-1.5 mb-2 text-[11px] text-muted-foreground/70">
+                  <Sparkles className="w-3 h-3 text-primary/70" />
+                  <span>试试问我：</span>
                 </div>
-                <div className="flex gap-2 overflow-x-auto pb-2">
+                <div className="flex gap-2 overflow-x-auto pb-2 scrollbar-none">
                   {PROMPT_TAGS.map((tag) => (
                     <button
                       key={tag.label}
                       type="button"
-                      className="shrink-0 px-3 py-1.5 rounded-full text-xs border bg-white hover:border-primary/40 hover:text-primary hover:bg-primary/5 transition-colors"
+                      className="shrink-0 px-3 py-1.5 rounded-full text-xs border bg-background/80 hover:border-primary/50 hover:text-primary hover:bg-primary/5 transition-all duration-200 active:scale-95 shadow-sm"
                       onClick={() => {
                         setInputValue(tag.value)
                       }}
@@ -946,12 +987,12 @@ export function YiKnowAssistant() {
                 </div>
               </div>
             )}
-            <div className="p-2 pt-3 bg-background border-t flex items-center gap-2">
-              <div className="relative flex-1">
-                <Search className="absolute left-3 top-1/2 -translate-y-1/2 w-4 h-4 text-muted-foreground" />
+            <div className="p-2 pt-3 bg-background/60 border-t flex items-center gap-2">
+              <div className="relative flex-1 group">
+                <Search className="absolute left-3 top-1/2 -translate-y-1/2 w-4 h-4 text-muted-foreground/60 group-focus-within:text-primary transition-colors duration-200" />
                 <Input
-                  placeholder="输入问题或搜索资源，例如：金融专业岗位标准"
-                  className="pl-9 h-9 text-sm"
+                  placeholder="搜索资源或提问..."
+                  className="pl-9 h-9 text-sm bg-muted/40 border-muted-foreground/20 focus-visible:bg-background transition-all duration-200"
                   value={inputValue}
                   onChange={(e) => setInputValue(e.target.value)}
                   onKeyDown={(e) => {
@@ -964,7 +1005,7 @@ export function YiKnowAssistant() {
               </div>
               <Button
                 size="icon"
-                className="h-9 w-9 shrink-0"
+                className="h-9 w-9 shrink-0 bg-gradient-to-br from-primary to-primary/80 hover:from-primary/90 hover:to-primary/70 shadow-sm transition-all duration-200 active:scale-95"
                 onClick={handleSend}
                 disabled={!inputValue.trim() || isTyping}
               >
