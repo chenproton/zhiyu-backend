@@ -5,7 +5,7 @@ import type { LucideIcon } from "lucide-react"
 import {
   Bell, BookOpen, Calendar, CheckSquare, ChevronLeft, ChevronRight,
   Clock, GraduationCap, ClipboardList,
-  ExternalLink, PlayCircle, TrendingUp, FileCheck, PenLine,
+  ExternalLink, PlayCircle, TrendingUp, FileCheck,
 } from "lucide-react"
 import { Badge } from "@/components/ui/badge"
 import { Button } from "@/components/ui/button"
@@ -19,7 +19,8 @@ import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@
 import { SectionCard } from "./section-card"
 import { CourseDetailDialog } from "./teacher-courses-tab"
 import { PrepAssociateDialog } from "./prep-associate-dialog"
-import { GradeEntryDialog } from "./grade-entry-dialog"
+import { GradingIframeDialog } from "./grading-iframe-dialog"
+import { HybridGradingDialog } from "./hybrid-grading-dialog"
 import {
   mockTeacherAnnouncements,
   mockTeacherTodos,
@@ -61,6 +62,9 @@ export function TeacherDashboardTab({ onTabChange, prepAssociations = {}, onAsso
   const [gradeDialogOpen, setGradeDialogOpen] = useState(false)
   const [gradeSessionTitle, setGradeSessionTitle] = useState("")
   const [gradeClassName, setGradeClassName] = useState("")
+  const [hybridGradeDialogOpen, setHybridGradeDialogOpen] = useState(false)
+  const [hybridGradeSessionTitle, setHybridGradeSessionTitle] = useState("")
+  const [hybridGradeClassName, setHybridGradeClassName] = useState("")
   const [prepSessionLabels, setPrepSessionLabels] = useState<Record<string, string>>({})
 
   const usageMap: Record<string, string> = {}
@@ -89,9 +93,15 @@ export function TeacherDashboardTab({ onTabChange, prepAssociations = {}, onAsso
                 setPrepIsHybrid(isHybrid); setPrepUrl(url); setPrepDialogOpen(true)
                 if (sessionLabel) setPrepSessionLabels(prev => ({ ...prev, [sessionId]: sessionLabel }))
               }}
-              onGradeRequest={(title, className) => {
-                setGradeSessionTitle(title); setGradeClassName(className || "")
-                setGradeDialogOpen(true)
+              onGradeRequest={(title, className, isHybrid) => {
+                if (isHybrid) {
+                  setHybridGradeSessionTitle(title)
+                  setHybridGradeClassName(className || "")
+                  setHybridGradeDialogOpen(true)
+                } else {
+                  setGradeSessionTitle(title); setGradeClassName(className || "")
+                  setGradeDialogOpen(true)
+                }
               }}
             />
           </SectionCard>
@@ -191,11 +201,17 @@ export function TeacherDashboardTab({ onTabChange, prepAssociations = {}, onAsso
           window.open(prepUrl, "_blank")
         }}
       />
-      <GradeEntryDialog
+      <GradingIframeDialog
         open={gradeDialogOpen}
         onOpenChange={setGradeDialogOpen}
         sessionTitle={gradeSessionTitle}
         className={gradeClassName}
+      />
+      <HybridGradingDialog
+        open={hybridGradeDialogOpen}
+        onOpenChange={setHybridGradeDialogOpen}
+        sessionTitle={hybridGradeSessionTitle}
+        className={hybridGradeClassName}
       />
     </div>
   )
@@ -266,7 +282,7 @@ interface CourseScheduleTableProps {
   prepAssociations?: Record<string, PrepAssociationRecord>
   onAssociate?: (fn: (prev: Record<string, PrepAssociationRecord>) => Record<string, PrepAssociationRecord>) => void
   onPrepRequest?: (planId: string, sessionId: string, planName: string, isHybrid: boolean, url: string, sessionLabel?: string) => void
-  onGradeRequest?: (title: string, className: string) => void
+  onGradeRequest?: (title: string, className: string, isHybrid: boolean) => void
 }
 
 function CourseScheduleTable({ prepAssociations = {}, onAssociate, onPrepRequest, onGradeRequest }: CourseScheduleTableProps = {}) {
@@ -484,7 +500,7 @@ function CourseScheduleTable({ prepAssociations = {}, onAssociate, onPrepRequest
                               }
                             }}>
                             <ExternalLink className="h-3.5 w-3.5 mr-1" />
-                            前往备课
+                            导学准备
                           </Button>
                           <Button size="sm" variant="outline"
                             className={`flex-1 justify-center text-[11px] h-7 px-2 ${urls.isHybrid ? "border-blue-200 text-blue-600 hover:bg-blue-50" : "border-emerald-200 text-emerald-600 hover:bg-emerald-50"}`}
@@ -495,10 +511,10 @@ function CourseScheduleTable({ prepAssociations = {}, onAssociate, onPrepRequest
                           <Button size="sm" variant="outline"
                             className="flex-1 justify-center text-[11px] h-7 px-2 border-amber-200 text-amber-600 hover:bg-amber-50"
                             onClick={() => {
-                              if (onGradeRequest) onGradeRequest(`${event.title} · ${event.period}`, event.className || event.tag || "")
+                              if (onGradeRequest) onGradeRequest(`${event.title} · ${event.period}`, event.className || event.tag || "", urls.isHybrid)
                             }}>
-                            <PenLine className="h-3.5 w-3.5 mr-1" />
-                            录入成绩
+                            <GraduationCap className="h-3.5 w-3.5 mr-1" />
+                            前往评分
                           </Button>
                         </div>
                         <div className="pt-2 mt-1 border-t border-dashed border-gray-200">

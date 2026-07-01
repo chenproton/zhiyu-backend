@@ -2,7 +2,7 @@
   "platforms": [
     {
       "id": "alliance",
-      "name": "产业联盟与人资品牌服务平台",
+      "name": "产教协同与人才品牌运营平台",
       "url": "http://111.170.170.202:3004/",
       "enabled": true
     },
@@ -20,7 +20,7 @@
     },
     {
       "id": "ability",
-      "name": "能力测评认证平台",
+      "name": "能力评价与测评资源管理平台",
       "url": "http://111.170.170.202:3005/landingpage",
       "enabled": true
     },
@@ -32,14 +32,14 @@
     },
     {
       "id": "ai",
-      "name": "AI 服务平台",
+      "name": "AI 智能服务平台",
       "url": "http://111.170.170.202:3008/#/showcase",
       "enabled": true
     },
     {
       "id": "resource",
       "name": "教学资源共享服务平台",
-      "url": "",
+      "url": "http://111.170.170.202:3009/home",
       "enabled": true
     },
     {
@@ -49,27 +49,9 @@
       "enabled": true
     },
     {
-      "id": "research",
-      "name": "教科研服务平台",
-      "url": "",
-      "enabled": true
-    },
-    {
       "id": "affairs",
       "name": "数字教务平台",
-      "url": "http://111.170.170.202:3007/",
-      "enabled": true
-    },
-    {
-      "id": "decision",
-      "name": "决策支持平台",
-      "url": "",
-      "enabled": true
-    },
-    {
-      "id": "employment",
-      "name": "就业服务平台",
-      "url": "",
+      "url": "http://111.170.170.202:3007/admin",
       "enabled": true
     }
   ]

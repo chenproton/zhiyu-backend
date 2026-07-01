@@ -5,7 +5,7 @@ import {
   BookOpen, Calendar, Clock, MapPin,
   BarChart3, Users, ClipboardList, GraduationCap, Layers, TrendingUp,
   CheckCircle2, Zap, MessageSquare, Trophy, FileCheck, AlertCircle,
-  ExternalLink, PlayCircle, MoreHorizontal, PenLine,
+  ExternalLink, PlayCircle, MoreHorizontal,
 } from "lucide-react"
 import { Badge } from "@/components/ui/badge"
 import { Button } from "@/components/ui/button"
@@ -26,7 +26,8 @@ import {
 import { SectionCard } from "./section-card"
 import { StatCard } from "./stat-card"
 import { PrepAssociateDialog } from "./prep-associate-dialog"
-import { GradeEntryDialog } from "./grade-entry-dialog"
+import { GradingIframeDialog } from "./grading-iframe-dialog"
+import { HybridGradingDialog } from "./hybrid-grading-dialog"
 import {
   mockTeacherCourses,
   mockClassPlans,
@@ -511,6 +512,9 @@ export function TeacherCoursesTab({ prepAssociations = {}, onAssociate }: Teache
   const [gradeDialogOpen, setGradeDialogOpen] = useState(false)
   const [gradeSessionTitle, setGradeSessionTitle] = useState("")
   const [gradeClassName, setGradeClassName] = useState("")
+  const [hybridGradeDialogOpen, setHybridGradeDialogOpen] = useState(false)
+  const [hybridGradeSessionTitle, setHybridGradeSessionTitle] = useState("")
+  const [hybridGradeClassName, setHybridGradeClassName] = useState("")
 
   const filteredCourses = mockTeacherCourses.filter((c) => {
     if (courseFilter !== "all" && c.status !== courseFilter) return false
@@ -729,7 +733,7 @@ export function TeacherCoursesTab({ prepAssociations = {}, onAssociate }: Teache
                                           }
                                         }}>
                                         <ExternalLink className="h-3 w-3 mr-0.5" />
-                                        备课
+                                        导学准备
                                       </Button>
                                       <Button size="sm" variant="outline"
                                         className={`flex-1 justify-center text-[10px] h-7 px-1.5 ${isHybrid ? "border-blue-200 text-blue-600 hover:bg-blue-50" : "border-emerald-200 text-emerald-600 hover:bg-emerald-50"}`}
@@ -740,12 +744,18 @@ export function TeacherCoursesTab({ prepAssociations = {}, onAssociate }: Teache
                                       <Button size="sm" variant="outline"
                                         className="flex-1 justify-center text-[10px] h-7 px-1.5 border-amber-200 text-amber-600 hover:bg-amber-50"
                                         onClick={() => {
-                                          setGradeSessionTitle(`第 ${session.week} 周 · ${session.weekday} ${session.period}`)
-                                          setGradeClassName(plan.name)
-                                          setGradeDialogOpen(true)
+                                          if (isHybrid) {
+                                            setHybridGradeSessionTitle(`第 ${session.week} 周 · ${session.weekday} ${session.period}`)
+                                            setHybridGradeClassName(plan.name)
+                                            setHybridGradeDialogOpen(true)
+                                          } else {
+                                            setGradeSessionTitle(`第 ${session.week} 周 · ${session.weekday} ${session.period}`)
+                                            setGradeClassName(plan.name)
+                                            setGradeDialogOpen(true)
+                                          }
                                         }}>
-                                        <PenLine className="h-3 w-3 mr-0.5" />
-                                        录入成绩
+                                        <GraduationCap className="h-3 w-3 mr-0.5" />
+                                        前往评分
                                       </Button>
                                     </div>
                                     <div className="pt-1.5 mt-1 border-t border-dashed border-gray-200">
@@ -804,11 +814,17 @@ export function TeacherCoursesTab({ prepAssociations = {}, onAssociate }: Teache
           window.open(prepUrl, "_blank")
         }}
       />
-      <GradeEntryDialog
+      <GradingIframeDialog
         open={gradeDialogOpen}
         onOpenChange={setGradeDialogOpen}
         sessionTitle={gradeSessionTitle}
         className={gradeClassName}
+      />
+      <HybridGradingDialog
+        open={hybridGradeDialogOpen}
+        onOpenChange={setHybridGradeDialogOpen}
+        sessionTitle={hybridGradeSessionTitle}
+        className={hybridGradeClassName}
       />
     </div>
   )

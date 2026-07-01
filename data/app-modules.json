@@ -2,7 +2,7 @@
   "platforms": [
     {
       "id": "alliance",
-      "name": "产业联盟与人资品牌服务平台",
+      "name": "产教协同与人才品牌运营平台",
       "modules": [
         {
           "id": "alliance-1",
@@ -86,7 +86,7 @@
     },
     {
       "id": "ability",
-      "name": "能力测评认证平台",
+      "name": "能力评价与测评资源管理平台",
       "modules": [
         {
           "id": "ability-1",
@@ -182,7 +182,7 @@
     },
     {
       "id": "ai",
-      "name": "AI 服务平台",
+      "name": "AI 智能服务平台",
       "modules": [
         {
           "id": "ai-1",
@@ -199,7 +199,7 @@
         {
           "id": "ai-3",
           "title": "管理后台",
-          "desc": "官方智能体、知识库发布与活动管理",
+          "desc": "智能体、知识库广场管理",
           "href": "http://111.170.170.202:3008/#/admin-agents"
         }
       ]
@@ -210,95 +210,24 @@
       "modules": [
         {
           "id": "resource-1",
-          "title": "资源上传管理",
-          "desc": "管理教学资源的上传与审核",
-          "href": ""
+          "title": "公共资源库",
+          "desc": "浏览公共教学资源库",
+          "href": "http://111.170.170.202:3009/admin/resources/video"
         },
         {
           "id": "resource-2",
-          "title": "资源共享配置",
-          "desc": "配置资源跨校共享策略",
-          "href": ""
+          "title": "资源审核管理",
+          "desc": "资源上传审核管理",
+          "href": "http://111.170.170.202:3009/admin/audit"
         },
         {
           "id": "resource-3",
-          "title": "资源使用统计",
-          "desc": "查看资源下载与使用数据",
-          "href": ""
+          "title": "我的资源",
+          "desc": "管理我上传的资源",
+          "href": "http://111.170.170.202:3009/admin/my-resources"
         }
       ]
     },
-    {
-      "id": "research",
-      "name": "教科研服务平台",
-      "modules": [
-        {
-          "id": "research-1",
-          "title": "课题项目管理",
-          "desc": "管理教科研课题与项目",
-          "href": ""
-        },
-        {
-          "id": "research-2",
-          "title": "成果申报审核",
-          "desc": "审核教学成果申报材料",
-          "href": ""
-        },
-        {
-          "id": "research-3",
-          "title": "学术交流活动",
-          "desc": "管理学术交流与研讨活动",
-          "href": ""
-        }
-      ]
-    },
-    {
-      "id": "decision",
-      "name": "决策支持平台",
-      "modules": [
-        {
-          "id": "decision-1",
-          "title": "数据看板配置",
-          "desc": "配置管理决策数据看板",
-          "href": ""
-        },
-        {
-          "id": "decision-2",
-          "title": "教学质量分析",
-          "desc": "分析教学质量与运行数据",
-          "href": ""
-        },
-        {
-          "id": "decision-3",
-          "title": "预警模型管理",
-          "desc": "配置学业与教学预警规则",
-          "href": ""
-        }
-      ]
-    },
-    {
-      "id": "employment",
-      "name": "就业服务平台",
-      "modules": [
-        {
-          "id": "employment-1",
-          "title": "企业岗位管理",
-          "desc": "管理合作企业发布的岗位",
-          "href": ""
-        },
-        {
-          "id": "employment-2",
-          "title": "学生求职跟踪",
-          "desc": "跟踪学生求职与签约情况",
-          "href": ""
-        },
-        {
-          "id": "employment-3",
-          "title": "校企对接活动",
-          "desc": "管理校园招聘与宣讲活动",
-          "href": ""
-        }
-      ]
-    }
+
   ]
 }

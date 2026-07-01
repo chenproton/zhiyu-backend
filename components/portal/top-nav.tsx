@@ -3,7 +3,7 @@
 import { useState, useEffect } from "react"
 import Link from "next/link"
 import { usePathname } from "next/navigation"
-import { Home, Briefcase, LayoutGrid, ChevronDown, User, Settings, LogOut, LogIn, Building2, RefreshCw, Link2 } from "lucide-react"
+import { Home, Briefcase, LayoutGrid, ChevronDown, User, Settings, LogOut, LogIn, Building2, RefreshCw, Link2, LayoutDashboard } from "lucide-react"
 import {
   DropdownMenu,
   DropdownMenuContent,
@@ -105,7 +105,7 @@ export function TopNav() {
 
   return (
     <>
-      <header className="h-14 bg-background border-b border-border flex items-center justify-between px-6 shrink-0 fixed top-0 left-0 right-0 z-50 shadow-sm">
+      <header className="h-14 bg-white/70 backdrop-blur-xl border-b border-white/20 flex items-center justify-between px-6 shrink-0 fixed top-0 left-0 right-0 z-50 shadow-sm">
         <div className="flex items-center gap-8">
           <Link href="/portal" className="flex items-center gap-2">
             <div className="w-8 h-8 bg-primary rounded-lg flex items-center justify-center">
@@ -178,6 +178,17 @@ export function TopNav() {
                     <Link2 className="w-4 h-4 mr-2" />
                     平台地址配置
                   </Link>
+                </DropdownMenuItem>
+                <DropdownMenuItem asChild>
+                  <a
+                    href="http://111.170.170.202:3010/"
+                    target="_blank"
+                    rel="noopener noreferrer"
+                    className="cursor-pointer"
+                  >
+                    <LayoutDashboard className="w-4 h-4 mr-2" />
+                    SaaS 管理后台
+                  </a>
                 </DropdownMenuItem>
                 <DropdownMenuSeparator />
                 <DropdownMenuLabel className="text-xs text-muted-foreground font-normal">

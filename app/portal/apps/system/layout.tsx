@@ -104,7 +104,7 @@ export default function SystemLayout({
   }
 
   return (
-    <div className="flex min-h-[calc(100vh-3.5rem)] pt-14 bg-[#f5f7fa]">
+    <div className="flex min-h-[calc(100vh-3.5rem)] bg-[#f5f7fa]">
       {/* Left Sidebar */}
       <aside className="w-56 bg-background border-r border-border shrink-0 sticky top-14 h-[calc(100vh-3.5rem)] overflow-y-auto">
         {/* Header with back button */}

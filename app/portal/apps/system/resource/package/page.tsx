@@ -59,7 +59,7 @@ const packageModules: PackageModule[] = [
     ],
   },
   {
-    name: "能力测评认证平台",
+    name: "能力评价与测评资源管理平台",
     enabled: true,
     subModules: [
       { name: "测评题库管理", enabled: true },
@@ -81,7 +81,7 @@ const packageModules: PackageModule[] = [
     ],
   },
   {
-    name: "AI 服务平台",
+    name: "AI 智能服务平台",
     enabled: true,
     subModules: [
       { name: "智能问答助手", enabled: true },

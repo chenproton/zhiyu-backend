@@ -1,10 +1,10 @@
 "use client"
 
-import { useState } from "react"
+import { useState, useRef } from "react"
 import {
   Bell, Lock, Mail, Phone, Save, Shield, Smartphone, User,
   BookOpen, Briefcase, MapPin, Calendar, GraduationCap, Star,
-  Image, FileText, Plus, X, Upload,
+  Image, FileText, Plus, X, Upload, Trash2,
 } from "lucide-react"
 import { Button } from "@/components/ui/button"
 import { Input } from "@/components/ui/input"
@@ -42,6 +42,30 @@ export function TeacherProfileTab() {
 
   const [skills, setSkills] = useState(["路由交换", "网络安全", "Linux系统管理", "云计算", "网络工程实训"])
   const [skillInput, setSkillInput] = useState("")
+
+  const [materials, setMaterials] = useState<{ id: string; name: string; fileName: string; fileSize: string }[]>([])
+  const [materialName, setMaterialName] = useState("")
+  const fileInputRef = useRef<HTMLInputElement>(null)
+
+  const handleFileSelect = (e: React.ChangeEvent<HTMLInputElement>) => {
+    const file = e.target.files?.[0]
+    if (!file || !materialName.trim()) return
+    const size = file.size < 1024 * 1024
+      ? `${(file.size / 1024).toFixed(1)} KB`
+      : `${(file.size / 1024 / 1024).toFixed(1)} MB`
+    setMaterials([...materials, {
+      id: Date.now().toString(),
+      name: materialName.trim(),
+      fileName: file.name,
+      fileSize: size,
+    }])
+    setMaterialName("")
+    e.target.value = ""
+  }
+
+  const removeMaterial = (id: string) => {
+    setMaterials(materials.filter((m) => m.id !== id))
+  }
 
   const [notifications, setNotifications] = useState({
     course: true,
@@ -232,14 +256,56 @@ export function TeacherProfileTab() {
                   <FileText className="w-4 h-4 text-blue-500" />
                   资质荣誉（佐证材料）
                 </h4>
-                <div className="flex items-center gap-3 p-4 rounded-lg border border-dashed border-gray-300 bg-gray-50/50">
-                  <Upload className="w-5 h-5 text-gray-400" />
-                  <div className="flex-1">
-                    <p className="text-sm text-gray-600">拖拽文件到此处，或点击上传</p>
-                    <p className="text-xs text-gray-400">支持 PDF、JPG、PNG 格式，单个文件不超过 10MB</p>
+                <div className="space-y-3 mb-4">
+                  <div className="space-y-1.5">
+                    <Label className="text-xs text-gray-500">材料名称</Label>
+                    <Input
+                      value={materialName}
+                      onChange={(e) => setMaterialName(e.target.value)}
+                      placeholder="请输入材料名称，如：教师资格证、优秀教师奖状"
+                      className="bg-white border-gray-200 h-9"
+                    />
                   </div>
-                  <Button variant="outline" size="sm" className="text-xs border-gray-200"><Upload className="w-3.5 h-3.5 mr-1" />选择文件</Button>
+                  <div
+                    className="flex items-center gap-3 p-4 rounded-lg border border-dashed border-gray-300 bg-gray-50/50 cursor-pointer hover:bg-gray-100/50 transition-colors"
+                    onClick={() => fileInputRef.current?.click()}
+                  >
+                    <Upload className="w-5 h-5 text-gray-400" />
+                    <div className="flex-1">
+                      <p className="text-sm text-gray-600">拖拽文件到此处，或点击上传</p>
+                      <p className="text-xs text-gray-400">支持 PDF、JPG、PNG 格式，单个文件不超过 10MB</p>
+                    </div>
+                    <Button variant="outline" size="sm" className="text-xs border-gray-200 pointer-events-none">
+                      <Upload className="w-3.5 h-3.5 mr-1" />选择文件
+                    </Button>
+                    <input
+                      ref={fileInputRef}
+                      type="file"
+                      accept=".pdf,.jpg,.jpeg,.png"
+                      className="hidden"
+                      onChange={handleFileSelect}
+                    />
+                  </div>
                 </div>
+                {materials.length > 0 && (
+                  <div className="space-y-2">
+                    {materials.map((m) => (
+                      <div key={m.id} className="flex items-center gap-3 p-3 rounded-lg border border-gray-200 bg-white">
+                        <FileText className="w-4 h-4 text-blue-500 shrink-0" />
+                        <div className="flex-1 min-w-0">
+                          <p className="text-sm font-medium text-gray-900 truncate">{m.name}</p>
+                          <p className="text-xs text-gray-400 truncate">{m.fileName} · {m.fileSize}</p>
+                        </div>
+                        <button
+                          onClick={() => removeMaterial(m.id)}
+                          className="p-1 rounded-md hover:bg-red-50 text-gray-400 hover:text-red-500 transition-colors"
+                        >
+                          <Trash2 className="w-4 h-4" />
+                        </button>
+                      </div>
+                    ))}
+                  </div>
+                )}
               </div>
             </div>
 

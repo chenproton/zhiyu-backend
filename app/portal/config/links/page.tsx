@@ -24,17 +24,17 @@ const platformGroups = [
   {
     title: "场景应用生态",
     items: [
-      { id: "alliance", name: "产业联盟与人资品牌服务平台" },
+      { id: "alliance", name: "产教协同与人才品牌运营平台" },
       { id: "career", name: "职业岗位学习平台" },
       { id: "scene", name: "实践场景学习平台" },
-      { id: "ability", name: "能力测评认证平台" },
+      { id: "ability", name: "能力评价与测评资源管理平台" },
     ],
   },
   {
     title: "资源保障生态",
     items: [
       { id: "course", name: "数字课程服务平台" },
-      { id: "ai", name: "AI 服务平台" },
+      { id: "ai", name: "AI 智能服务平台" },
       { id: "resource", name: "教学资源共享服务平台" },
       { id: "mall", name: "教学资源商城" },
     ],
@@ -42,10 +42,7 @@ const platformGroups = [
   {
     title: "运营治理生态",
     items: [
-      { id: "research", name: "教科研服务平台" },
       { id: "affairs", name: "教务服务平台" },
-      { id: "decision", name: "决策支持平台" },
-      { id: "employment", name: "就业服务平台" },
     ],
   },
 ]

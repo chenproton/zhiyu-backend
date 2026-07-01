@@ -1,16 +1,10 @@
 "use client"
 
 import { useState } from "react"
-import {
-  Award, Calendar, CheckCircle2, Clock, FileCheck, GraduationCap,
-  Percent, Target, TrendingUp, Users,
-} from "lucide-react"
-import { Badge } from "@/components/ui/badge"
+import { Award, FileCheck, GraduationCap, Target } from "lucide-react"
 import { Button } from "@/components/ui/button"
-import { Progress } from "@/components/ui/progress"
 import { Tabs, TabsList, TabsTrigger } from "@/components/ui/tabs"
 import { SectionCard } from "./section-card"
-import { StatCard } from "./stat-card"
 import { mockExams } from "../_data/mock-student-data"
 import {
   Table, TableBody, TableCell, TableHead, TableHeader, TableRow,
@@ -21,8 +15,6 @@ import {
 interface AssessmentIndicator {
   label: string
   value: string
-  icon: typeof Percent
-  color: string
 }
 
 interface PositionAssessment {
@@ -37,10 +29,10 @@ const mockPositionAssessments: PositionAssessment[] = [
     id: "pa1",
     positionName: "网络运维工程师",
     indicators: [
-      { label: "岗位能力达标率", value: "89%", icon: Percent, color: "text-emerald-600 bg-emerald-50 border-emerald-200" },
-      { label: "岗位胜任度", value: "32%", icon: Target, color: "text-purple-600 bg-purple-50 border-purple-200" },
-      { label: "岗位能力认定得分", value: "87", icon: Award, color: "text-blue-600 bg-blue-50 border-blue-200" },
-      { label: "毕业标准", value: "A", icon: GraduationCap, color: "text-amber-600 bg-amber-50 border-amber-200" },
+      { label: "岗位能力达标率", value: "89%" },
+      { label: "岗位胜任度", value: "32%" },
+      { label: "岗位能力认定得分", value: "87" },
+      { label: "毕业标准", value: "A" },
     ],
     details: [
       { name: "网络故障诊断", score: 78, level: "L4", required: "L5", passed: true },
@@ -55,10 +47,10 @@ const mockPositionAssessments: PositionAssessment[] = [
     id: "pa2",
     positionName: "网络安全工程师",
     indicators: [
-      { label: "岗位能力达标率", value: "78%", icon: Percent, color: "text-emerald-600 bg-emerald-50 border-emerald-200" },
-      { label: "岗位胜任度", value: "28%", icon: Target, color: "text-purple-600 bg-purple-50 border-purple-200" },
-      { label: "岗位能力认定得分", value: "76", icon: Award, color: "text-blue-600 bg-blue-50 border-blue-200" },
-      { label: "毕业标准", value: "B+", icon: GraduationCap, color: "text-amber-600 bg-amber-50 border-amber-200" },
+      { label: "岗位能力达标率", value: "78%" },
+      { label: "岗位胜任度", value: "28%" },
+      { label: "岗位能力认定得分", value: "76" },
+      { label: "毕业标准", value: "B+" },
     ],
     details: [
       { name: "防火墙策略配置", score: 82, level: "L5", required: "L5", passed: true },
@@ -72,10 +64,10 @@ const mockPositionAssessments: PositionAssessment[] = [
     id: "pa3",
     positionName: "系统运维工程师",
     indicators: [
-      { label: "岗位能力达标率", value: "72%", icon: Percent, color: "text-emerald-600 bg-emerald-50 border-emerald-200" },
-      { label: "岗位胜任度", value: "18%", icon: Target, color: "text-purple-600 bg-purple-50 border-purple-200" },
-      { label: "岗位能力认定得分", value: "72", icon: Award, color: "text-blue-600 bg-blue-50 border-blue-200" },
-      { label: "毕业标准", value: "B", icon: GraduationCap, color: "text-amber-600 bg-amber-50 border-amber-200" },
+      { label: "岗位能力达标率", value: "72%" },
+      { label: "岗位胜任度", value: "18%" },
+      { label: "岗位能力认定得分", value: "72" },
+      { label: "毕业标准", value: "B" },
     ],
     details: [
       { name: "Linux操作", score: 85, level: "L5", required: "L5", passed: true },
@@ -102,7 +94,6 @@ const typeIconMap: Record<string, typeof GraduationCap> = {
 
 export function AssessmentTab() {
   const [examFilter, setExamFilter] = useState("all")
-  const [expandPosition, setExpandPosition] = useState<string | null>(null)
 
   const filteredExams = examFilter === "all"
     ? mockExams
@@ -124,42 +115,12 @@ export function AssessmentTab() {
               </div>
               {/* 四项指标 */}
               <div className="grid grid-cols-2 gap-3 p-4">
-                {pa.indicators.map((ind) => {
-                  const Icon = ind.icon
-                  return (
-                    <div key={ind.label} className={`rounded-lg border p-2.5 text-center ${ind.color}`}>
-                      <Icon className="w-4 h-4 mx-auto mb-1" />
-                      <p className="text-xs text-gray-500 leading-tight">{ind.label}</p>
-                      <p className="text-base font-bold leading-tight mt-0.5">{ind.value}</p>
-                    </div>
-                  )
-                })}
-              </div>
-              {/* 展开详情 */}
-              <div className="border-t border-gray-100">
-                <button
-                  onClick={() => setExpandPosition(expandPosition === pa.id ? null : pa.id)}
-                  className="w-full px-4 py-2 text-xs text-gray-500 hover:text-gray-700 hover:bg-gray-50 flex items-center justify-between transition-colors"
-                >
-                  <span>能力点详情</span>
-                  <span className={`transition-transform ${expandPosition === pa.id ? "rotate-180" : ""}`}>▼</span>
-                </button>
-                {expandPosition === pa.id && (
-                  <div className="px-4 pb-4 space-y-1.5">
-                    {pa.details.map((d) => (
-                      <div key={d.name} className="flex items-center justify-between text-xs">
-                        <div className="flex items-center gap-1.5">
-                          {d.passed
-                            ? <CheckCircle2 className="w-3 h-3 text-emerald-500" />
-                            : <span className="w-3 h-3 rounded-full border-2 border-gray-300 inline-block" />
-                          }
-                          <span className="text-gray-700">{d.name}</span>
-                        </div>
-                        <span className="text-gray-500">{d.level} / 需{d.required}</span>
-                      </div>
-                    ))}
+                {pa.indicators.map((ind) => (
+                  <div key={ind.label} className="rounded-lg border border-gray-200 p-2.5 text-center">
+                    <p className="text-xs text-gray-500 leading-tight">{ind.label}</p>
+                    <p className="text-lg font-bold leading-tight mt-0.5">{ind.value}</p>
                   </div>
-                )}
+                ))}
               </div>
             </div>
           ))}

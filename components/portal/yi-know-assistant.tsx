@@ -175,7 +175,7 @@ const RESOURCES: Resource[] = [
   {
     id: "eval-platform",
     category: "platform",
-    title: "能力测评认证平台",
+    title: "能力评价与测评资源管理平台",
     desc: "能力画像对比认证标准，推荐测评与练习资源。",
     tags: ["测评", "认证"],
     icon: "external",

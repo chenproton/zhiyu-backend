@@ -18,23 +18,23 @@ const platforms = [
       {
         id: "alliance",
         icon: "users",
-        color: "bg-rose-50 text-rose-500 border border-rose-100",
-        title: "产业联盟与人才品牌运营平台",
+        color: "bg-red-50 text-red-500 border border-red-100",
+        title: "产教协同与人才品牌运营平台",
         desc: "共建校企合作生态，打造具有行业影响力的人才培养品牌。",
       },
       {
         id: "ai",
         icon: "sparkles",
         color: "bg-indigo-50 text-indigo-500 border border-indigo-100",
-        title: "AI 服务平台",
+        title: "AI 智能服务平台",
         desc: "融合前沿AI技术，为教学设计、资源建设、学习辅导、评价分析提供伴随式智能服务。",
       },
       {
         id: "ability",
         icon: "check-circle",
         color: "bg-emerald-50 text-emerald-500 border border-emerald-100",
-        title: "能力测评认证平台",
-        desc: "基于统一评价量规，实现对实践过程与结果的精准量化评估与技能认证。",
+        title: "能力评价与测评资源管理平台",
+        desc: "基于统一评价标准，实现对实践过程与结果的精准量化评估与技能认证。",
       },
     ],
   },
@@ -79,7 +79,7 @@ const platforms = [
         icon: "calendar",
         color: "bg-teal-50 text-teal-500 border border-teal-100",
         title: "教务服务平台",
-        desc: "统筹排课选班、学分认定与学籍管理，保障教学秩序顺畅运行。",
+        desc: "统筹人培标准、排课，保障教学秩序顺畅运行",
       },
       {
         id: "mall",
@@ -162,29 +162,28 @@ function getIcon(name: string): ReactNode {
 
 /* ─── card style config ─── */
 interface CardConfig {
-  type: "feature" | "wide" | "tile"
+  type: "feature" | "tall" | "wide" | "tile"
   gradient: string
+  color: string
   shadow: string
   icon: string
 }
 
 const CARD_STYLES: Record<string, CardConfig> = {
-  alliance: { type: "feature", gradient: "linear-gradient(145deg,#f43f5e,#be123c)", shadow: "rgba(190,18,60,0.32)", icon: "users" },
-  career: { type: "tile", gradient: "linear-gradient(145deg,#8b5cf6,#6d28d9)", shadow: "rgba(124,58,237,0.32)", icon: "briefcase" },
-  scene: { type: "wide", gradient: "linear-gradient(120deg,#3b82f6,#2563eb)", shadow: "rgba(59,130,246,0.32)", icon: "layers" },
-  course: { type: "tile", gradient: "linear-gradient(145deg,#22d3ee,#0891b2)", shadow: "rgba(8,182,212,0.32)", icon: "book" },
-  ability: { type: "tile", gradient: "linear-gradient(145deg,#34d399,#059669)", shadow: "rgba(5,150,105,0.32)", icon: "check-circle" },
-  affairs: { type: "tile", gradient: "linear-gradient(145deg,#fbbf24,#ea580c)", shadow: "rgba(234,88,12,0.32)", icon: "calendar" },
-  ai: { type: "wide", gradient: "linear-gradient(120deg,#f472b6,#db2777)", shadow: "rgba(219,39,119,0.32)", icon: "sparkles" },
-  research: { type: "tile", gradient: "linear-gradient(145deg,#fb923c,#c2410c)", shadow: "rgba(194,65,12,0.32)", icon: "file-text" },
-  decision: { type: "tile", gradient: "linear-gradient(145deg,#818cf8,#4f46e5)", shadow: "rgba(79,70,229,0.32)", icon: "bar-chart" },
-  employment: { type: "tile", gradient: "linear-gradient(145deg,#38bdf8,#0284c7)", shadow: "rgba(2,132,199,0.32)", icon: "graduation-cap" },
+  alliance: { type: "tall", gradient: "linear-gradient(145deg,#fecaca,#fca5a5)", color: "#f87171", shadow: "rgba(248,113,113,0.3)", icon: "users" },
+  career: { type: "tile", gradient: "linear-gradient(145deg,#d4c4f0,#c0abe3)", color: "#b184e0", shadow: "rgba(192,171,227,0.3)", icon: "briefcase" },
+  scene: { type: "tile", gradient: "linear-gradient(120deg,#bdd8f5,#a2c4e8)", color: "#7db4ed", shadow: "rgba(162,196,232,0.3)", icon: "layers" },
+  course: { type: "tile", gradient: "linear-gradient(145deg,#b5edd0,#96d8b8)", color: "#6ad4a0", shadow: "rgba(150,216,184,0.3)", icon: "book" },
+  ability: { type: "wide", gradient: "linear-gradient(145deg,#c5e8c5,#aad4aa)", color: "#84cf84", shadow: "rgba(170,212,170,0.3)", icon: "check-circle" },
+  affairs: { type: "tile", gradient: "linear-gradient(145deg,#f5e0b8,#e8d0a0)", color: "#e0c070", shadow: "rgba(232,208,160,0.3)", icon: "calendar" },
+  ai: { type: "tile", gradient: "linear-gradient(120deg,#f5c8dd,#e8afcc)", color: "#e08ebd", shadow: "rgba(232,175,204,0.3)", icon: "sparkles" },
+
 }
 
 /* section-2 resource cards */
 const RESOURCE_STYLES: Record<string, CardConfig> = {
-  resource: { type: "wide", gradient: "linear-gradient(120deg,#6366f1,#4338ca)", shadow: "rgba(67,56,202,0.3)", icon: "share" },
-  mall: { type: "wide", gradient: "linear-gradient(120deg,#fb923c,#ea580c)", shadow: "rgba(234,88,12,0.3)", icon: "shopping-cart" },
+  resource: { type: "tile", gradient: "linear-gradient(120deg,#d8c8f5,#c0ade8)", color: "#b088e8", shadow: "rgba(192,173,232,0.3)", icon: "share" },
+  mall: { type: "tile", gradient: "linear-gradient(120deg,#f5d0b8,#e8baa0)", color: "#e8a078", shadow: "rgba(232,186,160,0.3)", icon: "shopping-cart" },
 }
 
 /* ─── helpers ─── */
@@ -216,59 +215,63 @@ function GradientTile({
   const wrapperProps =
     url && enabled ? { href: url, target: "_blank", rel: "noopener noreferrer" as const } : {}
 
-  const sizeClass = tall ? "col-span-2 row-span-2" : wide ? "flex-row items-center gap-5 col-span-2" : ""
+  const sizeClass = tall && wide ? "col-span-2 row-span-2" : tall ? "row-span-2" : wide ? "col-span-2 flex-row items-center gap-5" : ""
+  const color = style?.color || "#000"
 
   return (
     <Wrapper
       {...wrapperProps}
-      className={`group rounded-2xl p-6 text-white relative overflow-hidden cursor-pointer transition-all duration-[350ms] hover:-translate-y-1.5 flex flex-col ${sizeClass}`}
+      className={`group rounded-2xl p-6 bg-white/60 backdrop-blur-xl relative overflow-hidden cursor-pointer transition-all duration-[400ms] hover:-translate-y-2 flex flex-col border-[1.5px] ${sizeClass}`}
       style={{
-        background: style?.gradient,
-        boxShadow: `0 14px 30px ${style?.shadow || "rgba(79,70,229,0.28)"}`,
+        borderColor: `${color}3d`,
+        boxShadow: `0 2px 8px ${color}14, 0 16px 40px ${color}0a`,
       }}
     >
-      <div className="absolute rounded-full bg-white/18 pointer-events-none transition-all duration-500 group-hover:scale-[1.35]" style={{ width: 130, height: 130, top: -45, right: -30 }} />
-      <div className="absolute rounded-full bg-white/10 pointer-events-none" style={{ width: 80, height: 80, bottom: -30, right: 40 }} />
+      {/* decorative bubble */}
+      <div className="absolute rounded-full pointer-events-none transition-all duration-700 group-hover:scale-[1.4]" style={{ width: 140, height: 140, top: -50, right: -35, backgroundColor: `${color}28` }} />
 
       {tall && (
-        <>
-          <div className="absolute rounded-full bg-white/8 pointer-events-none" style={{ width: 200, height: 200, bottom: -60, left: -60 }} />
-          <div className="absolute rounded-full bg-white/6 pointer-events-none" style={{ width: 60, height: 60, top: 30, left: 30 }} />
-          <div className="absolute rounded-full bg-white/8 pointer-events-none" style={{ width: 40, height: 40, bottom: 60, right: 100 }} />
-        </>
+        <div className="absolute rounded-full pointer-events-none" style={{ width: 240, height: 240, bottom: -80, left: -80, backgroundColor: `${color}14` }} />
       )}
 
       <div
-        className={`rounded-xl bg-white/22 backdrop-blur flex items-center justify-center relative transition-transform duration-[350ms] group-hover:scale-110 group-hover:-rotate-5 shrink-0 ${tall ? "w-16 h-16 text-3xl mb-4" : wide ? "w-14 h-14 mb-0" : "w-[50px] h-[50px] text-2xl mb-auto"}`} style={{ zIndex: 2 }}
+        className={`rounded-2xl flex items-center justify-center relative transition-all duration-[400ms] group-hover:scale-110 group-hover:-rotate-6 shrink-0 ${tall ? "w-14 h-14 text-2xl mb-4" : wide ? "w-12 h-12 text-xl mb-0" : "w-[46px] h-[46px] text-xl mb-3.5"}`}
+        style={{ zIndex: 2, backgroundColor: color, color: "#fff", boxShadow: `0 8px 28px ${color}3d` }}
       >
         {getIcon(item.icon)}
       </div>
 
       {tall ? (
         <div className="relative flex flex-col flex-1" style={{ zIndex: 2 }}>
-          <h4 className="text-xl font-bold leading-tight mb-2">{item.title}</h4>
-          <p className="text-sm opacity-85 leading-relaxed">{item.desc}</p>
-          <div className="mt-auto pt-6 text-sm font-semibold opacity-95 flex items-center gap-1.5 transition-all duration-[250ms] group-hover:gap-2.5">
-            进入平台 →
-          </div>
+          <h4 className="text-xl font-bold leading-tight mb-2 text-[#141a2e]">{item.title}</h4>
+          <p className="text-sm leading-relaxed text-[#5b677b]">{item.desc}</p>
+          {item.id !== "affairs" && (
+            <div className="mt-auto pt-6 text-sm font-semibold flex items-center gap-1.5 transition-all duration-[250ms] group-hover:gap-2.5 text-[#5b677b]">
+              进入平台 →
+            </div>
+          )}
         </div>
       ) : wide ? (
         <>
           <div className="relative flex-1" style={{ zIndex: 2 }}>
-            <h4 className="text-lg font-bold leading-tight mb-1">{item.title}</h4>
-            <p className="text-xs opacity-85 leading-relaxed">{item.desc}</p>
+            <h4 className="text-lg font-bold leading-tight mb-1 text-[#141a2e]">{item.title}</h4>
+            <p className="text-xs leading-relaxed text-[#5b677b]">{item.desc}</p>
           </div>
-          <span className="relative text-xl font-semibold opacity-95 transition-all duration-[250ms] group-hover:translate-x-1" style={{ zIndex: 2 }}>
-            →
-          </span>
+          {item.id !== "affairs" && (
+            <span className="relative text-sm font-semibold flex items-center gap-1.5 transition-all duration-[250ms] group-hover:gap-2.5 whitespace-nowrap text-[#5b677b]" style={{ zIndex: 2 }}>
+              进入平台 →
+            </span>
+          )}
         </>
       ) : (
-        <div className="relative mt-3.5" style={{ zIndex: 2 }}>
-          <h4 className="text-lg font-bold leading-tight mb-1">{item.title}</h4>
-          <p className="text-xs opacity-85 leading-relaxed">{item.desc}</p>
-          <div className="mt-3 text-sm font-semibold opacity-95 flex items-center gap-1.5 transition-all duration-[250ms] group-hover:gap-2.5">
-            进入平台 →
-          </div>
+        <div className="relative" style={{ zIndex: 2 }}>
+          <h4 className="text-lg font-bold leading-tight mb-1 text-[#141a2e]">{item.title}</h4>
+          <p className="text-xs leading-relaxed text-[#5b677b]">{item.desc}</p>
+          {item.id !== "affairs" && (
+            <div className="mt-3 text-sm font-semibold flex items-center gap-1.5 transition-all duration-[250ms] group-hover:gap-2.5 text-[#5b677b]">
+              进入平台 →
+            </div>
+          )}
         </div>
       )}
     </Wrapper>
@@ -285,6 +288,8 @@ function ResourceTile({
   enabled: boolean
 }) {
   const style = RESOURCE_STYLES[item.id]
+  const isWide = style?.type === "wide"
+  const color = style?.color || "#000"
   const Wrapper = url && enabled ? "a" : "div"
   const wrapperProps =
     url && enabled ? { href: url, target: "_blank", rel: "noopener noreferrer" as const } : {}
@@ -292,25 +297,33 @@ function ResourceTile({
   return (
     <Wrapper
       {...wrapperProps}
-      className="group col-span-2 rounded-2xl p-6 text-white relative overflow-hidden cursor-pointer transition-all duration-[350ms] hover:-translate-y-1.5 flex flex-row items-center gap-5"
+      className={`group rounded-2xl p-6 bg-white/60 backdrop-blur-xl relative overflow-hidden cursor-pointer transition-all duration-[400ms] hover:-translate-y-2 flex border-[1.5px] ${isWide ? "col-span-2 flex-row items-center gap-5" : "flex-col"}`}
       style={{
-        background: style?.gradient,
-        boxShadow: `0 14px 30px ${style?.shadow || "rgba(67,56,202,0.3)"}`,
+        borderColor: `${color}3d`,
+        boxShadow: `0 2px 8px ${color}14, 0 16px 40px ${color}0a`,
       }}
     >
-      <div className="absolute rounded-full bg-white/18 pointer-events-none transition-all duration-500 group-hover:scale-[1.35]" style={{ width: 130, height: 130, top: -45, right: -30 }} />
+      <div className="absolute rounded-full pointer-events-none transition-all duration-700 group-hover:scale-[1.4]" style={{ width: 140, height: 140, top: -50, right: -35, backgroundColor: `${color}28` }} />
 
-      <div className="w-14 h-14 rounded-xl bg-white/22 backdrop-blur flex items-center justify-center text-2xl relative transition-transform duration-[350ms] group-hover:scale-110 group-hover:-rotate-5 shrink-0" style={{ zIndex: 2 }}>
+      <div className={`rounded-2xl flex items-center justify-center relative transition-all duration-[400ms] group-hover:scale-110 group-hover:-rotate-6 shrink-0 ${isWide ? "w-12 h-12 text-xl" : "w-[46px] h-[46px] text-xl mb-3.5"}`}
+        style={{ zIndex: 2, backgroundColor: color, color: "#fff", boxShadow: `0 8px 28px ${color}3d` }}
+      >
         {getIcon(item.icon)}
       </div>
 
-      <div className="relative flex-1" style={{ zIndex: 2 }}>
-        <h4 className="text-lg font-bold leading-tight mb-1">{item.title}</h4>
-        <p className="text-xs opacity-85 leading-relaxed">{item.desc}</p>
-      </div>
-      <span className="relative text-xl font-semibold opacity-95 transition-all duration-[250ms] group-hover:translate-x-1" style={{ zIndex: 2 }}>
-        →
-      </span>
+      {isWide ? (
+        <>
+          <div className="relative flex-1" style={{ zIndex: 2 }}>
+            <h4 className="text-lg font-bold leading-tight mb-1 text-[#141a2e]">{item.title}</h4>
+            <p className="text-xs leading-relaxed text-[#5b677b]">{item.desc}</p>
+          </div>
+        </>
+      ) : (
+        <div className="relative" style={{ zIndex: 2 }}>
+          <h4 className="text-lg font-bold leading-tight mb-1 text-[#141a2e]">{item.title}</h4>
+          <p className="text-xs leading-relaxed text-[#5b677b]">{item.desc}</p>
+        </div>
+      )}
     </Wrapper>
   )
 }
@@ -337,8 +350,8 @@ export default function PortalHomePage() {
 
   const items = getFlatItems()
 
-  /* Card order matching the bento grid layout */
-  const cardOrder = ['alliance', 'career', 'course', 'scene', 'ability', 'affairs', 'ai']
+  /* Card order matching the 3×3 bento grid layout */
+  const cardOrder = ['alliance', 'career', 'scene', 'ability', 'course', 'affairs', 'ai']
 
   /* section 2: resource & mall */
   const resourceIds = items.filter((i) => i.id === "resource" || i.id === "mall").map((i) => i.id)
@@ -377,12 +390,8 @@ export default function PortalHomePage() {
       />
 
       {/* Hero */}
-      <section className="relative pt-12 pb-6 text-center px-10">
+      <section className="relative pt-8 pb-6 text-center px-10">
         <div className="relative max-w-3xl mx-auto" style={{ zIndex: 2 }}>
-          <span className="inline-flex items-center gap-2 px-[18px] py-1.5 bg-white/80 border border-violet-600/18 rounded-full text-sm font-semibold text-violet-600 mb-4 shadow-lg" style={{ boxShadow: "0 6px 20px rgba(124,58,237,0.1)" }}>
-            <span className="w-1.5 h-1.5 rounded-full bg-violet-600" style={{ boxShadow: "0 0 0 3px rgba(124,58,237,0.2)" }} />
-            产教融合 · AI 赋能 · 场景育人
-          </span>
           <h1 className="text-4xl font-extrabold text-[#141a2e] tracking-wide leading-tight mb-3">
             <span className="bg-gradient-to-r from-violet-600 via-indigo-600 to-cyan-400 bg-clip-text text-transparent">
               场景化数智
@@ -407,9 +416,9 @@ export default function PortalHomePage() {
       <main className="max-w-6xl mx-auto px-10 pb-24 relative" style={{ zIndex: 2 }}>
 
         {/* Section 1: 应用服务中心 */}
-        <SectionLabel title="应用服务中心" tag="9 个平台 一站直达" />
+        <SectionLabel title="产教融合生态体系" tag="九大平台 · 一站直达" />
 
-        <div className="grid grid-cols-4 gap-[18px]" style={{ gridAutoRows: "168px" }}>
+        <div className="grid grid-cols-3 gap-[18px]" style={{ gridAutoRows: "168px" }}>
           {section1Ids.map((id) => {
             const item = findByLabel(items, id)
             if (!item) return null
@@ -421,7 +430,7 @@ export default function PortalHomePage() {
                 url={getUrl(id)}
                 enabled={isEnabled(id)}
                 wide={style_?.type === "wide"}
-                tall={style_?.type === "feature"}
+                tall={style_?.type === "feature" || style_?.type === "tall"}
               />
             )
           })}
@@ -430,8 +439,8 @@ export default function PortalHomePage() {
         {/* Section 2: 资源共享与转化 */}
         {resourceIds.length > 0 && (
           <>
-            <SectionLabel title="资源共享与转化" tag="开放共享 · 资源交易" />
-            <div className="grid grid-cols-4 gap-[18px]" style={{ gridAutoRows: "138px" }}>
+            <SectionLabel title="资源共享与转化" tag="开放共享 · 资源转化" />
+            <div className="grid grid-cols-2 gap-[18px]" style={{ gridAutoRows: "168px" }}>
               {resourceIds.map((id) => {
                 const item = findByLabel(items, id)
                 if (!item) return null

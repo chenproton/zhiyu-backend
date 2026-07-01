@@ -7,7 +7,6 @@ import {
 } from "lucide-react"
 import { Badge } from "@/components/ui/badge"
 import { Button } from "@/components/ui/button"
-import { Tabs, TabsList, TabsTrigger } from "@/components/ui/tabs"
 import { SectionCard } from "./section-card"
 
 // ==================== Mock 收藏数据 ====================
@@ -48,8 +47,8 @@ const mockFavoriteExams = [
 
 const categoryConfig = {
   jobs: { label: "职业岗位", icon: Briefcase, color: "blue" as const },
-  courses: { label: "在线课程", icon: BookOpen, color: "emerald" as const },
   scenes: { label: "实践场景", icon: Layers, color: "amber" as const },
+  courses: { label: "数字课程", icon: BookOpen, color: "emerald" as const },
   exams: { label: "测评资源", icon: FileText, color: "purple" as const },
 }
 
@@ -68,19 +67,32 @@ export function CareerTab() {
     <div className="space-y-5">
       <SectionCard title="我的收藏" icon={Heart} iconColor="rose">
         {/* 分类筛选 */}
-        <Tabs value={activeCategory} onValueChange={setActiveCategory}>
-          <TabsList className="h-9 bg-white border border-gray-200 shadow-sm mb-5">
-            <TabsTrigger value="all" className="text-xs px-4 data-[state=active]:bg-rose-600 data-[state=active]:text-white">
-              全部收藏
-            </TabsTrigger>
-            {cats.map((c) => (
-              <TabsTrigger key={c.id} value={c.id} className="text-xs px-4 data-[state=active]:bg-rose-600 data-[state=active]:text-white">
-                <c.icon className="w-3.5 h-3.5 mr-1" />
-                {c.label}
-              </TabsTrigger>
-            ))}
-          </TabsList>
-        </Tabs>
+        <div className="flex items-center gap-5 mb-5 border-b border-gray-100">
+          <button
+            onClick={() => setActiveCategory("all")}
+            className={`text-sm pb-2 border-b-2 transition-colors ${
+              activeCategory === "all"
+                ? "text-rose-600 border-rose-600 font-medium"
+                : "text-gray-500 border-transparent hover:text-gray-700"
+            }`}
+          >
+            全部收藏
+          </button>
+          {cats.map((c) => (
+            <button
+              key={c.id}
+              onClick={() => setActiveCategory(c.id)}
+              className={`text-sm pb-2 border-b-2 transition-colors flex items-center gap-1.5 ${
+                activeCategory === c.id
+                  ? "text-rose-600 border-rose-600 font-medium"
+                  : "text-gray-500 border-transparent hover:text-gray-700"
+              }`}
+            >
+              <c.icon className="w-3.5 h-3.5" />
+              {c.label}
+            </button>
+          ))}
+        </div>
 
         {/* 职业岗位 */}
         {(activeCategory === "all" || activeCategory === "jobs") && (
@@ -120,12 +132,12 @@ export function CareerTab() {
           </div>
         )}
 
-        {/* 在线课程 */}
+        {/* 数字课程 */}
         {(activeCategory === "all" || activeCategory === "courses") && (
           <div className="mb-6">
             <h4 className="text-sm font-semibold text-gray-900 mb-3 flex items-center gap-2">
               <BookOpen className="w-4 h-4 text-emerald-500" />
-              在线课程
+              数字课程
               <span className="text-xs text-gray-400 font-normal">（{mockFavoriteCourses.length}）</span>
             </h4>
             <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-3">

@@ -11,10 +11,8 @@ import {
   BookOpen,
   Sparkles,
   Share2,
-  FileText,
   Calendar,
   BarChart3,
-  GraduationCap,
   Star,
   ChevronRight,
   ExternalLink,
@@ -26,17 +24,14 @@ import { useAppModules } from "@/hooks/use-platform-links"
 
 const menuItems = [
   { id: "system", label: "系统管理", icon: Settings },
-  { id: "alliance", label: "产业联盟与人资品牌服务平台", icon: Users },
+  { id: "alliance", label: "产教协同与人才品牌运营平台", icon: Users },
   { id: "career", label: "职业岗位学习平台", icon: Briefcase },
-  { id: "scene", label: "实践场景学习平台", icon: Layers },
-  { id: "ability", label: "能力测评认证平台", icon: CheckCircle },
   { id: "course", label: "数字课程服务平台", icon: BookOpen },
-  { id: "ai", label: "AI 服务平台", icon: Sparkles },
-  { id: "resource", label: "教学资源共享服务平台", icon: Share2 },
-  { id: "research", label: "教科研服务平台", icon: FileText },
+  { id: "scene", label: "实践场景学习平台", icon: Layers },
+  { id: "ability", label: "能力评价与测评资源管理平台", icon: CheckCircle },
   { id: "affairs", label: "教务服务平台", icon: Calendar },
-  { id: "decision", label: "决策支持平台", icon: BarChart3 },
-  { id: "employment", label: "就业服务平台", icon: GraduationCap },
+  { id: "ai", label: "AI 智能服务平台", icon: Sparkles },
+  { id: "resource", label: "教学资源共享服务平台", icon: Share2 },
 ]
 
 const quickAccess = [
@@ -56,15 +51,12 @@ const platformStyles: Record<string, PlatformStyle> = {
   system: { iconColor: "text-blue-600", iconBg: "bg-blue-50" },
   alliance: { iconColor: "text-rose-600", iconBg: "bg-rose-50" },
   career: { iconColor: "text-purple-600", iconBg: "bg-purple-50" },
+  course: { iconColor: "text-amber-600", iconBg: "bg-amber-50" },
   scene: { iconColor: "text-cyan-600", iconBg: "bg-cyan-50" },
   ability: { iconColor: "text-emerald-600", iconBg: "bg-emerald-50" },
-  course: { iconColor: "text-amber-600", iconBg: "bg-amber-50" },
+  affairs: { iconColor: "text-teal-600", iconBg: "bg-teal-50" },
   ai: { iconColor: "text-indigo-600", iconBg: "bg-indigo-50" },
   resource: { iconColor: "text-blue-600", iconBg: "bg-blue-50" },
-  research: { iconColor: "text-orange-600", iconBg: "bg-orange-50" },
-  affairs: { iconColor: "text-teal-600", iconBg: "bg-teal-50" },
-  decision: { iconColor: "text-violet-600", iconBg: "bg-violet-50" },
-  employment: { iconColor: "text-sky-600", iconBg: "bg-sky-50" },
 }
 
 const systemModules = [
@@ -164,7 +156,7 @@ function ModuleCard({
 }
 
 export default function AppsPage() {
-  const [activeMenu, setActiveMenu] = useState("system")
+  const [activeMenu, setActiveMenu] = useState(menuItems[0].id)
   const sectionRefs = useRef<Record<string, HTMLDivElement | null>>({})
   const contentRef = useRef<HTMLDivElement>(null)
   const { getUrl } = usePlatformLinks()
@@ -203,7 +195,7 @@ export default function AppsPage() {
       if (!contentRef.current) return
 
       const scrollTop = contentRef.current.scrollTop
-      let currentSection = "system"
+      let currentSection = menuItems[0].id
 
       for (const section of allModules) {
         const el = sectionRefs.current[section.id]
@@ -238,7 +230,7 @@ export default function AppsPage() {
     <TooltipProvider>
       <div className="min-h-[calc(100vh-3.5rem)] bg-[#f5f7fa] pt-0">
         {/* Quick Access Bar */}
-        <div className="bg-background border-b border-border px-4 py-1.5 sticky top-14 z-10 shadow-sm">
+        <div className="bg-background border-b border-border px-6 py-3 sticky top-14 z-10 shadow-sm">
           <div className="flex items-center gap-4">
             <div className="flex items-center gap-2 text-sm text-muted-foreground shrink-0">
               <Sparkles className="w-4 h-4 text-amber-500" />
@@ -262,7 +254,7 @@ export default function AppsPage() {
         <div className="flex">
           {/* Left Sidebar */}
           <aside className="w-56 bg-background shrink-0 min-h-[calc(100vh-3.5rem-40px)] sticky top-[96px] self-start border-r border-border shadow-sm">
-            <nav className="p-2 space-y-1">
+            <nav className="p-2 space-y-2">
               {menuItems.map((item) => {
                 const Icon = item.icon
                 const isActive = activeMenu === item.id
@@ -271,7 +263,7 @@ export default function AppsPage() {
                     key={item.id}
                     onClick={() => scrollToSection(item.id)}
                     className={cn(
-                      "w-full flex items-center gap-3 px-2 py-2 rounded-lg text-sm transition-all text-left group",
+                      "w-full flex items-center gap-3 px-3 py-3 rounded-lg text-sm transition-all text-left group",
                       isActive
                         ? "bg-primary text-white shadow-md shadow-primary/20"
                         : "text-muted-foreground hover:bg-muted hover:text-foreground"
@@ -292,7 +284,7 @@ export default function AppsPage() {
           </aside>
 
           {/* Main Content */}
-          <main ref={contentRef} className="flex-1 px-4 pb-4 pt-4 overflow-y-auto max-h-[calc(100vh-3.5rem-40px)]">
+          <main ref={contentRef} className="flex-1 px-4 pb-4 pt-4 overflow-y-auto max-h-[calc(100vh-3.5rem-40px)] relative">
             {modulesLoading ? (
               <div className="flex items-center justify-center h-64">
                 <div className="text-sm text-muted-foreground">加载中...</div>
@@ -318,7 +310,7 @@ export default function AppsPage() {
                       <span className="text-xs text-muted-foreground bg-muted px-2 py-0.5 rounded-full">
                         {section.modules.length} 个模块
                       </span>
-                      {platformUrl && (
+                      {platformUrl && section.id !== "affairs" && (
                         <a
                           href={platformUrl}
                           target="_blank"

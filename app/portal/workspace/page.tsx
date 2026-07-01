@@ -178,7 +178,7 @@ const studentTabs = [
   { id: "learning", label: "我的学习", icon: Layers },
   { id: "career", label: "我的收藏", icon: Compass },
   { id: "assessment", label: "测评认证", icon: Award },
-  { id: "portrait", label: "能力画像", icon: BarChart3 },
+  { id: "portrait", label: "学生画像", icon: BarChart3 },
   { id: "community", label: "学习社区", icon: MessageSquare },
   { id: "profile", label: "个人中心", icon: User },
 ]
