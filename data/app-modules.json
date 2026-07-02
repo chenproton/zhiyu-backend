@@ -126,21 +126,27 @@
       "modules": [
         {
           "id": "course-1",
-          "title": "课程后台管理",
-          "desc": "体系化课程建设与审批管理",
+          "title": "在线课程资源库",
+          "desc": "在线课程资源的统一管理与检索",
           "href": "http://111.170.170.202:3006/admin/system"
         },
         {
           "id": "course-2",
-          "title": "智慧课堂平台",
-          "desc": "教师教学分析与排课管理",
-          "href": "http://111.170.170.202:3006/teacher"
+          "title": "混合课资源库",
+          "desc": "混合式课程资源建设与维护",
+          "href": "http://111.170.170.202:3006/admin/hybrid"
         },
         {
           "id": "course-3",
-          "title": "学生学习平台",
-          "desc": "学生课程学习与进度跟踪",
-          "href": "http://111.170.170.202:3006/learn"
+          "title": "教学空间",
+          "desc": "教师教学任务与认领管理",
+          "href": "http://111.170.170.202:3006/teacher/claim"
+        },
+        {
+          "id": "course-4",
+          "title": "资源审批与质量",
+          "desc": "课程资源审批与质量监控",
+          "href": "http://111.170.170.202:3006/admin/approvals"
         }
       ]
     },
@@ -150,30 +156,24 @@
       "modules": [
         {
           "id": "affairs-1",
-          "title": "教务数据中心",
-          "desc": "教务数据总览与管理入口",
-          "href": "http://111.170.170.202:3007/admin"
+          "title": "基础数据管理",
+          "desc": "组织架构与基础数据维护",
+          "href": "http://111.170.170.202:3007/admin/organization/departments"
         },
         {
           "id": "affairs-2",
-          "title": "培养方案管理",
-          "desc": "人才培养方案制定与审批",
+          "title": "教学运行中心",
+          "desc": "培养方案与教学运行管理",
           "href": "http://111.170.170.202:3007/admin/programs"
         },
         {
           "id": "affairs-3",
-          "title": "教学运行中心",
-          "desc": "学期课程排课与调课管理",
-          "href": "http://111.170.170.202:3007/admin/operations/calendar"
-        },
-        {
-          "id": "affairs-4",
           "title": "学业认定中心",
-          "desc": "学生成绩与学分认定管理",
+          "desc": "学生成绩与学业认定管理",
           "href": "http://111.170.170.202:3007/admin/academics/grades"
         },
         {
-          "id": "affairs-5",
+          "id": "affairs-4",
           "title": "教学成果管理",
           "desc": "教学成果申报与审核管理",
           "href": "http://111.170.170.202:3007/admin/achievements/applications"

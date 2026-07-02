@@ -852,42 +852,42 @@ export function TeacherCoursesTab({ prepAssociations = {}, onAssociate }: Teache
       </div>
     </div>
 
-      <CourseDetailDialog
-        open={dialogOpen}
-        onOpenChange={setDialogOpen}
-        course={selectedCourse}
-        initialTab={dialogTab}
-      />
-      <PrepAssociateDialog
-        open={prepDialogOpen}
-        onOpenChange={setPrepDialogOpen}
-        planId={prepPlanId}
-        planName={prepPlanName}
-        isHybrid={prepIsHybrid}
-        currentSubItemIds={prepAssociations[prepSessionId]?.subItems.map(s => s.id)}
-        usageMap={usageMap}
-        onConfirm={(subItems) => {
-          if (onAssociate) {
-            onAssociate((prev) => ({
-              ...prev,
-              [prepSessionId]: { planId: prepPlanId, subItems: subItems.map(s => ({ id: s.id, name: s.name })) },
-            }))
-          }
-          window.open(prepUrl, "_blank")
-        }}
-      />
-      <GradingIframeDialog
-        open={gradeDialogOpen}
-        onOpenChange={setGradeDialogOpen}
-        sessionTitle={gradeSessionTitle}
-        className={gradeClassName}
-      />
-      <HybridGradingDialog
-        open={hybridGradeDialogOpen}
-        onOpenChange={setHybridGradeDialogOpen}
-        sessionTitle={hybridGradeSessionTitle}
-        className={hybridGradeClassName}
-      />
-    </div>
+    <CourseDetailDialog
+      open={dialogOpen}
+      onOpenChange={setDialogOpen}
+      course={selectedCourse}
+      initialTab={dialogTab}
+    />
+    <PrepAssociateDialog
+      open={prepDialogOpen}
+      onOpenChange={setPrepDialogOpen}
+      planId={prepPlanId}
+      planName={prepPlanName}
+      isHybrid={prepIsHybrid}
+      currentSubItemIds={prepAssociations[prepSessionId]?.subItems.map(s => s.id)}
+      usageMap={usageMap}
+      onConfirm={(subItems) => {
+        if (onAssociate) {
+          onAssociate((prev) => ({
+            ...prev,
+            [prepSessionId]: { planId: prepPlanId, subItems: subItems.map(s => ({ id: s.id, name: s.name })) },
+          }))
+        }
+        window.open(prepUrl, "_blank")
+      }}
+    />
+    <GradingIframeDialog
+      open={gradeDialogOpen}
+      onOpenChange={setGradeDialogOpen}
+      sessionTitle={gradeSessionTitle}
+      className={gradeClassName}
+    />
+    <HybridGradingDialog
+      open={hybridGradeDialogOpen}
+      onOpenChange={setHybridGradeDialogOpen}
+      sessionTitle={hybridGradeSessionTitle}
+      className={hybridGradeClassName}
+    />
+  </div>
   )
 }
