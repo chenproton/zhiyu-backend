@@ -222,6 +222,7 @@ const days = ["周一", "周二", "周三", "周四", "周五", "周六", "周�
 
 const scheduleTypeConfig: Record<string, { bg: string; border: string; badge: string; label: string }> = {
   course: { bg: "bg-blue-50", border: "border-blue-200", badge: "border-blue-300 text-blue-600", label: "课程" },
+  scene: { bg: "bg-emerald-50", border: "border-emerald-200", badge: "border-emerald-300 text-emerald-600", label: "实践场景" },
   meeting: { bg: "bg-amber-50", border: "border-amber-200", badge: "border-amber-300 text-amber-600", label: "会议" },
   training: { bg: "bg-green-50", border: "border-green-200", badge: "border-green-300 text-green-600", label: "培训" },
   exam: { bg: "bg-purple-50", border: "border-purple-200", badge: "border-purple-300 text-purple-600", label: "检查" },
@@ -258,12 +259,7 @@ function formatDate(date: Date) {
 }
 
 function getCourseUrls(event: TeacherScheduleEvent) {
-  const termPlans = mockClassPlans.filter((p) => p.term === "2026年第一学期")
-  const matchIndex = termPlans.findIndex(
-    (p) => p.course === event.title && (event.className ? p.name === event.className : true)
-  )
-  const effectiveIndex = matchIndex >= 0 ? matchIndex : 0
-  const isHybrid = effectiveIndex % 2 === 0
+  const isHybrid = event.type !== "scene"
   if (isHybrid) {
     return {
       isHybrid: true,
@@ -408,8 +404,8 @@ function CourseScheduleTable({ prepAssociations = {}, onAssociate, onPrepRequest
             {[1, 2, 3, 4, 5, 6, 7].map((dayOfWeek) => {
               const event = events.find((e) => e.dayOfWeek === dayOfWeek && e.period === period)
               const config = event ? scheduleTypeConfig[event.type] : null
-              const isCourse = event?.type === "course"
-                if (event && config && isCourse) {
+              const isCourseLike = event?.type === "course" || event?.type === "scene"
+                if (event && config && isCourseLike) {
                 const urls = getCourseUrls(event)
                 const matchingPlan = mockClassPlans.find(
                   (p) => p.course === event.title && (event.className ? p.name === event.className : true)
@@ -427,7 +423,7 @@ function CourseScheduleTable({ prepAssociations = {}, onAssociate, onPrepRequest
                     <PopoverTrigger asChild>
                       <div className="p-1.5 border-r border-gray-200 last:border-r-0 min-h-[80px]">
                         <div
-                          className={`w-full h-full rounded-lg p-2 text-xs space-y-1 transition-all hover:shadow-md hover:scale-[1.02] cursor-pointer ring-1 ring-transparent hover:ring-blue-300/50 ${config.bg} border ${config.border}`}
+                          className={`w-full h-full rounded-lg p-2 text-xs space-y-1 transition-all hover:shadow-md hover:scale-[1.02] cursor-pointer ring-1 ring-transparent ${urls.isHybrid ? "hover:ring-blue-300/50" : "hover:ring-emerald-300/50"} ${config.bg} border ${config.border}`}
                         >
                           <div className="flex items-center gap-1">
                             <Badge variant="outline" className={`text-[10px] h-4 px-1 font-medium ${config.badge}`}>
@@ -443,7 +439,7 @@ function CourseScheduleTable({ prepAssociations = {}, onAssociate, onPrepRequest
                               {event.location}
                             </div>
                           )}
-                          <div className="text-[10px] text-blue-500 font-medium mt-0.5">点击查看操作</div>
+                          <div className={`text-[10px] font-medium mt-0.5 ${urls.isHybrid ? "text-blue-500" : "text-emerald-600"}`}>点击查看操作</div>
                         </div>
                       </div>
                     </PopoverTrigger>
@@ -463,19 +459,19 @@ function CourseScheduleTable({ prepAssociations = {}, onAssociate, onPrepRequest
                         {(() => {
                           if (existingAssoc && existingAssoc.subItems.length > 0) {
                             return (
-                              <div className="rounded-lg border border-blue-100 bg-blue-50/50 p-2 space-y-1">
-                                <span className="text-[10px] text-blue-500 font-medium block">
+                              <div className={`rounded-lg border p-2 space-y-1 ${urls.isHybrid ? "border-blue-100 bg-blue-50/50" : "border-emerald-100 bg-emerald-50/50"}`}>
+                                <span className={`text-[10px] font-medium block ${urls.isHybrid ? "text-blue-500" : "text-emerald-600"}`}>
                                   {urls.isHybrid ? "已关联节次" : "已关联任务"}（{existingAssoc.subItems.length}）
                                 </span>
                                 <div className="space-y-0.5 max-h-[100px] overflow-y-auto">
                                   {existingAssoc.subItems.map((si) => (
-                                    <div key={si.id} className="text-xs text-gray-700 pl-2 border-l-2 border-blue-200">
+                                    <div key={si.id} className={`text-xs text-gray-700 pl-2 border-l-2 ${urls.isHybrid ? "border-blue-200" : "border-emerald-200"}`}>
                                       {si.name}
                                     </div>
                                   ))}
                                 </div>
                                 <Button size="sm" variant="link"
-                                  className="text-[10px] h-5 p-0 text-blue-600"
+                                  className={`text-[10px] h-5 p-0 ${urls.isHybrid ? "text-blue-600" : "text-emerald-600"}`}
                                   onClick={() => {
                                     if (onPrepRequest) onPrepRequest(pid, sessionKey, event.title, urls.isHybrid, urls.prepUrl, `${days[event.dayOfWeek - 1]} ${event.period}`)
                                   }}>
@@ -500,7 +496,7 @@ function CourseScheduleTable({ prepAssociations = {}, onAssociate, onPrepRequest
                               }
                             }}>
                             <ExternalLink className="h-3.5 w-3.5 mr-1" />
-                            导学准备
+                            {urls.isHybrid ? "前往备课" : "导学准备"}
                           </Button>
                           <Button size="sm" variant="outline"
                             className={`flex-1 justify-center text-[11px] h-7 px-2 ${urls.isHybrid ? "border-blue-200 text-blue-600 hover:bg-blue-50" : "border-emerald-200 text-emerald-600 hover:bg-emerald-50"}`}
@@ -521,7 +517,7 @@ function CourseScheduleTable({ prepAssociations = {}, onAssociate, onPrepRequest
                           <span className="text-[10px] text-gray-400 block mb-1.5">数据查看</span>
                           <div className="flex items-center gap-2">
                             <Button size="sm" variant="ghost"
-                              className="flex-1 justify-center text-[11px] h-7 px-2 text-blue-600 hover:bg-blue-50"
+                              className={`flex-1 justify-center text-[11px] h-7 px-2 ${urls.isHybrid ? "text-blue-600 hover:bg-blue-50" : "text-emerald-600 hover:bg-emerald-50"}`}
                               onClick={() => openActionDialog(event, "tracking")}>
                               <TrendingUp className="h-3.5 w-3.5 mr-1" />
                               教学进展

@@ -332,7 +332,7 @@ export const mockClassSessions: ClassSessionData[] = [
 
 // ==================== 教师课程表 ====================
 
-export type TeacherScheduleEventType = "course" | "meeting" | "training" | "exam" | "todo"
+export type TeacherScheduleEventType = "course" | "scene" | "meeting" | "training" | "exam" | "todo"
 
 export interface TeacherScheduleEvent {
   id: string
@@ -415,9 +415,9 @@ export const mockTeacherSchedule: TeacherScheduleEvent[] = [
   { id: "se4", title: "教研组会议", type: "meeting", dayOfWeek: 1, period: "下午 3", location: "会议室 302", description: "期中教学检查布置", tag: "全体教师" },
 
   // 周二
-  { id: "se5", title: "Linux系统管理", type: "course", dayOfWeek: 2, period: "上午 1", location: "实验楼 B-205", description: "Shell脚本编程", tag: "计网2402班", className: "计网2402班" },
-  { id: "se6", title: "Linux系统管理", type: "course", dayOfWeek: 2, period: "上午 2", location: "实验楼 B-205", description: "Shell脚本编程", tag: "计网2402班", className: "计网2402班" },
-  { id: "se7", title: "网络安全技术", type: "course", dayOfWeek: 2, period: "上午 1", location: "教学楼 A-401", description: "防火墙基本原理", tag: "计网2301班", className: "计网2301班" },
+  { id: "se5", title: "Linux系统管理", type: "scene", dayOfWeek: 2, period: "上午 1", location: "实验楼 B-205", description: "Shell脚本编程", tag: "计网2402班", className: "计网2402班" },
+  { id: "se6", title: "Linux系统管理", type: "scene", dayOfWeek: 2, period: "上午 2", location: "实验楼 B-205", description: "Shell脚本编程", tag: "计网2402班", className: "计网2402班" },
+  { id: "se7", title: "网络安全技术", type: "scene", dayOfWeek: 2, period: "上午 1", location: "教学楼 A-401", description: "防火墙基本原理", tag: "计网2301班", className: "计网2301班" },
   { id: "se8", title: "期中教学检查", type: "exam", dayOfWeek: 2, period: "下午 2", location: "教务处", description: "提交教学文档", tag: "教务" },
 
   // 周三
@@ -426,9 +426,9 @@ export const mockTeacherSchedule: TeacherScheduleEvent[] = [
   { id: "se11", title: "路由交换技术", type: "course", dayOfWeek: 3, period: "下午 2", location: "实训中心 C-102", description: "VLAN间路由实验", tag: "计网2401班", className: "计网2401班" },
 
   // 周四
-  { id: "se12", title: "Linux系统管理", type: "course", dayOfWeek: 4, period: "上午 1", location: "实验楼 B-205", description: "用户与权限管理", tag: "计网2402班", className: "计网2402班" },
-  { id: "se13", title: "网络安全技术", type: "course", dayOfWeek: 4, period: "上午 1", location: "教学楼 A-401", description: "入侵检测系统", tag: "计网2301班", className: "计网2301班" },
-  { id: "se14", title: "网络安全技术", type: "course", dayOfWeek: 4, period: "上午 2", location: "实验楼 C-301", description: "IDS配置实验", tag: "计网2301班", className: "计网2301班" },
+  { id: "se12", title: "Linux系统管理", type: "scene", dayOfWeek: 4, period: "上午 1", location: "实验楼 B-205", description: "用户与权限管理", tag: "计网2402班", className: "计网2402班" },
+  { id: "se13", title: "网络安全技术", type: "scene", dayOfWeek: 4, period: "上午 1", location: "教学楼 A-401", description: "入侵检测系统", tag: "计网2301班", className: "计网2301班" },
+  { id: "se14", title: "网络安全技术", type: "scene", dayOfWeek: 4, period: "上午 2", location: "实验楼 C-301", description: "IDS配置实验", tag: "计网2301班", className: "计网2301班" },
   { id: "se15", title: "教师信息化培训", type: "training", dayOfWeek: 4, period: "下午 1", location: "报告厅", description: "AI辅助教学设计", tag: "培训" },
 
   // 周五
