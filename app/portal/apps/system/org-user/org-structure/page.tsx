@@ -1,91 +1,290 @@
 "use client"
 
-import { useState } from "react"
+import { useMemo, useState } from "react"
 import { Button } from "@/components/ui/button"
 import { Badge } from "@/components/ui/badge"
-import { Dialog, DialogContent, DialogDescription, DialogFooter, DialogHeader, DialogTitle } from "@/components/ui/dialog"
-import { DropdownMenu, DropdownMenuContent, DropdownMenuItem, DropdownMenuSeparator, DropdownMenuTrigger } from "@/components/ui/dropdown-menu"
+import {
+  Dialog,
+  DialogContent,
+  DialogDescription,
+  DialogFooter,
+  DialogHeader,
+  DialogTitle,
+} from "@/components/ui/dialog"
+import {
+  DropdownMenu,
+  DropdownMenuContent,
+  DropdownMenuItem,
+  DropdownMenuSeparator,
+  DropdownMenuTrigger,
+} from "@/components/ui/dropdown-menu"
 import { Input } from "@/components/ui/input"
 import { Label } from "@/components/ui/label"
-import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@/components/ui/select"
+import {
+  Select,
+  SelectContent,
+  SelectItem,
+  SelectTrigger,
+  SelectValue,
+} from "@/components/ui/select"
 import { ScrollArea } from "@/components/ui/scroll-area"
-import { Plus, MoreHorizontal, ChevronRight, ChevronDown, Pencil, Trash2, Users, Upload, Download, ArrowUp, GraduationCap, FolderTree } from "lucide-react"
+import {
+  Plus,
+  MoreHorizontal,
+  ChevronRight,
+  ChevronDown,
+  Pencil,
+  Trash2,
+  Users,
+  Upload,
+  Download,
+  ArrowUp,
+  GraduationCap,
+  School,
+  Building2,
+  BookOpen,
+  CalendarDays,
+  Briefcase,
+  LayoutList,
+  Building,
+} from "lucide-react"
 import { cn } from "@/lib/utils"
+
+type OrgNodeType = "学校" | "二级学院" | "专业" | "年级" | "班级" | "行政职能部门"
 
 interface OrgNode {
   id: string
   name: string
-  type: string
+  type: OrgNodeType
   order: number
   memberCount: number
   children?: OrgNode[]
   expanded?: boolean
 }
 
-const mockOrgData: OrgNode[] = [
+function generateClass(majorCode: string, grade: string, index: number): OrgNode {
+  return {
+    id: `${majorCode}-${grade}-${index}`,
+    name: `${majorCode}${grade.slice(2)}0${index}班`,
+    type: "班级",
+    order: index,
+    memberCount: 28 + Math.floor(Math.random() * 20),
+  }
+}
+
+function generateGrade(majorCode: string, grade: string, order: number): OrgNode {
+  return {
+    id: `${majorCode}-${grade}`,
+    name: `${grade}级`,
+    type: "年级",
+    order,
+    memberCount: 0,
+    expanded: false,
+    children: Array.from({ length: 2 }, (_, i) => generateClass(majorCode, grade, i + 1)),
+  }
+}
+
+function generateMajor(
+  collegeCode: string,
+  name: string,
+  code: string,
+  order: number
+): OrgNode {
+  return {
+    id: `${collegeCode}-${code}`,
+    name,
+    type: "专业",
+    order,
+    memberCount: 0,
+    expanded: false,
+    children: ["2021", "2022", "2023", "2024"].map((grade, i) =>
+      generateGrade(code, grade, i + 1)
+    ),
+  }
+}
+
+function generateDepartment(
+  collegeCode: string,
+  name: string,
+  order: number
+): OrgNode {
+  return {
+    id: `${collegeCode}-dept-${order}`,
+    name,
+    type: "行政职能部门",
+    order,
+    memberCount: 5 + Math.floor(Math.random() * 15),
+  }
+}
+
+function generateCollege(
+  code: string,
+  name: string,
+  order: number,
+  majors: { name: string; code: string }[],
+  departments: string[]
+): OrgNode {
+  return {
+    id: `college-${code}`,
+    name,
+    type: "二级学院",
+    order,
+    memberCount: 0,
+    expanded: true,
+    children: [
+      ...majors.map((m, i) => generateMajor(code, m.name, m.code, i + 1)),
+      ...departments.map((d, i) =>
+        generateDepartment(code, d, i + 1 + majors.length)
+      ),
+    ],
+  }
+}
+
+const rawMockOrgData: OrgNode[] = [
   {
-    id: "1",
-    name: "清华大学",
+    id: "school-1",
+    name: "智慧大学",
     type: "学校",
     order: 1,
     memberCount: 0,
     expanded: true,
     children: [
-      {
-        id: "1-1",
-        name: "信息学院",
-        type: "二级学院",
-        order: 1,
-        memberCount: 120,
-        expanded: true,
-        children: [
-          { id: "1-1-1", name: "计算机系", type: "专业系", order: 1, memberCount: 45 },
-          { id: "1-1-2", name: "软件工程系", type: "专业系", order: 2, memberCount: 38 },
-          {
-            id: "1-1-3",
-            name: "2024级软件班",
-            type: "班级",
-            order: 3,
-            memberCount: 35,
-            children: [],
-          },
+      generateCollege(
+        "cs",
+        "计算机科学与技术学院",
+        1,
+        [
+          { name: "计算机科学与技术", code: "CS" },
+          { name: "软件工程", code: "SE" },
+          { name: "网络工程", code: "NE" },
         ],
-      },
-      {
-        id: "1-2",
-        name: "经济管理学院",
-        type: "二级学院",
-        order: 2,
-        memberCount: 95,
-        children: [
-          { id: "1-2-1", name: "会计系", type: "专业系", order: 1, memberCount: 32 },
-          { id: "1-2-2", name: "金融系", type: "专业系", order: 2, memberCount: 28 },
+        ["学院办公室", "学生工作办公室", "教学科研办公室"]
+      ),
+      generateCollege(
+        "em",
+        "经济管理学院",
+        2,
+        [
+          { name: "工商管理", code: "BA" },
+          { name: "会计学", code: "AC" },
+          { name: "金融学", code: "FI" },
         ],
-      },
-      { id: "1-3", name: "教务处", type: "行政部门", order: 3, memberCount: 15 },
-      { id: "1-4", name: "学生处", type: "行政部门", order: 4, memberCount: 12 },
+        ["学院办公室", "学生工作办公室", "教务办公室"]
+      ),
+      generateCollege(
+        "me",
+        "机械工程学院",
+        3,
+        [
+          { name: "机械设计制造及其自动化", code: "ME" },
+          { name: "车辆工程", code: "VE" },
+        ],
+        ["学院办公室", "实验教学中心"]
+      ),
+      generateCollege(
+        "admin",
+        "行政教辅中心",
+        4,
+        [],
+        [
+          "教务处",
+          "学生处",
+          "人事处",
+          "财务处",
+          "图书馆",
+          "信息中心",
+          "后勤管理处",
+        ]
+      ),
     ],
   },
 ]
+
+function computeMemberCount(nodes: OrgNode[]): OrgNode[] {
+  return nodes.map((node) => {
+    if (node.children && node.children.length > 0) {
+      const children = computeMemberCount(node.children)
+      return {
+        ...node,
+        children,
+        memberCount: children.reduce((sum, child) => sum + child.memberCount, 0),
+      }
+    }
+    return node
+  })
+}
+
+function countByType(nodes: OrgNode[], type: OrgNodeType): number {
+  let count = 0
+  nodes.forEach((node) => {
+    if (node.type === type) count += 1
+    if (node.children) count += countByType(node.children, type)
+  })
+  return count
+}
+
+function totalMembers(nodes: OrgNode[]): number {
+  return nodes.reduce((sum, node) => sum + node.memberCount, 0)
+}
+
+const typeMeta: Record<
+  OrgNodeType,
+  { icon: React.ElementType; color: string; badge: string }
+> = {
+  学校: { icon: School, color: "text-blue-600", badge: "bg-blue-50 text-blue-700 border-blue-200" },
+  二级学院: { icon: Building2, color: "text-violet-600", badge: "bg-violet-50 text-violet-700 border-violet-200" },
+  专业: { icon: BookOpen, color: "text-emerald-600", badge: "bg-emerald-50 text-emerald-700 border-emerald-200" },
+  年级: { icon: CalendarDays, color: "text-amber-600", badge: "bg-amber-50 text-amber-700 border-amber-200" },
+  班级: { icon: Users, color: "text-cyan-600", badge: "bg-cyan-50 text-cyan-700 border-cyan-200" },
+  行政职能部门: { icon: Briefcase, color: "text-rose-600", badge: "bg-rose-50 text-rose-700 border-rose-200" },
+}
 
 function TreeNode({
   node,
   level = 0,
   onToggle,
   onAction,
+  groupLabel,
 }: {
   node: OrgNode
   level?: number
   onToggle: (id: string) => void
   onAction: (action: string, node: OrgNode) => void
+  groupLabel?: string
 }) {
   const hasChildren = node.children && node.children.length > 0
+  const meta = typeMeta[node.type]
+  const Icon = meta.icon
+
+  const studentChildren =
+    node.type === "二级学院"
+      ? node.children?.filter((c) => c.type !== "行政职能部门") || []
+      : []
+  const teacherChildren =
+    node.type === "二级学院"
+      ? node.children?.filter((c) => c.type === "行政职能部门") || []
+      : []
+  const normalChildren =
+    node.type !== "二级学院" ? node.children || [] : []
 
   return (
     <div>
+      {groupLabel && (
+        <div
+          className={cn(
+            "flex items-center gap-2 py-1.5 px-3 text-xs font-medium text-muted-foreground",
+            level > 0 && "ml-6"
+          )}
+        >
+          <div className="w-5" />
+          <Badge variant="secondary" className="text-[10px]">
+            {groupLabel}
+          </Badge>
+        </div>
+      )}
       <div
         className={cn(
-          "flex items-center gap-2 py-2 px-3 hover:bg-muted rounded-lg group",
+          "flex items-center gap-2 py-2 px-3 hover:bg-muted rounded-lg group transition-colors",
           level > 0 && "ml-6"
         )}
       >
@@ -103,16 +302,22 @@ function TreeNode({
             <span className="w-4" />
           )}
         </button>
-        <FolderTree className="w-4 h-4 text-primary" />
+        <Icon className={cn("w-4 h-4", meta.color)} />
         <span className="flex-1 text-sm font-medium">{node.name}</span>
-        <Badge variant="outline" className="text-xs">{node.type}</Badge>
-        <div className="flex items-center gap-1 text-xs text-muted-foreground">
+        <Badge variant="outline" className={cn("text-xs", meta.badge)}>
+          {node.type}
+        </Badge>
+        <div className="flex items-center gap-1 text-xs text-muted-foreground min-w-[3rem] justify-end">
           <Users className="w-3 h-3" />
           {node.memberCount}
         </div>
         <DropdownMenu>
           <DropdownMenuTrigger asChild>
-            <Button variant="ghost" size="icon" className="h-7 w-7 opacity-0 group-hover:opacity-100">
+            <Button
+              variant="ghost"
+              size="icon"
+              className="h-7 w-7 opacity-0 group-hover:opacity-100"
+            >
               <MoreHorizontal className="h-4 w-4" />
             </Button>
           </DropdownMenuTrigger>
@@ -140,17 +345,71 @@ function TreeNode({
               </DropdownMenuItem>
             )}
             <DropdownMenuSeparator />
-            <DropdownMenuItem onClick={() => onAction("delete", node)} className="text-destructive">
+            <DropdownMenuItem
+              onClick={() => onAction("delete", node)}
+              className="text-destructive"
+            >
               <Trash2 className="mr-2 h-4 w-4" />
               删除
             </DropdownMenuItem>
           </DropdownMenuContent>
         </DropdownMenu>
       </div>
+
       {hasChildren && node.expanded && (
         <div>
-          {node.children!.map((child) => (
-            <TreeNode key={child.id} node={child} level={level + 1} onToggle={onToggle} onAction={onAction} />
+          {node.type === "二级学院" && studentChildren.length > 0 && (
+            <>
+              <div className="flex items-center gap-2 py-1 px-3 ml-6">
+                <div className="w-5" />
+                <span className="flex items-center gap-1 text-xs font-semibold text-emerald-600">
+                  <GraduationCap className="w-3 h-3" />
+                  学生线：专业 / 年级 / 班级
+                </span>
+                <div className="flex-1 h-px bg-emerald-100" />
+              </div>
+              {studentChildren.map((child) => (
+                <TreeNode
+                  key={child.id}
+                  node={child}
+                  level={level + 1}
+                  onToggle={onToggle}
+                  onAction={onAction}
+                />
+              ))}
+            </>
+          )}
+
+          {node.type === "二级学院" && teacherChildren.length > 0 && (
+            <>
+              <div className="flex items-center gap-2 py-1 px-3 ml-6">
+                <div className="w-5" />
+                <span className="flex items-center gap-1 text-xs font-semibold text-rose-600">
+                  <Briefcase className="w-3 h-3" />
+                  教师线：行政职能部门
+                </span>
+                <div className="flex-1 h-px bg-rose-100" />
+              </div>
+              {teacherChildren.map((child) => (
+                <TreeNode
+                  key={child.id}
+                  node={child}
+                  level={level + 1}
+                  onToggle={onToggle}
+                  onAction={onAction}
+                />
+              ))}
+            </>
+          )}
+
+          {normalChildren.map((child) => (
+            <TreeNode
+              key={child.id}
+              node={child}
+              level={level + 1}
+              onToggle={onToggle}
+              onAction={onAction}
+            />
           ))}
         </div>
       )}
@@ -159,10 +418,24 @@ function TreeNode({
 }
 
 export default function OrgStructurePage() {
-  const [orgData, setOrgData] = useState<OrgNode[]>(mockOrgData)
+  const [orgData, setOrgData] = useState<OrgNode[]>(() =>
+    computeMemberCount(rawMockOrgData)
+  )
   const [isDialogOpen, setIsDialogOpen] = useState(false)
   const [dialogType, setDialogType] = useState<"add" | "edit" | "members">("add")
   const [selectedNode, setSelectedNode] = useState<OrgNode | null>(null)
+
+  const stats = useMemo(() => {
+    return {
+      school: countByType(orgData, "学校"),
+      college: countByType(orgData, "二级学院"),
+      major: countByType(orgData, "专业"),
+      grade: countByType(orgData, "年级"),
+      class: countByType(orgData, "班级"),
+      department: countByType(orgData, "行政职能部门"),
+      members: totalMembers(orgData),
+    }
+  }, [orgData])
 
   const toggleNode = (id: string) => {
     const toggle = (nodes: OrgNode[]): OrgNode[] => {
@@ -198,7 +471,9 @@ export default function OrgStructurePage() {
       <div className="mb-6 flex items-center justify-between">
         <div>
           <h1 className="text-xl font-semibold text-foreground">组织架构管理</h1>
-          <p className="mt-1 text-sm text-muted-foreground">管理组织架构树，配置组织成员归属</p>
+          <p className="mt-1 text-sm text-muted-foreground">
+            管理学校组织架构树，同时维护学生线与教师线的组织归属
+          </p>
         </div>
         <div className="flex items-center gap-2">
           <Button variant="outline" size="sm">
@@ -209,17 +484,76 @@ export default function OrgStructurePage() {
             <Download className="h-4 w-4 mr-1" />
             批量导出
           </Button>
-          <Button size="sm" onClick={() => { setSelectedNode(null); setDialogType("add"); setIsDialogOpen(true) }}>
+          <Button
+            size="sm"
+            onClick={() => {
+              setSelectedNode(null)
+              setDialogType("add")
+              setIsDialogOpen(true)
+            }}
+          >
             <Plus className="h-4 w-4 mr-1" />
             新增节点
           </Button>
         </div>
       </div>
 
-      <div className="rounded-lg border border-gray-100 bg-white shadow-sm p-4">
-        <ScrollArea className="h-[600px]">
+      <div className="grid grid-cols-2 md:grid-cols-4 lg:grid-cols-7 gap-3 mb-6">
+        <div className="rounded-lg border bg-white p-3 shadow-sm">
+          <div className="text-xs text-muted-foreground">学校</div>
+          <div className="mt-1 text-xl font-semibold text-blue-600">{stats.school}</div>
+        </div>
+        <div className="rounded-lg border bg-white p-3 shadow-sm">
+          <div className="text-xs text-muted-foreground">二级学院</div>
+          <div className="mt-1 text-xl font-semibold text-violet-600">{stats.college}</div>
+        </div>
+        <div className="rounded-lg border bg-white p-3 shadow-sm">
+          <div className="text-xs text-muted-foreground">专业</div>
+          <div className="mt-1 text-xl font-semibold text-emerald-600">{stats.major}</div>
+        </div>
+        <div className="rounded-lg border bg-white p-3 shadow-sm">
+          <div className="text-xs text-muted-foreground">年级</div>
+          <div className="mt-1 text-xl font-semibold text-amber-600">{stats.grade}</div>
+        </div>
+        <div className="rounded-lg border bg-white p-3 shadow-sm">
+          <div className="text-xs text-muted-foreground">班级</div>
+          <div className="mt-1 text-xl font-semibold text-cyan-600">{stats.class}</div>
+        </div>
+        <div className="rounded-lg border bg-white p-3 shadow-sm">
+          <div className="text-xs text-muted-foreground">职能部门</div>
+          <div className="mt-1 text-xl font-semibold text-rose-600">{stats.department}</div>
+        </div>
+        <div className="rounded-lg border bg-white p-3 shadow-sm">
+          <div className="text-xs text-muted-foreground">总人数</div>
+          <div className="mt-1 text-xl font-semibold text-foreground">{stats.members}</div>
+        </div>
+      </div>
+
+      <div className="rounded-lg border border-gray-100 bg-white shadow-sm">
+        <div className="flex items-center justify-between px-4 py-3 border-b border-gray-100">
+          <div className="flex items-center gap-2 text-sm font-medium">
+            <LayoutList className="w-4 h-4 text-muted-foreground" />
+            组织架构树
+          </div>
+          <div className="flex items-center gap-4 text-xs">
+            <div className="flex items-center gap-1.5">
+              <div className="w-2 h-2 rounded-full bg-emerald-500" />
+              <span className="text-muted-foreground">学生线</span>
+            </div>
+            <div className="flex items-center gap-1.5">
+              <div className="w-2 h-2 rounded-full bg-rose-500" />
+              <span className="text-muted-foreground">教师线</span>
+            </div>
+          </div>
+        </div>
+        <ScrollArea className="h-[600px] p-4">
           {orgData.map((node) => (
-            <TreeNode key={node.id} node={node} onToggle={toggleNode} onAction={handleAction} />
+            <TreeNode
+              key={node.id}
+              node={node}
+              onToggle={toggleNode}
+              onAction={handleAction}
+            />
           ))}
         </ScrollArea>
       </div>
@@ -228,7 +562,11 @@ export default function OrgStructurePage() {
         <DialogContent className="sm:max-w-[500px]">
           <DialogHeader>
             <DialogTitle>
-              {dialogType === "add" ? "新增节点" : dialogType === "edit" ? "编辑节点" : "成员管理"}
+              {dialogType === "add"
+                ? "新增节点"
+                : dialogType === "edit"
+                ? "编辑节点"
+                : "成员管理"}
             </DialogTitle>
             <DialogDescription>
               {dialogType === "members"
@@ -240,24 +578,36 @@ export default function OrgStructurePage() {
             <div className="grid gap-4 py-4">
               <div className="grid gap-2">
                 <Label>节点名称</Label>
-                <Input placeholder="如：信息学院" defaultValue={dialogType === "edit" ? selectedNode?.name : ""} />
+                <Input
+                  placeholder="如：信息学院"
+                  defaultValue={dialogType === "edit" ? selectedNode?.name : ""}
+                />
               </div>
               <div className="grid gap-2">
                 <Label>节点类型</Label>
-                <Select defaultValue={dialogType === "edit" ? selectedNode?.type : undefined}>
-                  <SelectTrigger><SelectValue placeholder="选择类型" /></SelectTrigger>
+                <Select
+                  defaultValue={dialogType === "edit" ? selectedNode?.type : undefined}
+                >
+                  <SelectTrigger>
+                    <SelectValue placeholder="选择类型" />
+                  </SelectTrigger>
                   <SelectContent>
+                    <SelectItem value="学校">学校</SelectItem>
                     <SelectItem value="二级学院">二级学院</SelectItem>
-                    <SelectItem value="专业系">专业系</SelectItem>
+                    <SelectItem value="专业">专业</SelectItem>
+                    <SelectItem value="年级">年级</SelectItem>
                     <SelectItem value="班级">班级</SelectItem>
-                    <SelectItem value="行政部门">行政部门</SelectItem>
-                    <SelectItem value="教研室">教研室</SelectItem>
+                    <SelectItem value="行政职能部门">行政职能部门</SelectItem>
                   </SelectContent>
                 </Select>
               </div>
               <div className="grid gap-2">
                 <Label>排序序号</Label>
-                <Input type="number" placeholder="1" defaultValue={dialogType === "edit" ? selectedNode?.order : 1} />
+                <Input
+                  type="number"
+                  placeholder="1"
+                  defaultValue={dialogType === "edit" ? selectedNode?.order : 1}
+                />
               </div>
             </div>
           ) : (
@@ -283,7 +633,9 @@ export default function OrgStructurePage() {
             </div>
           )}
           <DialogFooter>
-            <Button variant="outline" onClick={() => setIsDialogOpen(false)}>取消</Button>
+            <Button variant="outline" onClick={() => setIsDialogOpen(false)}>
+              取消
+            </Button>
             <Button onClick={() => setIsDialogOpen(false)}>保存</Button>
           </DialogFooter>
         </DialogContent>
