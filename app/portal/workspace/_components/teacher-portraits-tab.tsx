@@ -62,14 +62,26 @@ export function TeacherPortraitsTab() {
       gradeMap.get(s.grade)!.add(s.className)
     })
     const result: MajorGroup[] = []
+    const q = navSearch.trim().toLowerCase()
     majorMap.forEach((gradeMap, major) => {
       const grades: GradeGroup[] = []
       gradeMap.forEach((classes, grade) => {
-        if (!navSearch.trim() || grade.includes(navSearch) || Array.from(classes).some((c) => c.includes(navSearch))) {
-          grades.push({ grade, classes: Array.from(classes).sort() })
+        const matchedClasses = Array.from(classes).filter((cls) => {
+          if (!q) return true
+          if (major.toLowerCase().includes(q)) return true
+          if (grade.toLowerCase().includes(q)) return true
+          if (cls.toLowerCase().includes(q)) return true
+          return mockStudentPortraits.some(
+            (s) =>
+              s.className === cls &&
+              (s.name.toLowerCase().includes(q) || s.studentNo.toLowerCase().includes(q))
+          )
+        })
+        if (matchedClasses.length > 0) {
+          grades.push({ grade, classes: matchedClasses.sort() })
         }
       })
-      if (grades.length > 0 && (!navSearch.trim() || major.includes(navSearch))) {
+      if (grades.length > 0) {
         result.push({ major, grades: grades.sort((a, b) => b.grade.localeCompare(a.grade)) })
       }
     })
@@ -179,7 +191,7 @@ export function TeacherPortraitsTab() {
               <div className="relative">
                 <Search className="absolute left-2.5 top-1/2 size-3.5 -translate-y-1/2 text-gray-400" />
                 <Input
-                  placeholder="搜索专业或班级..."
+                  placeholder="搜索姓名或学号..."
                   value={navSearch}
                   onChange={(e) => setNavSearch(e.target.value)}
                   className="h-9 pl-8 text-xs border-gray-200 bg-white focus:border-blue-300"

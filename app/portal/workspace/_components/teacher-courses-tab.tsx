@@ -1,6 +1,6 @@
 "use client"
 
-import { useState } from "react"
+import { useState, useEffect } from "react"
 import {
   BookOpen, Calendar, Clock, MapPin,
   BarChart3, Users, ClipboardList, GraduationCap, Layers, TrendingUp,
@@ -497,6 +497,7 @@ export function TeacherCoursesTab({ prepAssociations = {}, onAssociate }: Teache
   const [activeSubTab, setActiveSubTab] = useState("plans")
   const [courseFilter, setCourseFilter] = useState("all")
   const [selectedTerm, setSelectedTerm] = useState(semesters[2])
+  const [selectedPlanId, setSelectedPlanId] = useState<string | null>(null)
   const [dialogOpen, setDialogOpen] = useState(false)
   const [selectedCourse, setSelectedCourse] = useState<SelectedCourse | null>(null)
   const [dialogTab, setDialogTab] = useState("tracking")
@@ -522,8 +523,17 @@ export function TeacherCoursesTab({ prepAssociations = {}, onAssociate }: Teache
   })
 
   const termPlans = mockClassPlans.filter((p) => p.term === selectedTerm)
+  const selectedPlan = termPlans.find((p) => p.id === selectedPlanId) || null
   const planCourseIds = new Set(termPlans.map((p) => p.id))
   const termSessions = mockClassSessions.filter((s) => planCourseIds.has(s.courseId))
+
+  useEffect(() => {
+    if (termPlans.length > 0) {
+      setSelectedPlanId(termPlans[0].id)
+    } else {
+      setSelectedPlanId(null)
+    }
+  }, [selectedTerm])
 
   const usageMap: Record<string, string> = {}
   for (const [sessionKey, assoc] of Object.entries(prepAssociations)) {
@@ -558,33 +568,83 @@ export function TeacherCoursesTab({ prepAssociations = {}, onAssociate }: Teache
   }
 
   return (
-    <div className="space-y-5">
-      {/* 开课计划管理 */}
-        <div className="space-y-4">
-          <div className="flex items-center gap-3">
-            <Tabs value={selectedTerm} onValueChange={setSelectedTerm}>
-              <TabsList className="h-9 bg-white border border-gray-100 shadow-sm">
-                {semesters.map((term) => (
-                  <TabsTrigger key={term} value={term} className="text-xs px-3 data-[state=active]:bg-blue-600 data-[state=active]:text-white">
-                    <Calendar className="h-3.5 w-3.5 mr-1" />
-                    {term}
-                  </TabsTrigger>
-                ))}
-              </TabsList>
-            </Tabs>
-          </div>
+    <div className="space-y-4">
+      <div className="flex items-center gap-3">
+        <Tabs value={selectedTerm} onValueChange={setSelectedTerm}>
+          <TabsList className="h-9 bg-white border border-gray-100 shadow-sm">
+            {semesters.map((term) => (
+              <TabsTrigger key={term} value={term} className="text-xs px-3 data-[state=active]:bg-blue-600 data-[state=active]:text-white">
+                <Calendar className="h-3.5 w-3.5 mr-1" />
+                {term}
+              </TabsTrigger>
+            ))}
+          </TabsList>
+        </Tabs>
+      </div>
 
-          <SectionCard title="课程节次列表" icon={Calendar} iconColor="blue">
-            <div className="space-y-4">
-              {termPlans.map((plan) => {
-                const sessions = mockClassSessions
-                  .filter((s) => s.courseId === plan.id)
-                  .sort((a, b) => a.week - b.week)
-                const courseTypeTag = ["混合课程", "实践场景", "混合课程", "实践场景", "混合课程", "实践场景"][
-                  termPlans.indexOf(plan) % 2
-                ]
+      <div className="grid grid-cols-12 gap-6">
+        {/* 左侧课程/场景导航 */}
+        <div className="col-span-3">
+          <div className="rounded-xl border bg-white shadow-sm overflow-hidden">
+            <div className="border-b bg-gradient-to-r from-gray-50 to-white p-3">
+              <h3 className="text-sm font-semibold text-gray-900">课程/场景</h3>
+              <p className="text-xs text-gray-500 mt-0.5">共 {termPlans.length} 个</p>
+            </div>
+            <div className="max-h-[calc(100vh-320px)] overflow-y-auto p-2">
+              {termPlans.map((plan, index) => {
+                const sessions = mockClassSessions.filter((s) => s.courseId === plan.id)
+                const courseTypeTag = ["混合课程", "实践场景", "混合课程", "实践场景", "混合课程", "实践场景"][index % 2]
                 const isHybrid = courseTypeTag === "混合课程"
-                const accentColors = isHybrid
+                const isActive = selectedPlanId === plan.id
+                return (
+                  <button
+                    key={plan.id}
+                    onClick={() => setSelectedPlanId(plan.id)}
+                    className={`w-full flex items-center gap-3 rounded-lg px-3 py-2.5 text-left transition-all mb-1 ${
+                      isActive
+                        ? "bg-gradient-to-r from-blue-50 to-blue-100/50 border border-blue-200 shadow-sm"
+                        : "hover:bg-gray-50"
+                    }`}
+                  >
+                    <div className={`w-9 h-9 rounded-lg flex items-center justify-center text-sm font-bold text-white shrink-0 ${isHybrid ? "bg-gradient-to-br from-blue-500 to-indigo-600" : "bg-gradient-to-br from-emerald-500 to-teal-600"}`}>
+                      {plan.course.charAt(0)}
+                    </div>
+                    <div className="min-w-0 flex-1">
+                      <div className="flex items-center gap-1.5">
+                        <span className={`text-sm font-medium truncate ${isActive ? "text-blue-700" : "text-gray-900"}`}>{plan.course}</span>
+                      </div>
+                      <div className="flex items-center gap-1.5 mt-0.5">
+                        <Badge variant="outline" className="text-[10px] h-4 px-1">{plan.name}</Badge>
+                        <Badge className={`text-[10px] h-4 px-1 border-0 text-white ${isHybrid ? "bg-gradient-to-r from-blue-500 to-indigo-500" : "bg-gradient-to-r from-emerald-500 to-teal-500"}`}>{courseTypeTag}</Badge>
+                      </div>
+                      <p className={`text-xs mt-0.5 ${isActive ? "text-blue-500" : "text-gray-400"}`}>{sessions.length} 个节次</p>
+                    </div>
+                  </button>
+                )
+              })}
+            </div>
+          </div>
+        </div>
+
+        {/* 右侧节次内容 */}
+        <div className="col-span-9">
+          <SectionCard title="节次列表" icon={Calendar} iconColor="blue">
+            {!selectedPlan ? (
+              <div className="flex flex-col items-center justify-center py-16 text-gray-400">
+                <BookOpen className="w-12 h-12 mb-3 text-gray-200" />
+                <p className="text-sm font-medium">请从左侧选择课程/场景</p>
+              </div>
+            ) : (
+              <div className="space-y-4">
+                {(() => {
+                  const plan = selectedPlan
+                  const sessions = mockClassSessions
+                    .filter((s) => s.courseId === plan.id)
+                    .sort((a, b) => a.week - b.week)
+                  const planIndex = termPlans.findIndex((p) => p.id === plan.id)
+                  const courseTypeTag = ["混合课程", "实践场景", "混合课程", "实践场景", "混合课程", "实践场景"][planIndex % 2]
+                  const isHybrid = courseTypeTag === "混合课程"
+                  const accentColors = isHybrid
                   ? { bg: "from-blue-50 to-indigo-50", border: "border-blue-100 hover:border-blue-300", iconBg: "bg-gradient-to-br from-blue-500 to-indigo-600", badgeBg: "bg-gradient-to-r from-blue-500 to-indigo-500", prepUrl: "http://111.170.170.202:3006/admin/hybrid/add?id=hybrid-1", learnUrl: "http://111.170.170.202:3006/learn/courses/hybrid/hybrid-1/learn" }
                   : { bg: "from-emerald-50 to-teal-50", border: "border-emerald-100 hover:border-emerald-300", iconBg: "bg-gradient-to-br from-emerald-500 to-teal-600", badgeBg: "bg-gradient-to-r from-emerald-500 to-teal-500", prepUrl: "http://111.170.170.202:3003/scenarios/scenario-1/edit/tasks", learnUrl: "http://111.170.170.202:3003/student.html" }
                 return (
@@ -785,10 +845,12 @@ export function TeacherCoursesTab({ prepAssociations = {}, onAssociate }: Teache
                     )}
                   </div>
                 )
-              })}
+              })()}
             </div>
-          </SectionCard>
-        </div>
+          )}
+        </SectionCard>
+      </div>
+    </div>
 
       <CourseDetailDialog
         open={dialogOpen}
