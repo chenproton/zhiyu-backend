@@ -224,7 +224,7 @@ const scheduleTypeConfig: Record<string, { bg: string; border: string; badge: st
   course: { bg: "bg-blue-50", border: "border-blue-200", badge: "border-blue-300 text-blue-600", label: "课程" },
   scene: { bg: "bg-emerald-50", border: "border-emerald-200", badge: "border-emerald-300 text-emerald-600", label: "实践场景" },
   meeting: { bg: "bg-amber-50", border: "border-amber-200", badge: "border-amber-300 text-amber-600", label: "会议" },
-  training: { bg: "bg-green-50", border: "border-green-200", badge: "border-green-300 text-green-600", label: "培训" },
+  training: { bg: "bg-cyan-50", border: "border-cyan-200", badge: "border-cyan-300 text-cyan-600", label: "培训" },
   exam: { bg: "bg-purple-50", border: "border-purple-200", badge: "border-purple-300 text-purple-600", label: "检查" },
   todo: { bg: "bg-gray-50", border: "border-gray-200", badge: "border-gray-300 text-gray-600", label: "待办" },
 }
