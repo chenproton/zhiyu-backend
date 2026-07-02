@@ -387,6 +387,10 @@ export default function StudentsPage() {
             </div>
             <div className="grid grid-cols-2 gap-4">
               <div className="grid gap-2">
+                <Label>密码 <span className="text-destructive">*</span></Label>
+                <Input type="password" placeholder="请输入密码" />
+              </div>
+              <div className="grid gap-2">
                 <Label>状态</Label>
                 <Select defaultValue={selectedStudent?.status || "在籍"}>
                   <SelectTrigger><SelectValue placeholder="选择状态" /></SelectTrigger>
@@ -399,7 +403,6 @@ export default function StudentsPage() {
                   </SelectContent>
                 </Select>
               </div>
-              <div />
             </div>
             <div className="grid gap-2">
               <Label>所属班级</Label>
