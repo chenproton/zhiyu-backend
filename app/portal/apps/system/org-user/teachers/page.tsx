@@ -11,10 +11,12 @@ import { Label } from "@/components/ui/label"
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@/components/ui/select"
 import { Collapsible, CollapsibleContent, CollapsibleTrigger } from "@/components/ui/collapsible"
 import { ScrollArea } from "@/components/ui/scroll-area"
+import { Popover, PopoverContent, PopoverTrigger } from "@/components/ui/popover"
+import { Command, CommandEmpty, CommandGroup, CommandInput, CommandItem, CommandList } from "@/components/ui/command"
 import { cn } from "@/lib/utils"
 import {
   Plus, MoreHorizontal, Power, Trash2, Search, Filter, Upload, Download,
-  X, Check, FolderTree, ChevronRight, ChevronDown
+  X, Check, FolderTree, ChevronRight, ChevronDown, ChevronsUpDown
 } from "lucide-react"
 
 interface Teacher {
@@ -74,6 +76,7 @@ export default function TeachersPage() {
   const [positionSearchTerm, setPositionSearchTerm] = useState("")
   const [showPositionDropdown, setShowPositionDropdown] = useState(false)
   const positionInputRef = useRef<HTMLInputElement>(null)
+  const [deptPopoverOpen, setDeptPopoverOpen] = useState(false)
 
   const filteredTeachers = teachers.filter((teacher) => {
     if (searchTerm) {
@@ -313,15 +316,37 @@ export default function TeachersPage() {
 
             <div className="grid grid-cols-2 gap-4">
               <div className="grid gap-2">
-                <Label>所属院系</Label>
-                <Select value={editDepartment} onValueChange={setEditDepartment}>
-                  <SelectTrigger><SelectValue placeholder="选择院系" /></SelectTrigger>
-                  <SelectContent>
-                    {orgTreeData.map(d => (
-                      <SelectItem key={d.id} value={d.name}>{d.name}</SelectItem>
-                    ))}
-                  </SelectContent>
-                </Select>
+                <Label>所属机构</Label>
+                <Popover open={deptPopoverOpen} onOpenChange={setDeptPopoverOpen}>
+                  <PopoverTrigger asChild>
+                    <Button variant="outline" role="combobox" className="w-full justify-between font-normal">
+                      {editDepartment || '选择组织节点...'}
+                      <ChevronsUpDown className="ml-2 h-4 w-4 shrink-0 opacity-50" />
+                    </Button>
+                  </PopoverTrigger>
+                  <PopoverContent className="w-[350px] p-0">
+                    <Command>
+                      <CommandInput placeholder="搜索组织节点..." />
+                      <CommandList>
+                        <CommandEmpty>未找到</CommandEmpty>
+                        {orgTreeData.map(dept => (
+                          <CommandGroup key={dept.id} heading={dept.name}>
+                            <CommandItem onSelect={() => { setEditDepartment(dept.name); setDeptPopoverOpen(false) }}>
+                              <Check className={cn("mr-2 h-4 w-4", editDepartment === dept.name ? "opacity-100" : "opacity-0")} />
+                              {dept.name}（院系）
+                            </CommandItem>
+                            {dept.majors.map(major => (
+                              <CommandItem key={major.id} onSelect={() => { setEditDepartment(dept.name + ' / ' + major.name); setDeptPopoverOpen(false) }} className="pl-6">
+                                <Check className={cn("mr-2 h-4 w-4", editDepartment === (dept.name + ' / ' + major.name) ? "opacity-100" : "opacity-0")} />
+                                <span className="text-muted-foreground">{major.name}</span>
+                              </CommandItem>
+                            ))}
+                          </CommandGroup>
+                        ))}
+                      </CommandList>
+                    </Command>
+                  </PopoverContent>
+                </Popover>
               </div>
               <div className="grid gap-2">
                 <Label>状态</Label>
