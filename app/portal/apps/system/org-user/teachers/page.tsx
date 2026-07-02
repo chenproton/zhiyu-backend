@@ -15,7 +15,6 @@ interface Teacher {
   id: string
   name: string
   workNo: string
-  idCard: string
   department: string
   roles: string[]
   positions: string[]
@@ -23,12 +22,12 @@ interface Teacher {
 }
 
 const mockTeachers: Teacher[] = [
-  { id: "1", name: "张三", workNo: "T001", idCard: "330102199001010011", department: "计算机系", roles: ["超级管理员"], positions: ["系主任", "教授"], status: "active" },
-  { id: "2", name: "李四", workNo: "T002", idCard: "330102199002020022", department: "计算机系", roles: ["教师"], positions: ["讲师"], status: "active" },
-  { id: "3", name: "王五", workNo: "T003", idCard: "330102198503030033", department: "软件工程系", roles: ["教师", "教研室主任"], positions: ["专业负责人"], status: "active" },
-  { id: "4", name: "赵六", workNo: "T004", idCard: "330102199204040044", department: "软件工程系", roles: ["教师"], positions: [], status: "active" },
-  { id: "5", name: "孙七", workNo: "T005", idCard: "330102198805050055", department: "大数据学院", roles: ["教师", "班主任"], positions: ["教研室主任"], status: "active" },
-  { id: "6", name: "钱八", workNo: "T006", idCard: "330102197006060066", department: "人工智能学院", roles: ["超级管理员", "教师"], positions: ["院长", "教授"], status: "active" },
+  { id: "1", name: "张三", workNo: "T001", department: "计算机系", roles: ["超级管理员"], positions: ["系主任", "教授"], status: "active" },
+  { id: "2", name: "李四", workNo: "T002", department: "计算机系", roles: ["教师"], positions: ["讲师"], status: "active" },
+  { id: "3", name: "王五", workNo: "T003", department: "软件工程系", roles: ["教师", "教研室主任"], positions: ["专业负责人"], status: "active" },
+  { id: "4", name: "赵六", workNo: "T004", department: "软件工程系", roles: ["教师"], positions: [], status: "active" },
+  { id: "5", name: "孙七", workNo: "T005", department: "大数据学院", roles: ["教师", "班主任"], positions: ["教研室主任"], status: "active" },
+  { id: "6", name: "钱八", workNo: "T006", department: "人工智能学院", roles: ["超级管理员", "教师"], positions: ["院长", "教授"], status: "active" },
 ]
 
 const allRoles = ["超级管理员", "系统管理员", "教师", "教研室主任", "班主任", "辅导员"]
@@ -140,7 +139,6 @@ export default function TeachersPage() {
             <TableRow className="border-border">
               <TableHead>姓名</TableHead>
               <TableHead>工号</TableHead>
-              <TableHead>身份证号</TableHead>
               <TableHead>部门</TableHead>
               <TableHead>角色</TableHead>
               <TableHead>职位</TableHead>
@@ -153,7 +151,6 @@ export default function TeachersPage() {
               <TableRow key={teacher.id} className="border-border">
                 <TableCell className="font-medium">{teacher.name}</TableCell>
                 <TableCell className="font-mono text-sm">{teacher.workNo}</TableCell>
-                <TableCell className="text-muted-foreground text-sm">{teacher.idCard}</TableCell>
                 <TableCell>{teacher.department}</TableCell>
                 <TableCell>
                   {teacher.roles.length > 0 ? (
@@ -227,10 +224,6 @@ export default function TeachersPage() {
             <div className="grid gap-2">
               <Label>工号 <span className="text-destructive">*</span></Label>
               <Input placeholder="如：T001" defaultValue={selectedTeacher?.workNo} />
-            </div>
-            <div className="grid gap-2">
-              <Label>身份证号 <span className="text-destructive">*</span></Label>
-              <Input placeholder="18位身份证号" defaultValue={selectedTeacher?.idCard} />
             </div>
             <div className="grid gap-2">
               <Label>密码 <span className="text-destructive">*</span></Label>
