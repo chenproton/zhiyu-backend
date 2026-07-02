@@ -733,8 +733,8 @@ export function TeacherCoursesTab({ prepAssociations = {}, onAssociate }: Teache
                                           }
                                         }}>
                                         <ExternalLink className="h-3 w-3 mr-0.5" />
-                                        导学准备
-                                      </Button>
+                                        {isHybrid ? "前往备课" : "导学准备"}
+                                       </Button>
                                       <Button size="sm" variant="outline"
                                         className={`flex-1 justify-center text-[10px] h-7 px-1.5 ${isHybrid ? "border-blue-200 text-blue-600 hover:bg-blue-50" : "border-emerald-200 text-emerald-600 hover:bg-emerald-50"}`}
                                         onClick={() => window.open(accentColors.learnUrl, "_blank")}>
