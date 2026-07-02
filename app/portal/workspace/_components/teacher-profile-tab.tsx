@@ -1,6 +1,6 @@
 "use client"
 
-import { useState, useRef } from "react"
+import { useState } from "react"
 import {
   Bell, Lock, Mail, Phone, Save, Shield, Smartphone, User,
   BookOpen, Briefcase, MapPin, Calendar, GraduationCap, Star,
@@ -43,23 +43,27 @@ export function TeacherProfileTab() {
   const [skills, setSkills] = useState(["路由交换", "网络安全", "Linux系统管理", "云计算", "网络工程实训"])
   const [skillInput, setSkillInput] = useState("")
 
-  const [materials, setMaterials] = useState<{ id: string; name: string; fileName: string; fileSize: string }[]>([])
-  const [materialName, setMaterialName] = useState("")
-  const fileInputRef = useRef<HTMLInputElement>(null)
+  interface Material { id: string; name: string; fileName: string; fileSize: string }
 
-  const handleFileSelect = (e: React.ChangeEvent<HTMLInputElement>) => {
+  const [materials, setMaterials] = useState<Material[]>([])
+
+  const addMaterial = () => {
+    setMaterials([...materials, { id: Date.now().toString(), name: "", fileName: "", fileSize: "" }])
+  }
+
+  const updateMaterialName = (id: string, name: string) => {
+    setMaterials(materials.map((m) => (m.id === id ? { ...m, name } : m)))
+  }
+
+  const handleFileSelect = (id: string, e: React.ChangeEvent<HTMLInputElement>) => {
     const file = e.target.files?.[0]
-    if (!file || !materialName.trim()) return
+    if (!file) return
     const size = file.size < 1024 * 1024
       ? `${(file.size / 1024).toFixed(1)} KB`
       : `${(file.size / 1024 / 1024).toFixed(1)} MB`
-    setMaterials([...materials, {
-      id: Date.now().toString(),
-      name: materialName.trim(),
-      fileName: file.name,
-      fileSize: size,
-    }])
-    setMaterialName("")
+    setMaterials(materials.map((m) =>
+      m.id === id ? { ...m, fileName: file.name, fileSize: size } : m
+    ))
     e.target.value = ""
   }
 
@@ -256,46 +260,11 @@ export function TeacherProfileTab() {
                   <FileText className="w-4 h-4 text-blue-500" />
                   资质荣誉（佐证材料）
                 </h4>
-                <div className="space-y-3 mb-4">
-                  <div className="space-y-1.5">
-                    <Label className="text-xs text-gray-500">材料名称</Label>
-                    <Input
-                      value={materialName}
-                      onChange={(e) => setMaterialName(e.target.value)}
-                      placeholder="请输入材料名称，如：教师资格证、优秀教师奖状"
-                      className="bg-white border-gray-200 h-9"
-                    />
-                  </div>
-                  <div
-                    className="flex items-center gap-3 p-4 rounded-lg border border-dashed border-gray-300 bg-gray-50/50 cursor-pointer hover:bg-gray-100/50 transition-colors"
-                    onClick={() => fileInputRef.current?.click()}
-                  >
-                    <Upload className="w-5 h-5 text-gray-400" />
-                    <div className="flex-1">
-                      <p className="text-sm text-gray-600">拖拽文件到此处，或点击上传</p>
-                      <p className="text-xs text-gray-400">支持 PDF、JPG、PNG 格式，单个文件不超过 10MB</p>
-                    </div>
-                    <Button variant="outline" size="sm" className="text-xs border-gray-200 pointer-events-none">
-                      <Upload className="w-3.5 h-3.5 mr-1" />选择文件
-                    </Button>
-                    <input
-                      ref={fileInputRef}
-                      type="file"
-                      accept=".pdf,.jpg,.jpeg,.png"
-                      className="hidden"
-                      onChange={handleFileSelect}
-                    />
-                  </div>
-                </div>
-                {materials.length > 0 && (
-                  <div className="space-y-2">
-                    {materials.map((m) => (
-                      <div key={m.id} className="flex items-center gap-3 p-3 rounded-lg border border-gray-200 bg-white">
-                        <FileText className="w-4 h-4 text-blue-500 shrink-0" />
-                        <div className="flex-1 min-w-0">
-                          <p className="text-sm font-medium text-gray-900 truncate">{m.name}</p>
-                          <p className="text-xs text-gray-400 truncate">{m.fileName} · {m.fileSize}</p>
-                        </div>
+                <div className="space-y-3">
+                  {materials.map((m, index) => (
+                    <div key={m.id} className="rounded-lg border border-gray-200 bg-white p-4 space-y-3">
+                      <div className="flex items-center justify-between">
+                        <span className="text-xs text-gray-400 font-medium">材料 {index + 1}</span>
                         <button
                           onClick={() => removeMaterial(m.id)}
                           className="p-1 rounded-md hover:bg-red-50 text-gray-400 hover:text-red-500 transition-colors"
@@ -303,9 +272,78 @@ export function TeacherProfileTab() {
                           <Trash2 className="w-4 h-4" />
                         </button>
                       </div>
-                    ))}
-                  </div>
-                )}
+                      <div className="space-y-1.5">
+                        <Label className="text-xs text-gray-500">材料名称</Label>
+                        <Input
+                          value={m.name}
+                          onChange={(e) => updateMaterialName(m.id, e.target.value)}
+                          placeholder="请输入材料名称，如：教师资格证、优秀教师奖状"
+                          className="bg-white border-gray-200 h-9"
+                        />
+                      </div>
+                      {m.fileName ? (
+                        <div className="flex items-center gap-3 p-3 rounded-lg border border-gray-200 bg-gray-50">
+                          <FileText className="w-4 h-4 text-blue-500 shrink-0" />
+                          <div className="flex-1 min-w-0">
+                            <p className="text-sm font-medium text-gray-900 truncate">{m.fileName}</p>
+                            <p className="text-xs text-gray-400">{m.fileSize}</p>
+                          </div>
+                          <Button
+                            variant="ghost"
+                            size="sm"
+                            className="text-xs h-7 text-blue-600"
+                            onClick={() => {
+                              const input = document.getElementById(`file-${m.id}`) as HTMLInputElement
+                              input?.click()
+                            }}
+                          >
+                            替换
+                          </Button>
+                          <input
+                            id={`file-${m.id}`}
+                            type="file"
+                            accept=".pdf,.jpg,.jpeg,.png"
+                            className="hidden"
+                            onChange={(e) => handleFileSelect(m.id, e)}
+                          />
+                        </div>
+                      ) : (
+                        <div
+                          className="flex items-center gap-3 p-4 rounded-lg border border-dashed border-gray-300 bg-gray-50/50 cursor-pointer hover:bg-gray-100/50 transition-colors"
+                          onClick={() => {
+                            const input = document.getElementById(`file-${m.id}`) as HTMLInputElement
+                            input?.click()
+                          }}
+                        >
+                          <Upload className="w-5 h-5 text-gray-400" />
+                          <div className="flex-1">
+                            <p className="text-sm text-gray-600">点击上传附件</p>
+                            <p className="text-xs text-gray-400">支持 PDF、JPG、PNG 格式，单个文件不超过 10MB</p>
+                          </div>
+                          <Button variant="outline" size="sm" className="text-xs border-gray-200 pointer-events-none">
+                            <Upload className="w-3.5 h-3.5 mr-1" />选择文件
+                          </Button>
+                          <input
+                            id={`file-${m.id}`}
+                            type="file"
+                            accept=".pdf,.jpg,.jpeg,.png"
+                            className="hidden"
+                            onChange={(e) => handleFileSelect(m.id, e)}
+                          />
+                        </div>
+                      )}
+                    </div>
+                  ))}
+                </div>
+                <Button
+                  variant="outline"
+                  size="sm"
+                  className="mt-3 text-xs border-dashed border-gray-300 w-full h-9"
+                  onClick={addMaterial}
+                >
+                  <Plus className="w-3.5 h-3.5 mr-1" />
+                  添加材料
+                </Button>
               </div>
             </div>
 
