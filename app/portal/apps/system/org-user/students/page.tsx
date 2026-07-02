@@ -24,14 +24,10 @@ interface Student {
   id: string
   name: string
   studentNo: string
-  idCard: string
   className: string
   major: string
   department: string
-  entryYear: number
   status: "在籍" | "休学" | "退学" | "毕业" | "结业"
-  gpa?: number
-  creditsEarned?: number
 }
 
 interface OrgClassNode {
@@ -120,16 +116,16 @@ const statusColor: Record<string, string> = {
 }
 
 const mockStudents: Student[] = [
-  { id: "1", name: "王五", studentNo: "S2024001", idCard: "110101200601010011", className: "计算机2401班", major: "计算机系", department: "信息学院", entryYear: 2024, status: "在籍", gpa: 3.5, creditsEarned: 45 },
-  { id: "2", name: "赵六", studentNo: "S2024002", idCard: "110101200602020012", className: "计算机2401班", major: "计算机系", department: "信息学院", entryYear: 2024, status: "在籍", gpa: 3.2, creditsEarned: 40 },
-  { id: "3", name: "钱七", studentNo: "S2024003", idCard: "110101200603030013", className: "计算机2301班", major: "计算机系", department: "信息学院", entryYear: 2023, status: "在籍", gpa: 2.8, creditsEarned: 75 },
-  { id: "4", name: "孙八", studentNo: "S2024004", idCard: "110101200604040014", className: "软件2301班", major: "软件工程系", department: "信息学院", entryYear: 2023, status: "在籍", gpa: 3.7, creditsEarned: 80 },
-  { id: "5", name: "周九", studentNo: "S2023005", idCard: "110101200505050015", className: "2024级软件班", major: "软件工程系", department: "信息学院", entryYear: 2024, status: "在籍", gpa: 3.0, creditsEarned: 42 },
-  { id: "6", name: "吴十", studentNo: "S2023006", idCard: "110101200506060016", className: "2024级软件班", major: "软件工程系", department: "信息学院", entryYear: 2024, status: "在籍", gpa: 3.4, creditsEarned: 44 },
-  { id: "7", name: "郑十一", studentNo: "S2022007", idCard: "110101200407070017", className: "计算机2201班", major: "计算机系", department: "信息学院", entryYear: 2022, status: "在籍", gpa: 3.1, creditsEarned: 120 },
-  { id: "8", name: "冯十二", studentNo: "S2022008", idCard: "110101200408080018", className: "计算机2201班", major: "计算机系", department: "信息学院", entryYear: 2022, status: "退学", gpa: 1.8, creditsEarned: 60 },
-  { id: "9", name: "陈十三", studentNo: "S2025001", idCard: "110101200709090019", className: "会计2401班", major: "会计系", department: "经济管理学院", entryYear: 2025, status: "休学", gpa: undefined, creditsEarned: 0 },
-  { id: "10", name: "刘十四", studentNo: "S2024009", idCard: "110101200610100020", className: "金融2401班", major: "金融系", department: "经济管理学院", entryYear: 2024, status: "在籍", gpa: 3.6, creditsEarned: 48 },
+  { id: "1", name: "王五", studentNo: "S2024001", className: "计算机2401班", major: "计算机系", department: "信息学院", status: "在籍" },
+  { id: "2", name: "赵六", studentNo: "S2024002", className: "计算机2401班", major: "计算机系", department: "信息学院", status: "在籍" },
+  { id: "3", name: "钱七", studentNo: "S2024003", className: "计算机2301班", major: "计算机系", department: "信息学院", status: "在籍" },
+  { id: "4", name: "孙八", studentNo: "S2024004", className: "软件2301班", major: "软件工程系", department: "信息学院", status: "在籍" },
+  { id: "5", name: "周九", studentNo: "S2023005", className: "2024级软件班", major: "软件工程系", department: "信息学院", status: "在籍" },
+  { id: "6", name: "吴十", studentNo: "S2023006", className: "2024级软件班", major: "软件工程系", department: "信息学院", status: "在籍" },
+  { id: "7", name: "郑十一", studentNo: "S2022007", className: "计算机2201班", major: "计算机系", department: "信息学院", status: "在籍" },
+  { id: "8", name: "冯十二", studentNo: "S2022008", className: "计算机2201班", major: "计算机系", department: "信息学院", status: "退学" },
+  { id: "9", name: "陈十三", studentNo: "S2025001", className: "会计2401班", major: "会计系", department: "经济管理学院", status: "休学" },
+  { id: "10", name: "刘十四", studentNo: "S2024009", className: "金融2401班", major: "金融系", department: "经济管理学院", status: "在籍" },
 ]
 
 function classBadge(variant: string) {
@@ -154,7 +150,7 @@ export default function StudentsPage() {
   const filteredStudents = students.filter((student) => {
     if (searchTerm) {
       const term = searchTerm.toLowerCase()
-      if (!student.name.toLowerCase().includes(term) && !student.studentNo.toLowerCase().includes(term) && !student.idCard.toLowerCase().includes(term)) return false
+      if (!student.name.toLowerCase().includes(term) && !student.studentNo.toLowerCase().includes(term)) return false
     }
     if (statusFilter !== "all" && student.status !== statusFilter) return false
     if (selectedClassId) {
@@ -277,7 +273,7 @@ export default function StudentsPage() {
             <div className="flex items-center gap-4">
               <div className="relative flex-1 max-w-sm">
                 <Search className="absolute left-3 top-1/2 h-4 w-4 -translate-y-1/2 text-muted-foreground" />
-                <Input placeholder="搜索姓名、学号或身份证号..." value={searchTerm} onChange={(e) => setSearchTerm(e.target.value)} className="pl-9" />
+                <Input placeholder="搜索姓名、学号..." value={searchTerm} onChange={(e) => setSearchTerm(e.target.value)} className="pl-9" />
               </div>
               <Select value={statusFilter} onValueChange={setStatusFilter}>
                 <SelectTrigger className="w-32">
@@ -310,13 +306,9 @@ export default function StudentsPage() {
                   </TableHead>
                   <TableHead>学号</TableHead>
                   <TableHead>姓名</TableHead>
-                  <TableHead>身份证号</TableHead>
                   <TableHead>所属院系</TableHead>
                   <TableHead>专业</TableHead>
                   <TableHead>班级</TableHead>
-                  <TableHead>入学年份</TableHead>
-                  <TableHead>GPA</TableHead>
-                  <TableHead>已获学分</TableHead>
                   <TableHead>状态</TableHead>
                   <TableHead className="text-right">操作</TableHead>
                 </TableRow>
@@ -332,13 +324,9 @@ export default function StudentsPage() {
                     </TableCell>
                     <TableCell className="font-mono text-sm">{student.studentNo}</TableCell>
                     <TableCell className="font-medium">{student.name}</TableCell>
-                    <TableCell className="font-mono text-xs text-muted-foreground">{student.idCard}</TableCell>
                     <TableCell>{student.department}</TableCell>
                     <TableCell className="text-muted-foreground">{student.major}</TableCell>
                     <TableCell>{student.className}</TableCell>
-                    <TableCell>{student.entryYear}</TableCell>
-                    <TableCell>{student.gpa !== undefined ? student.gpa.toFixed(1) : "—"}</TableCell>
-                    <TableCell>{student.creditsEarned ?? "—"}</TableCell>
                     <TableCell>
                       <Badge variant={classBadge(statusColor[student.status])}>{student.status}</Badge>
                     </TableCell>
@@ -367,7 +355,7 @@ export default function StudentsPage() {
                 ))}
                 {filteredStudents.length === 0 && (
                   <TableRow>
-                    <TableCell colSpan={12} className="text-center text-muted-foreground py-8">暂无数据</TableCell>
+                    <TableCell colSpan={8} className="text-center text-muted-foreground py-8">暂无数据</TableCell>
                   </TableRow>
                 )}
               </TableBody>
@@ -399,27 +387,6 @@ export default function StudentsPage() {
             </div>
             <div className="grid grid-cols-2 gap-4">
               <div className="grid gap-2">
-                <Label>身份证号 <span className="text-destructive">*</span></Label>
-                <Input placeholder="18位身份证号码" defaultValue={selectedStudent?.idCard} />
-              </div>
-              <div className="grid gap-2">
-                <Label>密码 <span className="text-destructive">*</span></Label>
-                <Input type="password" placeholder="请输入密码" />
-              </div>
-            </div>
-            <div className="grid grid-cols-2 gap-4">
-              <div className="grid gap-2">
-                <Label>入学年份 <span className="text-destructive">*</span></Label>
-                <Select defaultValue={selectedStudent?.entryYear ? String(selectedStudent.entryYear) : undefined}>
-                  <SelectTrigger><SelectValue placeholder="选择入学年份" /></SelectTrigger>
-                  <SelectContent>
-                    {[2020, 2021, 2022, 2023, 2024, 2025, 2026].map(y => (
-                      <SelectItem key={y} value={String(y)}>{y}年</SelectItem>
-                    ))}
-                  </SelectContent>
-                </Select>
-              </div>
-              <div className="grid gap-2">
                 <Label>状态</Label>
                 <Select defaultValue={selectedStudent?.status || "在籍"}>
                   <SelectTrigger><SelectValue placeholder="选择状态" /></SelectTrigger>
@@ -432,6 +399,7 @@ export default function StudentsPage() {
                   </SelectContent>
                 </Select>
               </div>
+              <div />
             </div>
             <div className="grid gap-2">
               <Label>所属班级</Label>
@@ -483,16 +451,6 @@ export default function StudentsPage() {
               <div className="grid gap-2">
                 <Label>所属专业</Label>
                 <Input value={selectedOrgMajor?.name || "—"} readOnly className="bg-muted" />
-              </div>
-            </div>
-            <div className="grid grid-cols-2 gap-4">
-              <div className="grid gap-2">
-                <Label>GPA</Label>
-                <Input type="number" step="0.1" min="0" max="4" placeholder="0.0" defaultValue={selectedStudent?.gpa} />
-              </div>
-              <div className="grid gap-2">
-                <Label>已获学分</Label>
-                <Input type="number" step="1" min="0" placeholder="0" defaultValue={selectedStudent?.creditsEarned} />
               </div>
             </div>
           </div>
