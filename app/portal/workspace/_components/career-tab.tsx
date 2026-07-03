@@ -60,6 +60,19 @@ const statusBadge: Record<string, string> = {
 
 export function CareerTab() {
   const [activeCategory, setActiveCategory] = useState("all")
+  const [favorites, setFavorites] = useState({
+    jobs: mockFavoriteJobs,
+    courses: mockFavoriteCourses,
+    scenes: mockFavoriteScenes,
+    exams: mockFavoriteExams,
+  })
+
+  const handleUnfavorite = (category: keyof typeof categoryConfig, id: string) => {
+    setFavorites((prev) => ({
+      ...prev,
+      [category]: prev[category].filter((item) => item.id !== id),
+    }))
+  }
 
   const cats = Object.entries(categoryConfig).map(([k, v]) => ({ id: k, ...v }))
 
@@ -100,17 +113,27 @@ export function CareerTab() {
             <h4 className="text-sm font-semibold text-gray-900 mb-3 flex items-center gap-2">
               <Briefcase className="w-4 h-4 text-blue-500" />
               职业岗位
-              <span className="text-xs text-gray-400 font-normal">（{mockFavoriteJobs.length}）</span>
+              <span className="text-xs text-gray-400 font-normal">（{favorites.jobs.length}）</span>
             </h4>
             <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-3">
-              {mockFavoriteJobs.map((job) => (
+              {favorites.jobs.map((job) => (
                 <div key={job.id} className="p-3.5 rounded-xl border border-gray-100 bg-white hover:border-blue-200 hover:shadow-sm transition-all cursor-pointer group">
                   <div className="flex items-center justify-between mb-2">
                     <div className="flex items-center gap-1.5">
                       <Building2 className="w-3.5 h-3.5 text-gray-400" />
                       <span className="text-xs text-gray-500">{job.company}</span>
                     </div>
-                    <Heart className="w-3.5 h-3.5 text-rose-400 fill-rose-400" />
+                    <button
+                      onClick={(e) => {
+                        e.stopPropagation()
+                        handleUnfavorite("jobs", job.id)
+                      }}
+                      className="flex items-center gap-1 text-[10px] text-gray-400 hover:text-rose-500 transition-colors"
+                      title="取消收藏"
+                    >
+                      <Heart className="w-3.5 h-3.5 text-rose-400 fill-rose-400" />
+                      取消收藏
+                    </button>
                   </div>
                   <h5 className="text-sm font-semibold text-gray-900 truncate mb-1">{job.name}</h5>
                   <div className="flex items-center gap-2 text-xs text-gray-500 mb-2">
@@ -138,14 +161,24 @@ export function CareerTab() {
             <h4 className="text-sm font-semibold text-gray-900 mb-3 flex items-center gap-2">
               <BookOpen className="w-4 h-4 text-emerald-500" />
               数字课程
-              <span className="text-xs text-gray-400 font-normal">（{mockFavoriteCourses.length}）</span>
+              <span className="text-xs text-gray-400 font-normal">（{favorites.courses.length}）</span>
             </h4>
             <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-3">
-              {mockFavoriteCourses.map((course) => (
+              {favorites.courses.map((course) => (
                 <div key={course.id} className="p-3.5 rounded-xl border border-gray-100 bg-white hover:border-emerald-200 hover:shadow-sm transition-all cursor-pointer group">
                   <div className="flex items-center justify-between mb-1.5">
                     <Badge variant="outline" className="text-[10px] border-emerald-200 text-emerald-600">{course.level}</Badge>
-                    <Bookmark className="w-3.5 h-3.5 text-emerald-400 fill-emerald-400" />
+                    <button
+                      onClick={(e) => {
+                        e.stopPropagation()
+                        handleUnfavorite("courses", course.id)
+                      }}
+                      className="flex items-center gap-1 text-[10px] text-gray-400 hover:text-rose-500 transition-colors"
+                      title="取消收藏"
+                    >
+                      <Bookmark className="w-3.5 h-3.5 text-emerald-400 fill-emerald-400" />
+                      取消收藏
+                    </button>
                   </div>
                   <h5 className="text-sm font-semibold text-gray-900 truncate mb-1">{course.name}</h5>
                   <p className="text-xs text-gray-500 mb-2">{course.provider}</p>
@@ -165,14 +198,26 @@ export function CareerTab() {
             <h4 className="text-sm font-semibold text-gray-900 mb-3 flex items-center gap-2">
               <Layers className="w-4 h-4 text-amber-500" />
               实践场景
-              <span className="text-xs text-gray-400 font-normal">（{mockFavoriteScenes.length}）</span>
+              <span className="text-xs text-gray-400 font-normal">（{favorites.scenes.length}）</span>
             </h4>
             <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-3">
-              {mockFavoriteScenes.map((scene) => (
+              {favorites.scenes.map((scene) => (
                 <div key={scene.id} className="p-3.5 rounded-xl border border-gray-100 bg-white hover:border-amber-200 hover:shadow-sm transition-all cursor-pointer group">
                   <div className="flex items-center justify-between mb-1.5">
                     <span className="text-xs text-gray-500">{scene.company}</span>
-                    <span className={`text-[10px] px-1.5 py-0.5 rounded font-medium ${statusBadge[scene.status]}`}>{scene.status}</span>
+                    <div className="flex items-center gap-2">
+                      <span className={`text-[10px] px-1.5 py-0.5 rounded font-medium ${statusBadge[scene.status]}`}>{scene.status}</span>
+                      <button
+                        onClick={(e) => {
+                          e.stopPropagation()
+                          handleUnfavorite("scenes", scene.id)
+                        }}
+                        className="text-[10px] text-gray-400 hover:text-rose-500 transition-colors"
+                        title="取消收藏"
+                      >
+                        取消收藏
+                      </button>
+                    </div>
                   </div>
                   <h5 className="text-sm font-semibold text-gray-900 truncate mb-1">{scene.name}</h5>
                   <p className="text-xs text-gray-500 mb-3">{scene.tasks} 个任务</p>
@@ -192,16 +237,28 @@ export function CareerTab() {
             <h4 className="text-sm font-semibold text-gray-900 mb-3 flex items-center gap-2">
               <FileText className="w-4 h-4 text-purple-500" />
               测评资源
-              <span className="text-xs text-gray-400 font-normal">（{mockFavoriteExams.length}）</span>
+              <span className="text-xs text-gray-400 font-normal">（{favorites.exams.length}）</span>
             </h4>
             <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-3">
-              {mockFavoriteExams.map((exam) => (
+              {favorites.exams.map((exam) => (
                 <div key={exam.id} className="p-3.5 rounded-xl border border-gray-100 bg-white hover:border-purple-200 hover:shadow-sm transition-all cursor-pointer group">
                   <div className="flex items-center justify-between mb-1.5">
                     <Badge variant="outline" className="text-[10px] border-purple-200 text-purple-600">{exam.type}</Badge>
-                    <span className={`text-[10px] px-1.5 py-0.5 rounded font-medium ${exam.difficulty === "简单" ? "bg-emerald-50 text-emerald-600" : exam.difficulty === "中等" ? "bg-amber-50 text-amber-600" : "bg-rose-50 text-rose-600"}`}>
-                      {exam.difficulty}
-                    </span>
+                    <div className="flex items-center gap-2">
+                      <span className={`text-[10px] px-1.5 py-0.5 rounded font-medium ${exam.difficulty === "简单" ? "bg-emerald-50 text-emerald-600" : exam.difficulty === "中等" ? "bg-amber-50 text-amber-600" : "bg-rose-50 text-rose-600"}`}>
+                        {exam.difficulty}
+                      </span>
+                      <button
+                        onClick={(e) => {
+                          e.stopPropagation()
+                          handleUnfavorite("exams", exam.id)
+                        }}
+                        className="text-[10px] text-gray-400 hover:text-rose-500 transition-colors"
+                        title="取消收藏"
+                      >
+                        取消收藏
+                      </button>
+                    </div>
                   </div>
                   <h5 className="text-sm font-semibold text-gray-900 truncate mb-2">{exam.name}</h5>
                   <p className="text-xs text-gray-500 mb-3">{exam.questions} 道题目</p>
