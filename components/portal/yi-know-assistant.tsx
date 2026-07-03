@@ -101,9 +101,9 @@ const RESOURCES: Resource[] = [
   {
     id: "position-agent",
     category: "agent",
-    title: "岗位批量创建助手",
+    title: "岗位 AI 辅助创建",
     desc: "根据专业方向快速生成岗位能力模型与任务。",
-    tags: ["岗位", "创建"],
+    tags: ["官方", "岗位", "创建"],
     icon: "bot",
     color: "bg-indigo-50 text-indigo-600 border-indigo-100",
     originalId: 5,
@@ -112,9 +112,9 @@ const RESOURCES: Resource[] = [
   {
     id: "scene-agent",
     category: "agent",
-    title: "场景批量创建助手",
+    title: "场景 AI 辅助创建",
     desc: "智能拆解岗位任务，生成配套实践场景。",
-    tags: ["场景", "创建"],
+    tags: ["官方", "场景", "创建"],
     icon: "bot",
     color: "bg-cyan-50 text-cyan-600 border-cyan-100",
     originalId: 6,
@@ -451,7 +451,8 @@ export function YiKnowAssistant() {
         originalId: bot.id,
         originalType: "bot" as const,
       }))
-      setResources([...kbResources, ...botResources, ...platforms])
+      const staticAgents = RESOURCES.filter((r) => r.category === "agent")
+      setResources([...kbResources, ...botResources, ...staticAgents, ...platforms])
     }).catch(() => {
       // Keep static resources on error
     })
@@ -463,9 +464,12 @@ export function YiKnowAssistant() {
     }
   }, [chatMessages, isTyping])
 
+  const isOfficialAgent = (resource: Resource) =>
+    resource.category === "agent" && resource.tags?.includes("官方")
+
   const filteredResources = useMemo(() => {
     const query = inputValue.trim().toLowerCase()
-    return resources.filter((resource) => {
+    const list = resources.filter((resource) => {
       const matchesCategory = activeTab === "all" || resource.category === activeTab
       const matchesQuery =
         !query ||
@@ -474,7 +478,28 @@ export function YiKnowAssistant() {
         resource.tags?.some((t) => t.toLowerCase().includes(query))
       return matchesCategory && matchesQuery
     })
-  }, [activeTab, inputValue])
+
+    if (activeTab !== "agent") return list
+
+    return list.slice().sort((a, b) => {
+      const aOfficial = isOfficialAgent(a) ? 1 : 0
+      const bOfficial = isOfficialAgent(b) ? 1 : 0
+      if (aOfficial !== bOfficial) return bOfficial - aOfficial
+      if (!aOfficial) return 0
+      // 官方智能体中，岗位 > 场景 > 其他
+      const aName = a.title.toLowerCase()
+      const bName = b.title.toLowerCase()
+      const aIsPosition = aName.includes("岗位")
+      const bIsPosition = bName.includes("岗位")
+      const aIsScene = aName.includes("场景")
+      const bIsScene = bName.includes("场景")
+      if (aIsPosition && !bIsPosition) return -1
+      if (!aIsPosition && bIsPosition) return 1
+      if (aIsScene && !bIsScene && !bIsPosition) return -1
+      if (!aIsScene && bIsScene && !aIsPosition) return 1
+      return 0
+    })
+  }, [activeTab, inputValue, resources, isOfficialAgent])
 
   const isChatMode = chatMessages.length > 0 || isTyping
 
