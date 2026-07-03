@@ -535,16 +535,6 @@ export function TeacherCoursesTab({ prepAssociations = {}, onAssociate }: Teache
     }
   }, [selectedTerm])
 
-  const usageMap: Record<string, string> = {}
-  for (const [sessionKey, assoc] of Object.entries(prepAssociations)) {
-    if (sessionKey === prepSessionId) continue
-    if (assoc.planId !== prepPlanId) continue
-    const label = prepSessionLabels[sessionKey] || sessionKey
-    for (const sub of assoc.subItems) {
-      usageMap[sub.id] = label
-    }
-  }
-
   const openCourseDialog = (course: typeof mockTeacherCourses[0], tab: string) => {
     setSelectedCourse({
       id: course.id,
@@ -645,8 +635,8 @@ export function TeacherCoursesTab({ prepAssociations = {}, onAssociate }: Teache
                   const courseTypeTag = ["混合课程", "实践场景", "混合课程", "实践场景", "混合课程", "实践场景"][planIndex % 2]
                   const isHybrid = courseTypeTag === "混合课程"
                   const accentColors = isHybrid
-                  ? { bg: "from-blue-50 to-indigo-50", border: "border-blue-100 hover:border-blue-300", iconBg: "bg-gradient-to-br from-blue-500 to-indigo-600", badgeBg: "bg-gradient-to-r from-blue-500 to-indigo-500", prepUrl: "http://111.170.170.202:3006/admin/hybrid/add?id=hybrid-1", learnUrl: "http://111.170.170.202:3006/learn/courses/hybrid/hybrid-1/learn" }
-                  : { bg: "from-emerald-50 to-teal-50", border: "border-emerald-100 hover:border-emerald-300", iconBg: "bg-gradient-to-br from-emerald-500 to-teal-600", badgeBg: "bg-gradient-to-r from-emerald-500 to-teal-500", prepUrl: "http://111.170.170.202:3003/scenarios/scenario-1/edit/tasks", learnUrl: "http://111.170.170.202:3003/student.html" }
+                  ? { bg: "from-blue-50 to-indigo-50", border: "border-blue-100 hover:border-blue-300", iconBg: "bg-gradient-to-br from-blue-500 to-indigo-600", badgeBg: "bg-gradient-to-r from-blue-500 to-indigo-500", prepUrl: "http://111.170.170.202:3006/admin/hybrid/add?id=hybrid-1", learnUrl: "http://111.170.170.202:3006/learn/courses/hybrid/hybrid-1/teacherlearn" }
+                  : { bg: "from-emerald-50 to-teal-50", border: "border-emerald-100 hover:border-emerald-300", iconBg: "bg-gradient-to-br from-emerald-500 to-teal-600", badgeBg: "bg-gradient-to-r from-emerald-500 to-teal-500", prepUrl: "http://111.170.170.202:3003/student_teacher.html?task=task-1-1", learnUrl: "http://111.170.170.202:3003/student_teacher.html?task=task-1-1" }
                 return (
                   <div key={plan.id} className={`group rounded-xl border shadow-sm hover:shadow-md transition-all overflow-hidden ${accentColors.border}`}>
                     {/* 课程头部 */}
@@ -779,18 +769,13 @@ export function TeacherCoursesTab({ prepAssociations = {}, onAssociate }: Teache
                                       <Button size="sm" variant="outline"
                                         className={`flex-1 justify-center text-[10px] h-7 px-1.5 ${isHybrid ? "border-blue-200 text-blue-600 hover:bg-blue-50" : "border-emerald-200 text-emerald-600 hover:bg-emerald-50"}`}
                                         onClick={() => {
-                                          const existing = prepAssociations[session.id]
-                                          if (existing && existing.subItems.length > 0) {
-                                            window.open(accentColors.prepUrl, "_blank")
-                                          } else {
-                                            setPrepPlanId(plan.id)
-                                            setPrepSessionId(session.id)
-                                            setPrepPlanName(plan.course)
-                                            setPrepIsHybrid(isHybrid)
-                                            setPrepUrl(accentColors.prepUrl)
-                                            setPrepDialogOpen(true)
-                                            setPrepSessionLabels(prev => ({ ...prev, [session.id]: `${session.weekday} ${session.period}` }))
-                                          }
+                                          setPrepPlanId(plan.id)
+                                          setPrepSessionId(session.id)
+                                          setPrepPlanName(plan.course)
+                                          setPrepIsHybrid(isHybrid)
+                                          setPrepUrl(accentColors.prepUrl)
+                                          setPrepDialogOpen(true)
+                                          setPrepSessionLabels(prev => ({ ...prev, [session.id]: `${session.weekday} ${session.period}` }))
                                         }}>
                                         <ExternalLink className="h-3 w-3 mr-0.5" />
                                         {isHybrid ? "前往备课" : "导学准备"}
@@ -799,7 +784,7 @@ export function TeacherCoursesTab({ prepAssociations = {}, onAssociate }: Teache
                                         className={`flex-1 justify-center text-[10px] h-7 px-1.5 ${isHybrid ? "border-blue-200 text-blue-600 hover:bg-blue-50" : "border-emerald-200 text-emerald-600 hover:bg-emerald-50"}`}
                                         onClick={() => window.open(accentColors.learnUrl, "_blank")}>
                                         <PlayCircle className="h-3 w-3 mr-0.5" />
-                                        上课
+                                         {isHybrid ? "上课" : "前往导学"}
                                       </Button>
                                       <Button size="sm" variant="outline"
                                         className="flex-1 justify-center text-[10px] h-7 px-1.5 border-amber-200 text-amber-600 hover:bg-amber-50"
@@ -865,7 +850,7 @@ export function TeacherCoursesTab({ prepAssociations = {}, onAssociate }: Teache
       planName={prepPlanName}
       isHybrid={prepIsHybrid}
       currentSubItemIds={prepAssociations[prepSessionId]?.subItems.map(s => s.id)}
-      usageMap={usageMap}
+      prepUrl={prepUrl}
       onConfirm={(subItems) => {
         if (onAssociate) {
           onAssociate((prev) => ({
@@ -873,7 +858,6 @@ export function TeacherCoursesTab({ prepAssociations = {}, onAssociate }: Teache
             [prepSessionId]: { planId: prepPlanId, subItems: subItems.map(s => ({ id: s.id, name: s.name })) },
           }))
         }
-        window.open(prepUrl, "_blank")
       }}
     />
     <GradingIframeDialog

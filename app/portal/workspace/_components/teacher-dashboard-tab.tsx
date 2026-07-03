@@ -67,16 +67,6 @@ export function TeacherDashboardTab({ onTabChange, prepAssociations = {}, onAsso
   const [hybridGradeClassName, setHybridGradeClassName] = useState("")
   const [prepSessionLabels, setPrepSessionLabels] = useState<Record<string, string>>({})
 
-  const usageMap: Record<string, string> = {}
-  for (const [sessionKey, assoc] of Object.entries(prepAssociations)) {
-    if (sessionKey === prepSessionId) continue
-    if (assoc.planId !== prepPlanId) continue
-    const label = prepSessionLabels[sessionKey] || sessionKey
-    for (const sub of assoc.subItems) {
-      usageMap[sub.id] = label
-    }
-  }
-
   return (
     <div className="space-y-3">
       {/* 主体：课程表 + 右侧边栏 */}
@@ -190,7 +180,7 @@ export function TeacherDashboardTab({ onTabChange, prepAssociations = {}, onAsso
         planName={prepPlanName}
         isHybrid={prepIsHybrid}
         currentSubItemIds={prepAssociations[prepSessionId]?.subItems.map(s => s.id)}
-        usageMap={usageMap}
+        prepUrl={prepUrl}
         onConfirm={(subItems) => {
           if (onAssociate) {
             onAssociate((prev) => ({
@@ -198,7 +188,6 @@ export function TeacherDashboardTab({ onTabChange, prepAssociations = {}, onAsso
               [prepSessionId]: { planId: prepPlanId, subItems: subItems.map(s => ({ id: s.id, name: s.name })) },
             }))
           }
-          window.open(prepUrl, "_blank")
         }}
       />
       <GradingIframeDialog
@@ -264,13 +253,13 @@ function getCourseUrls(event: TeacherScheduleEvent) {
     return {
       isHybrid: true,
       prepUrl: "http://111.170.170.202:3006/admin/hybrid/add?id=hybrid-1",
-      learnUrl: "http://111.170.170.202:3006/learn/courses/hybrid/hybrid-1/learn",
+      learnUrl: "http://111.170.170.202:3006/learn/courses/hybrid/hybrid-1/teacherlearn",
     }
   }
   return {
     isHybrid: false,
-    prepUrl: "http://111.170.170.202:3003/scenarios/scenario-1/edit/tasks",
-    learnUrl: "http://111.170.170.202:3003/student.html",
+    prepUrl: "http://111.170.170.202:3003/student_teacher.html?task=task-1-1",
+    learnUrl: "http://111.170.170.202:3003/student_teacher.html?task=task-1-1",
   }
 }
 
@@ -487,14 +476,8 @@ function CourseScheduleTable({ prepAssociations = {}, onAssociate, onPrepRequest
                           <Button size="sm" variant="outline"
                             className={`flex-1 justify-center text-[11px] h-7 px-2 ${urls.isHybrid ? "border-blue-200 text-blue-600 hover:bg-blue-50" : "border-emerald-200 text-emerald-600 hover:bg-emerald-50"}`}
                               onClick={() => {
-                              if (existingAssoc && existingAssoc.subItems.length > 0) {
-                                window.open(urls.prepUrl, "_blank")
-                              } else if (onPrepRequest) {
-                                onPrepRequest(pid, sessionKey, event.title, urls.isHybrid, urls.prepUrl, `${days[event.dayOfWeek - 1]} ${event.period}`)
-                              } else {
-                                window.open(urls.prepUrl, "_blank")
-                              }
-                            }}>
+                                if (onPrepRequest) onPrepRequest(pid, sessionKey, event.title, urls.isHybrid, urls.prepUrl, `${days[event.dayOfWeek - 1]} ${event.period}`)
+                              }}>
                             <ExternalLink className="h-3.5 w-3.5 mr-1" />
                             {urls.isHybrid ? "前往备课" : "导学准备"}
                           </Button>
@@ -502,7 +485,7 @@ function CourseScheduleTable({ prepAssociations = {}, onAssociate, onPrepRequest
                             className={`flex-1 justify-center text-[11px] h-7 px-2 ${urls.isHybrid ? "border-blue-200 text-blue-600 hover:bg-blue-50" : "border-emerald-200 text-emerald-600 hover:bg-emerald-50"}`}
                             onClick={() => window.open(urls.learnUrl, "_blank")}>
                             <PlayCircle className="h-3.5 w-3.5 mr-1" />
-                            前往上课
+                             {urls.isHybrid ? "前往上课" : "前往导学"}
                           </Button>
                           <Button size="sm" variant="outline"
                             className="flex-1 justify-center text-[11px] h-7 px-2 border-amber-200 text-amber-600 hover:bg-amber-50"

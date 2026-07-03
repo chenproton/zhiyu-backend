@@ -3,13 +3,11 @@
 import { useState } from "react"
 import {
   Bell, Lock, Mail, Phone, Save, Shield, Smartphone, User,
-  BookOpen, Briefcase, MapPin, Calendar, GraduationCap, Star,
-  Image, FileText, Plus, X, Upload, Trash2,
+  Eye, EyeOff,
 } from "lucide-react"
 import { Button } from "@/components/ui/button"
 import { Input } from "@/components/ui/input"
 import { Label } from "@/components/ui/label"
-import { Textarea } from "@/components/ui/textarea"
 import {
   Select, SelectContent, SelectItem, SelectTrigger, SelectValue,
 } from "@/components/ui/select"
@@ -17,6 +15,9 @@ import { Badge } from "@/components/ui/badge"
 import { Switch } from "@/components/ui/switch"
 import { Avatar, AvatarFallback } from "@/components/ui/avatar"
 import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs"
+import {
+  Dialog, DialogContent, DialogHeader, DialogTitle, DialogDescription,
+} from "@/components/ui/dialog"
 import { SectionCard } from "./section-card"
 import { mockTeacherInfo, teacherSecurityItems } from "../_data/mock-teacher-data"
 
@@ -38,10 +39,16 @@ export function TeacherProfileTab() {
     businessDirection: "计算机网络技术专业建设、校企合作实训基地建设",
     bio: "从事计算机网络技术教学与研究18年，主持完成省部级教改项目3项，发表学术论文20余篇。多次指导学生参加全国职业技能大赛获一等奖。",
     experience: "2006-2010  华为技术有限公司  网络工程师\n2010-2015  北京邮电大学  讲师\n2015-至今   本校计算机学院  教授 / 网络技术专业负责人",
+    status: "在职",
+    roles: ["教师", "专业负责人"],
   })
 
   const [skills, setSkills] = useState(["路由交换", "网络安全", "Linux系统管理", "云计算", "网络工程实训"])
   const [skillInput, setSkillInput] = useState("")
+
+  const [passwordDialogOpen, setPasswordDialogOpen] = useState(false)
+  const [newPassword, setNewPassword] = useState("")
+  const [showPassword, setShowPassword] = useState(false)
 
   interface Material { id: string; name: string; fileName: string; fileSize: string }
 
@@ -105,245 +112,58 @@ export function TeacherProfileTab() {
               </Avatar>
               <div>
                 <h3 className="text-lg font-semibold text-gray-900">{mockTeacherInfo.name}</h3>
-                <p className="text-sm text-gray-500">
-                  {mockTeacherInfo.title} · {mockTeacherInfo.department}
-                </p>
-                <Button variant="outline" size="sm" className="mt-2 text-xs border-gray-200 text-gray-700 hover:bg-gray-50">
-                  <Image className="w-3.5 h-3.5 mr-1" />
-                  更换头像
-                </Button>
+                <p className="text-sm text-gray-500">{mockTeacherInfo.department}</p>
               </div>
             </div>
 
-            <div className="space-y-8">
-              {/* 基础信息 */}
-              <div>
-                <h4 className="text-sm font-semibold text-gray-900 mb-4 flex items-center gap-2">
-                  <User className="w-4 h-4 text-blue-500" />
-                  基础信息
-                </h4>
-                <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-4">
-                  <div className="space-y-1.5">
-                    <Label className="text-xs text-gray-500">姓名</Label>
-                    <Input value={formData.name} onChange={(e) => setFormData({ ...formData, name: e.target.value })} className="bg-white border-gray-200 h-9" />
-                  </div>
-                  <div className="space-y-1.5">
-                    <Label className="text-xs text-gray-500">性别</Label>
-                    <Select value={formData.gender} onValueChange={(v) => setFormData({ ...formData, gender: v })}>
-                      <SelectTrigger className="bg-white border-gray-200 h-9"><SelectValue /></SelectTrigger>
-                      <SelectContent><SelectItem value="男">男</SelectItem><SelectItem value="女">女</SelectItem></SelectContent>
-                    </Select>
-                  </div>
-                  <div className="space-y-1.5">
-                    <Label className="text-xs text-gray-500">年龄</Label>
-                    <Input value={formData.age} onChange={(e) => setFormData({ ...formData, age: e.target.value })} className="bg-white border-gray-200 h-9" />
-                  </div>
-                  <div className="space-y-1.5">
-                    <Label className="text-xs text-gray-500">工号</Label>
-                    <Input value={formData.teacherNo} disabled className="bg-gray-50 border-gray-200 h-9" />
-                  </div>
-                  <div className="space-y-1.5">
-                    <Label className="text-xs text-gray-500">手机号</Label>
-                    <Input value={formData.phone} className="bg-white border-gray-200 h-9" />
-                  </div>
-                  <div className="space-y-1.5">
-                    <Label className="text-xs text-gray-500">所在城市</Label>
-                    <Input value={formData.city} onChange={(e) => setFormData({ ...formData, city: e.target.value })} className="bg-white border-gray-200 h-9" />
-                  </div>
-                  <div className="space-y-1.5">
-                    <Label className="text-xs text-gray-500">职称/职务</Label>
-                    <Input value={formData.title} onChange={(e) => setFormData({ ...formData, title: e.target.value })} className="bg-white border-gray-200 h-9" />
-                  </div>
-                  <div className="space-y-1.5">
-                    <Label className="text-xs text-gray-500">现任岗位/负责人</Label>
-                    <Input value={formData.position} onChange={(e) => setFormData({ ...formData, position: e.target.value })} className="bg-white border-gray-200 h-9" />
-                  </div>
-                  <div className="space-y-1.5">
-                    <Label className="text-xs text-gray-500">工作年限</Label>
-                    <Input value={formData.workYears} onChange={(e) => setFormData({ ...formData, workYears: e.target.value })} className="bg-white border-gray-200 h-9" />
-                  </div>
-                  <div className="space-y-1.5">
-                    <Label className="text-xs text-gray-500">教育背景</Label>
-                    <Input value={formData.education} onChange={(e) => setFormData({ ...formData, education: e.target.value })} className="bg-white border-gray-200 h-9" />
-                  </div>
-                  <div className="space-y-1.5">
-                    <Label className="text-xs text-gray-500">研究/擅长领域</Label>
-                    <Input value={formData.researchAreas} onChange={(e) => setFormData({ ...formData, researchAreas: e.target.value })} className="bg-white border-gray-200 h-9" />
-                  </div>
-                  <div className="space-y-1.5">
-                    <Label className="text-xs text-gray-500">业务方向/服务领域</Label>
-                    <Input value={formData.businessDirection} onChange={(e) => setFormData({ ...formData, businessDirection: e.target.value })} className="bg-white border-gray-200 h-9" />
-                  </div>
-                </div>
-              </div>
-
-              {/* 教师照片与擅长领域 */}
-              <div className="border-t border-gray-100 pt-6">
-                <h4 className="text-sm font-semibold text-gray-900 mb-4 flex items-center gap-2">
-                  <Image className="w-4 h-4 text-blue-500" />
-                  教师照片与擅长领域
-                </h4>
-                <div className="grid grid-cols-1 md:grid-cols-2 gap-4 mb-5">
-                  <div className="space-y-1.5">
-                    <Label className="text-xs text-gray-500">上传头像</Label>
-                    <div className="flex items-center gap-3 p-3 rounded-lg border border-dashed border-gray-300 bg-gray-50/50">
-                      <Avatar className="w-12 h-12 ring-2 ring-white">
-                        <AvatarFallback className="bg-gradient-to-br from-blue-500 to-blue-600 text-white font-bold">{mockTeacherInfo.avatar}</AvatarFallback>
-                      </Avatar>
-                      <Button variant="outline" size="sm" className="text-xs border-gray-200"><Upload className="w-3.5 h-3.5 mr-1" />选择文件</Button>
-                    </div>
-                  </div>
-                  <div className="space-y-1.5">
-                    <Label className="text-xs text-gray-500">上传封面</Label>
-                    <div className="flex items-center gap-3 p-3 rounded-lg border border-dashed border-gray-300 bg-gray-50/50">
-                      <div className="w-12 h-12 rounded-lg bg-gradient-to-br from-blue-100 to-blue-200 flex items-center justify-center text-blue-400">
-                        <Image className="w-5 h-5" />
-                      </div>
-                      <Button variant="outline" size="sm" className="text-xs border-gray-200"><Upload className="w-3.5 h-3.5 mr-1" />选择文件</Button>
-                    </div>
-                  </div>
+            <div className="space-y-6">
+              <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-4">
+                <div className="space-y-1.5">
+                  <Label className="text-xs text-gray-500">姓名</Label>
+                  <Input value={formData.name} onChange={(e) => setFormData({ ...formData, name: e.target.value })} className="bg-white border-gray-200 h-9" />
                 </div>
                 <div className="space-y-1.5">
-                  <Label className="text-xs text-gray-500">擅长领域</Label>
-                  <div className="flex items-center gap-2 mb-2 flex-wrap">
-                    {skills.map((s, i) => (
-                      <Badge key={i} variant="secondary" className="text-xs px-2 py-1 bg-blue-50 text-blue-700 border border-blue-200">
-                        {s}
-                        <button onClick={() => setSkills(skills.filter((_, j) => j !== i))} className="ml-1.5 text-blue-400 hover:text-blue-600">
-                          <X className="w-3 h-3" />
-                        </button>
+                  <Label className="text-xs text-gray-500">工号</Label>
+                  <Input value={formData.teacherNo} disabled className="bg-gray-50 border-gray-200 h-9" />
+                </div>
+                <div className="space-y-1.5">
+                  <Label className="text-xs text-gray-500">所属部门</Label>
+                  <Input value={formData.department} onChange={(e) => setFormData({ ...formData, department: e.target.value })} className="bg-white border-gray-200 h-9" />
+                </div>
+                <div className="space-y-1.5">
+                  <Label className="text-xs text-gray-500">状态</Label>
+                  <Select value={formData.status} onValueChange={(v) => setFormData({ ...formData, status: v })}>
+                    <SelectTrigger className="bg-white border-gray-200 h-9"><SelectValue /></SelectTrigger>
+                    <SelectContent>
+                      <SelectItem value="在职">在职</SelectItem>
+                      <SelectItem value="离职">离职</SelectItem>
+                      <SelectItem value="外聘">外聘</SelectItem>
+                    </SelectContent>
+                  </Select>
+                </div>
+                <div className="space-y-1.5">
+                  <Label className="text-xs text-gray-500">职位</Label>
+                  <Input value={formData.position} onChange={(e) => setFormData({ ...formData, position: e.target.value })} className="bg-white border-gray-200 h-9" />
+                </div>
+                <div className="space-y-1.5">
+                  <Label className="text-xs text-gray-500">关联角色</Label>
+                  <div className="flex items-center gap-1.5 flex-wrap min-h-[36px]">
+                    {formData.roles.map((role) => (
+                      <Badge key={role} variant="secondary" className="text-xs px-2 py-1 bg-blue-50 text-blue-700 border border-blue-200">
+                        {role}
                       </Badge>
                     ))}
                   </div>
+                </div>
+                <div className="space-y-1.5 md:col-span-2 lg:col-span-3">
+                  <Label className="text-xs text-gray-500">密码</Label>
                   <div className="flex items-center gap-2">
-                    <Input value={skillInput} onChange={(e) => setSkillInput(e.target.value)} placeholder="输入擅长领域" className="bg-white border-gray-200 h-9 flex-1" />
-                    <Button size="sm" variant="outline" className="h-9 text-xs" onClick={() => { if (skillInput.trim() && !skills.includes(skillInput.trim())) { setSkills([...skills, skillInput.trim()]); setSkillInput("") } }}>
-                      <Plus className="w-3.5 h-3.5 mr-1" />添加
+                    <Input type="password" value="********" disabled className="bg-gray-50 border-gray-200 h-9 flex-1" />
+                    <Button variant="outline" size="sm" className="h-9 text-xs border-gray-200 text-gray-700 hover:bg-gray-50" onClick={() => setPasswordDialogOpen(true)}>
+                      修改密码
                     </Button>
                   </div>
                 </div>
-              </div>
-
-              {/* 教师简介 */}
-              <div className="border-t border-gray-100 pt-6">
-                <h4 className="text-sm font-semibold text-gray-900 mb-4 flex items-center gap-2">
-                  <Star className="w-4 h-4 text-blue-500" />
-                  教师简介
-                </h4>
-                <Textarea
-                  value={formData.bio}
-                  onChange={(e) => setFormData({ ...formData, bio: e.target.value })}
-                  rows={4}
-                  className="bg-white border-gray-200 resize-none"
-                  placeholder="请填写教师简介..."
-                />
-              </div>
-
-              {/* 从业经历 */}
-              <div className="border-t border-gray-100 pt-6">
-                <h4 className="text-sm font-semibold text-gray-900 mb-4 flex items-center gap-2">
-                  <Briefcase className="w-4 h-4 text-blue-500" />
-                  从业经历
-                </h4>
-                <Textarea
-                  value={formData.experience}
-                  onChange={(e) => setFormData({ ...formData, experience: e.target.value })}
-                  rows={5}
-                  className="bg-white border-gray-200 resize-none font-mono text-xs"
-                  placeholder="请填写从业经历..."
-                />
-              </div>
-
-              {/* 资质荣誉 */}
-              <div className="border-t border-gray-100 pt-6">
-                <h4 className="text-sm font-semibold text-gray-900 mb-4 flex items-center gap-2">
-                  <FileText className="w-4 h-4 text-blue-500" />
-                  资质荣誉（佐证材料）
-                </h4>
-                <div className="space-y-3">
-                  {materials.map((m, index) => (
-                    <div key={m.id} className="rounded-lg border border-gray-200 bg-white p-4 space-y-3">
-                      <div className="flex items-center justify-between">
-                        <span className="text-xs text-gray-400 font-medium">材料 {index + 1}</span>
-                        <button
-                          onClick={() => removeMaterial(m.id)}
-                          className="p-1 rounded-md hover:bg-red-50 text-gray-400 hover:text-red-500 transition-colors"
-                        >
-                          <Trash2 className="w-4 h-4" />
-                        </button>
-                      </div>
-                      <div className="space-y-1.5">
-                        <Label className="text-xs text-gray-500">材料名称</Label>
-                        <Input
-                          value={m.name}
-                          onChange={(e) => updateMaterialName(m.id, e.target.value)}
-                          placeholder="请输入材料名称，如：教师资格证、优秀教师奖状"
-                          className="bg-white border-gray-200 h-9"
-                        />
-                      </div>
-                      {m.fileName ? (
-                        <div className="flex items-center gap-3 p-3 rounded-lg border border-gray-200 bg-gray-50">
-                          <FileText className="w-4 h-4 text-blue-500 shrink-0" />
-                          <div className="flex-1 min-w-0">
-                            <p className="text-sm font-medium text-gray-900 truncate">{m.fileName}</p>
-                            <p className="text-xs text-gray-400">{m.fileSize}</p>
-                          </div>
-                          <Button
-                            variant="ghost"
-                            size="sm"
-                            className="text-xs h-7 text-blue-600"
-                            onClick={() => {
-                              const input = document.getElementById(`file-${m.id}`) as HTMLInputElement
-                              input?.click()
-                            }}
-                          >
-                            替换
-                          </Button>
-                          <input
-                            id={`file-${m.id}`}
-                            type="file"
-                            accept=".pdf,.jpg,.jpeg,.png"
-                            className="hidden"
-                            onChange={(e) => handleFileSelect(m.id, e)}
-                          />
-                        </div>
-                      ) : (
-                        <div
-                          className="flex items-center gap-3 p-4 rounded-lg border border-dashed border-gray-300 bg-gray-50/50 cursor-pointer hover:bg-gray-100/50 transition-colors"
-                          onClick={() => {
-                            const input = document.getElementById(`file-${m.id}`) as HTMLInputElement
-                            input?.click()
-                          }}
-                        >
-                          <Upload className="w-5 h-5 text-gray-400" />
-                          <div className="flex-1">
-                            <p className="text-sm text-gray-600">点击上传附件</p>
-                            <p className="text-xs text-gray-400">支持 PDF、JPG、PNG 格式，单个文件不超过 10MB</p>
-                          </div>
-                          <Button variant="outline" size="sm" className="text-xs border-gray-200 pointer-events-none">
-                            <Upload className="w-3.5 h-3.5 mr-1" />选择文件
-                          </Button>
-                          <input
-                            id={`file-${m.id}`}
-                            type="file"
-                            accept=".pdf,.jpg,.jpeg,.png"
-                            className="hidden"
-                            onChange={(e) => handleFileSelect(m.id, e)}
-                          />
-                        </div>
-                      )}
-                    </div>
-                  ))}
-                </div>
-                <Button
-                  variant="outline"
-                  size="sm"
-                  className="mt-3 text-xs border-dashed border-gray-300 w-full h-9"
-                  onClick={addMaterial}
-                >
-                  <Plus className="w-3.5 h-3.5 mr-1" />
-                  添加材料
-                </Button>
               </div>
             </div>
 
@@ -355,6 +175,40 @@ export function TeacherProfileTab() {
             </div>
           </SectionCard>
         </TabsContent>
+
+        <Dialog open={passwordDialogOpen} onOpenChange={setPasswordDialogOpen}>
+          <DialogContent className="sm:max-w-md">
+            <DialogHeader>
+              <DialogTitle>修改密码</DialogTitle>
+              <DialogDescription>请输入新密码，修改后将需要重新登录。</DialogDescription>
+            </DialogHeader>
+            <div className="space-y-4 py-2">
+              <div className="space-y-1.5">
+                <Label className="text-xs text-gray-500">新密码</Label>
+                <div className="relative">
+                  <Input
+                    type={showPassword ? "text" : "password"}
+                    value={newPassword}
+                    onChange={(e) => setNewPassword(e.target.value)}
+                    placeholder="请输入新密码"
+                    className="bg-white border-gray-200 h-9 pr-10"
+                  />
+                  <button
+                    type="button"
+                    onClick={() => setShowPassword((v) => !v)}
+                    className="absolute right-2.5 top-1/2 -translate-y-1/2 text-gray-400 hover:text-gray-600"
+                  >
+                    {showPassword ? <EyeOff className="w-4 h-4" /> : <Eye className="w-4 h-4" />}
+                  </button>
+                </div>
+              </div>
+            </div>
+            <div className="flex justify-end gap-2 mt-2">
+              <Button variant="outline" size="sm" className="h-9 text-xs" onClick={() => setPasswordDialogOpen(false)}>取消</Button>
+              <Button size="sm" className="h-9 text-xs bg-blue-600 hover:bg-blue-700" onClick={() => setPasswordDialogOpen(false)}>确认修改</Button>
+            </div>
+          </DialogContent>
+        </Dialog>
 
         <TabsContent value="security" className="mt-0">
           <SectionCard title="账号安全" icon={Shield} iconColor="rose">

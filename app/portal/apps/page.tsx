@@ -310,7 +310,7 @@ export default function AppsPage() {
                       <span className="text-xs text-muted-foreground bg-muted px-2 py-0.5 rounded-full">
                         {section.modules.length} 个模块
                       </span>
-                      {platformUrl && section.id !== "affairs" && (
+                      {platformUrl && (section.id === "alliance" || section.id === "ability") && (
                         <a
                           href={platformUrl}
                           target="_blank"
