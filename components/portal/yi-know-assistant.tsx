@@ -43,6 +43,7 @@ interface Resource {
   platformId?: string
   originalId?: number
   originalType?: "kb" | "bot"
+  href?: string
 }
 
 interface QuickAction {
@@ -108,6 +109,7 @@ const RESOURCES: Resource[] = [
     color: "bg-indigo-50 text-indigo-600 border-indigo-100",
     originalId: 5,
     originalType: "bot",
+    href: "http://demo2.zhiyu.com.cn:5000/job_ai",
   },
   {
     id: "scene-agent",
@@ -119,6 +121,7 @@ const RESOURCES: Resource[] = [
     color: "bg-cyan-50 text-cyan-600 border-cyan-100",
     originalId: 6,
     originalType: "bot",
+    href: "http://demo2.zhiyu.com.cn:5000/scene_ai",
   },
   {
     id: "qa-robot",
@@ -203,7 +206,7 @@ const QUICK_ACTIONS: QuickAction[] = [
     id: "ai-create-position",
     label: "我要 AI 帮我建岗位",
     icon: "sparkles",
-    href: "http://111.170.170.202:5000/",
+    href: "http://demo2.zhiyu.com.cn:5000/job_ai",
     color: "bg-indigo-50 text-indigo-600 border-indigo-100 hover:bg-indigo-100",
   },
 ]
@@ -317,6 +320,10 @@ function ResourceItem({
   const isClickable = resource.originalType === "kb" || resource.originalType === "bot"
 
   const handleClick = () => {
+    if (resource.href) {
+      window.open(resource.href, "_blank")
+      return
+    }
     if (isClickable && resource.originalId != null) {
       const type = resource.originalType === "kb" ? "kb" : "bot"
       window.open(`${ZHIYU_AI_HREF}/#/${type}/${resource.originalId}`, "_blank")
