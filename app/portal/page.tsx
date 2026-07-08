@@ -307,7 +307,14 @@ function GradientTile({
 
       {/* shared title + desc — identical across all variants */}
       <div className="relative" style={{ zIndex: 2 }}>
-        <h4 className="text-lg font-bold leading-tight mb-1 text-[#141a2e]">{item.title}</h4>
+        <h4 className="text-lg font-bold leading-tight mb-1 text-[#141a2e] flex items-center gap-2 flex-wrap">
+          {item.title}
+          {item.id === "opc" && (
+            <span className="text-[10px] font-medium px-2 py-0.5 rounded-full whitespace-nowrap" style={{ backgroundColor: `${color}18`, color }}>
+              江苏省数字经济联合会&大任智库联合打造
+            </span>
+          )}
+        </h4>
         <p className="text-xs leading-relaxed text-[#5b677b] line-clamp-2">{item.desc}</p>
       </div>
 
