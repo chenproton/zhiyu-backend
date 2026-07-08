@@ -306,16 +306,16 @@ function GradientTile({
 
       {isBig ? (
         <div className="relative flex flex-col flex-1" style={{ zIndex: 2 }}>
-          <h4 className="text-2xl font-bold leading-tight mb-3 text-[#141a2e]">{item.title}</h4>
-          <p className="text-sm leading-relaxed text-[#5b677b]">{item.desc}</p>
+          <h4 className="text-base font-bold leading-tight mb-3 text-[#141a2e]">{item.title}</h4>
+          <p className="text-xs leading-relaxed text-[#5b677b]">{item.desc}</p>
           <div className="mt-auto pt-6 text-sm font-semibold flex items-center gap-1.5 transition-all duration-[250ms] group-hover:gap-2.5" style={{ color }}>
             进入平台 →
           </div>
         </div>
       ) : isTall ? (
         <div className="relative flex flex-col flex-1" style={{ zIndex: 2 }}>
-          <h4 className="text-xl font-bold leading-tight mb-2 text-[#141a2e]">{item.title}</h4>
-          <p className="text-sm leading-relaxed text-[#5b677b]">{item.desc}</p>
+          <h4 className="text-base font-bold leading-tight mb-2 text-[#141a2e]">{item.title}</h4>
+          <p className="text-xs leading-relaxed text-[#5b677b]">{item.desc}</p>
           <div className="mt-auto pt-6 text-sm font-semibold flex items-center gap-1.5 transition-all duration-[250ms] group-hover:gap-2.5" style={{ color }}>
             进入平台 →
           </div>
@@ -323,7 +323,7 @@ function GradientTile({
       ) : isWide ? (
         <>
           <div className="relative flex-1" style={{ zIndex: 2 }}>
-            <h4 className="text-lg font-bold leading-tight mb-1 text-[#141a2e]">{item.title}</h4>
+            <h4 className="text-base font-bold leading-tight mb-1 text-[#141a2e]">{item.title}</h4>
             <p className="text-xs leading-relaxed text-[#5b677b]">{item.desc}</p>
           </div>
           <span className="relative text-sm font-semibold flex items-center gap-1.5 transition-all duration-[250ms] group-hover:gap-2.5 whitespace-nowrap shrink-0" style={{ zIndex: 2, color }}>
