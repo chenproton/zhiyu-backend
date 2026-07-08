@@ -44,9 +44,9 @@
     },
     {
       "id": "mall",
-      "name": "教学资源商城",
+      "name": "教学资源服务中心",
       "url": "",
-      "enabled": true
+      "enabled": false
     },
     {
       "id": "affairs",
@@ -58,19 +58,19 @@
       "id": "opc",
       "name": "OPC专区",
       "url": "",
-      "enabled": true
+      "enabled": false
     },
     {
       "id": "decision",
-      "name": "敏捷决策中心",
+      "name": "数据决策中心",
       "url": "",
-      "enabled": true
+      "enabled": false
     },
     {
       "id": "research",
       "name": "教科研服务中心",
       "url": "",
-      "enabled": true
+      "enabled": false
     }
   ]
 }
