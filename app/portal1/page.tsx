@@ -298,7 +298,7 @@ function GradientTile({
       )}
 
       <div
-        className={`rounded-2xl flex items-center justify-center relative transition-all duration-[400ms] group-hover:scale-110 group-hover:-rotate-6 shrink-0 ${isBig ? "w-16 h-16 text-2xl mb-5" : isTall ? "w-[46px] h-[46px] text-xl mb-3.5" : isWide ? "w-12 h-12 text-xl mb-0" : "w-[46px] h-[46px] text-xl mb-3.5"}`}
+        className={`rounded-2xl flex items-center justify-start relative transition-all duration-[400ms] group-hover:scale-110 group-hover:-rotate-6 shrink-0 ${isBig ? "w-16 h-16 text-2xl mb-5" : isTall ? "w-[46px] h-[46px] text-xl mb-3.5" : isWide ? "w-12 h-12 text-xl mb-0" : "w-[46px] h-[46px] text-xl mb-3.5"}`}
         style={{ zIndex: 2, backgroundColor: color, color: "#fff", boxShadow: `0 8px 28px ${color}3d` }}
       >
         {getIcon(item.icon)}
