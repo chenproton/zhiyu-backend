@@ -854,7 +854,6 @@ export const mockStudentPortraits = [
 // ==================== 教师个人中心 ====================
 
 export const teacherSecurityItems = [
-  { label: "登录密码", status: "strong", statusText: "安全强度：高", action: "修改" },
   { label: "手机绑定", status: "bound", statusText: "138****6666", action: "更换" },
   { label: "邮箱绑定", status: "bound", statusText: "zhang@example.edu.cn", action: "更换" },
   { label: "人脸识别", status: "unbound", statusText: "未录入", action: "录入" },

@@ -1,28 +1,19 @@
 "use client"
 
-import { useState } from "react"
 import {
-  Bell, Lock, Mail, Phone, Save, Shield, Smartphone, User,
-  Eye, EyeOff,
+  Bell, Lock, Mail, Phone, Shield, Smartphone, User,
 } from "lucide-react"
-import { Button } from "@/components/ui/button"
 import { Input } from "@/components/ui/input"
 import { Label } from "@/components/ui/label"
-import {
-  Select, SelectContent, SelectItem, SelectTrigger, SelectValue,
-} from "@/components/ui/select"
 import { Badge } from "@/components/ui/badge"
 import { Switch } from "@/components/ui/switch"
 import { Avatar, AvatarFallback } from "@/components/ui/avatar"
 import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs"
-import {
-  Dialog, DialogContent, DialogHeader, DialogTitle, DialogDescription,
-} from "@/components/ui/dialog"
 import { SectionCard } from "./section-card"
 import { mockTeacherInfo, teacherSecurityItems } from "../_data/mock-teacher-data"
 
 export function TeacherProfileTab() {
-  const [formData, setFormData] = useState({
+  const formData = {
     name: mockTeacherInfo.name,
     teacherNo: mockTeacherInfo.teacherNo,
     phone: "138****6666",
@@ -41,51 +32,16 @@ export function TeacherProfileTab() {
     experience: "2006-2010  华为技术有限公司  网络工程师\n2010-2015  北京邮电大学  讲师\n2015-至今   本校计算机学院  教授 / 网络技术专业负责人",
     status: "在职",
     roles: ["教师", "专业负责人"],
-  })
-
-  const [skills, setSkills] = useState(["路由交换", "网络安全", "Linux系统管理", "云计算", "网络工程实训"])
-  const [skillInput, setSkillInput] = useState("")
-
-  const [passwordDialogOpen, setPasswordDialogOpen] = useState(false)
-  const [newPassword, setNewPassword] = useState("")
-  const [showPassword, setShowPassword] = useState(false)
-
-  interface Material { id: string; name: string; fileName: string; fileSize: string }
-
-  const [materials, setMaterials] = useState<Material[]>([])
-
-  const addMaterial = () => {
-    setMaterials([...materials, { id: Date.now().toString(), name: "", fileName: "", fileSize: "" }])
   }
 
-  const updateMaterialName = (id: string, name: string) => {
-    setMaterials(materials.map((m) => (m.id === id ? { ...m, name } : m)))
-  }
-
-  const handleFileSelect = (id: string, e: React.ChangeEvent<HTMLInputElement>) => {
-    const file = e.target.files?.[0]
-    if (!file) return
-    const size = file.size < 1024 * 1024
-      ? `${(file.size / 1024).toFixed(1)} KB`
-      : `${(file.size / 1024 / 1024).toFixed(1)} MB`
-    setMaterials(materials.map((m) =>
-      m.id === id ? { ...m, fileName: file.name, fileSize: size } : m
-    ))
-    e.target.value = ""
-  }
-
-  const removeMaterial = (id: string) => {
-    setMaterials(materials.filter((m) => m.id !== id))
-  }
-
-  const [notifications, setNotifications] = useState({
+  const notifications = {
     course: true,
     exam: true,
     teaching: true,
     system: true,
     email: true,
     sms: false,
-  })
+  }
 
   return (
     <div className="space-y-5">
@@ -120,7 +76,7 @@ export function TeacherProfileTab() {
               <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-4">
                 <div className="space-y-1.5">
                   <Label className="text-xs text-gray-500">姓名</Label>
-                  <Input value={formData.name} onChange={(e) => setFormData({ ...formData, name: e.target.value })} className="bg-white border-gray-200 h-9" />
+                  <Input value={formData.name} disabled className="bg-gray-50 border-gray-200 h-9" />
                 </div>
                 <div className="space-y-1.5">
                   <Label className="text-xs text-gray-500">工号</Label>
@@ -128,22 +84,15 @@ export function TeacherProfileTab() {
                 </div>
                 <div className="space-y-1.5">
                   <Label className="text-xs text-gray-500">所属部门</Label>
-                  <Input value={formData.department} onChange={(e) => setFormData({ ...formData, department: e.target.value })} className="bg-white border-gray-200 h-9" />
+                  <Input value={formData.department} disabled className="bg-gray-50 border-gray-200 h-9" />
                 </div>
                 <div className="space-y-1.5">
                   <Label className="text-xs text-gray-500">状态</Label>
-                  <Select value={formData.status} onValueChange={(v) => setFormData({ ...formData, status: v })}>
-                    <SelectTrigger className="bg-white border-gray-200 h-9"><SelectValue /></SelectTrigger>
-                    <SelectContent>
-                      <SelectItem value="在职">在职</SelectItem>
-                      <SelectItem value="离职">离职</SelectItem>
-                      <SelectItem value="外聘">外聘</SelectItem>
-                    </SelectContent>
-                  </Select>
+                  <Input value={formData.status} disabled className="bg-gray-50 border-gray-200 h-9" />
                 </div>
                 <div className="space-y-1.5">
                   <Label className="text-xs text-gray-500">职位</Label>
-                  <Input value={formData.position} onChange={(e) => setFormData({ ...formData, position: e.target.value })} className="bg-white border-gray-200 h-9" />
+                  <Input value={formData.position} disabled className="bg-gray-50 border-gray-200 h-9" />
                 </div>
                 <div className="space-y-1.5">
                   <Label className="text-xs text-gray-500">关联角色</Label>
@@ -155,60 +104,11 @@ export function TeacherProfileTab() {
                     ))}
                   </div>
                 </div>
-                <div className="space-y-1.5 md:col-span-2 lg:col-span-3">
-                  <Label className="text-xs text-gray-500">密码</Label>
-                  <div className="flex items-center gap-2">
-                    <Input type="password" value="********" disabled className="bg-gray-50 border-gray-200 h-9 flex-1" />
-                    <Button variant="outline" size="sm" className="h-9 text-xs border-gray-200 text-gray-700 hover:bg-gray-50" onClick={() => setPasswordDialogOpen(true)}>
-                      修改密码
-                    </Button>
-                  </div>
-                </div>
-              </div>
-            </div>
 
-            <div className="mt-8 pt-6 border-t border-gray-100 flex justify-end">
-              <Button className="bg-blue-600 hover:bg-blue-700">
-                <Save className="w-4 h-4 mr-1" />
-                保存修改
-              </Button>
+              </div>
             </div>
           </SectionCard>
         </TabsContent>
-
-        <Dialog open={passwordDialogOpen} onOpenChange={setPasswordDialogOpen}>
-          <DialogContent className="sm:max-w-md">
-            <DialogHeader>
-              <DialogTitle>修改密码</DialogTitle>
-              <DialogDescription>请输入新密码，修改后将需要重新登录。</DialogDescription>
-            </DialogHeader>
-            <div className="space-y-4 py-2">
-              <div className="space-y-1.5">
-                <Label className="text-xs text-gray-500">新密码</Label>
-                <div className="relative">
-                  <Input
-                    type={showPassword ? "text" : "password"}
-                    value={newPassword}
-                    onChange={(e) => setNewPassword(e.target.value)}
-                    placeholder="请输入新密码"
-                    className="bg-white border-gray-200 h-9 pr-10"
-                  />
-                  <button
-                    type="button"
-                    onClick={() => setShowPassword((v) => !v)}
-                    className="absolute right-2.5 top-1/2 -translate-y-1/2 text-gray-400 hover:text-gray-600"
-                  >
-                    {showPassword ? <EyeOff className="w-4 h-4" /> : <Eye className="w-4 h-4" />}
-                  </button>
-                </div>
-              </div>
-            </div>
-            <div className="flex justify-end gap-2 mt-2">
-              <Button variant="outline" size="sm" className="h-9 text-xs" onClick={() => setPasswordDialogOpen(false)}>取消</Button>
-              <Button size="sm" className="h-9 text-xs bg-blue-600 hover:bg-blue-700" onClick={() => setPasswordDialogOpen(false)}>确认修改</Button>
-            </div>
-          </DialogContent>
-        </Dialog>
 
         <TabsContent value="security" className="mt-0">
           <SectionCard title="账号安全" icon={Shield} iconColor="rose">
@@ -228,9 +128,7 @@ export function TeacherProfileTab() {
                         </p>
                       </div>
                     </div>
-                    <Button variant="outline" size="sm" className="text-xs border-gray-200 text-gray-700 hover:bg-gray-50">
-                      {item.action}
-                    </Button>
+                    <span className="text-xs text-gray-400">{item.action}</span>
                   </div>
                 )
               })}
@@ -266,7 +164,7 @@ export function TeacherProfileTab() {
                       </div>
                       <Switch
                         checked={notifications[item.key as keyof typeof notifications]}
-                        onCheckedChange={(checked) => setNotifications({ ...notifications, [item.key]: checked })}
+                        disabled
                       />
                     </div>
                   ))}
@@ -287,7 +185,7 @@ export function TeacherProfileTab() {
                       </div>
                       <Switch
                         checked={notifications[item.key as keyof typeof notifications]}
-                        onCheckedChange={(checked) => setNotifications({ ...notifications, [item.key]: checked })}
+                        disabled
                       />
                     </div>
                   ))}

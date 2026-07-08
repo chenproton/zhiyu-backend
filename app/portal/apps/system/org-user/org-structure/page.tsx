@@ -43,14 +43,13 @@ import {
   School,
   Building2,
   BookOpen,
-  CalendarDays,
   Briefcase,
   LayoutList,
   Building,
 } from "lucide-react"
 import { cn } from "@/lib/utils"
 
-type OrgNodeType = "学校" | "二级学院" | "专业" | "年级" | "班级" | "行政职能部门"
+type OrgNodeType = "学校" | "二级学院" | "专业" | "班级" | "行政职能部门"
 
 interface OrgNode {
   id: string
@@ -60,27 +59,17 @@ interface OrgNode {
   memberCount: number
   children?: OrgNode[]
   expanded?: boolean
+  gradeLabel?: string
 }
 
-function generateClass(majorCode: string, grade: string, index: number): OrgNode {
+function generateClass(majorCode: string, grade: string, gradeLabel: string, index: number): OrgNode {
   return {
     id: `${majorCode}-${grade}-${index}`,
     name: `${majorCode}${grade.slice(2)}0${index}班`,
     type: "班级",
     order: index,
     memberCount: 28 + Math.floor(Math.random() * 20),
-  }
-}
-
-function generateGrade(majorCode: string, grade: string, order: number): OrgNode {
-  return {
-    id: `${majorCode}-${grade}`,
-    name: `${grade}级`,
-    type: "年级",
-    order,
-    memberCount: 0,
-    expanded: false,
-    children: Array.from({ length: 2 }, (_, i) => generateClass(majorCode, grade, i + 1)),
+    gradeLabel,
   }
 }
 
@@ -90,6 +79,7 @@ function generateMajor(
   code: string,
   order: number
 ): OrgNode {
+  const grades = ["2021", "2022", "2023", "2024"]
   return {
     id: `${collegeCode}-${code}`,
     name,
@@ -97,8 +87,10 @@ function generateMajor(
     order,
     memberCount: 0,
     expanded: false,
-    children: ["2021", "2022", "2023", "2024"].map((grade, i) =>
-      generateGrade(code, grade, i + 1)
+    children: grades.flatMap((grade, gi) =>
+      Array.from({ length: 2 }, (_, ci) =>
+        generateClass(code, grade, `${grade}级`, gi * 2 + ci + 1)
+      )
     ),
   }
 }
@@ -234,7 +226,6 @@ const typeMeta: Record<
   学校: { icon: School, color: "text-blue-600", badge: "bg-blue-50 text-blue-700 border-blue-200" },
   二级学院: { icon: Building2, color: "text-violet-600", badge: "bg-violet-50 text-violet-700 border-violet-200" },
   专业: { icon: BookOpen, color: "text-emerald-600", badge: "bg-emerald-50 text-emerald-700 border-emerald-200" },
-  年级: { icon: CalendarDays, color: "text-amber-600", badge: "bg-amber-50 text-amber-700 border-amber-200" },
   班级: { icon: Users, color: "text-cyan-600", badge: "bg-cyan-50 text-cyan-700 border-cyan-200" },
   行政职能部门: { icon: Briefcase, color: "text-rose-600", badge: "bg-rose-50 text-rose-700 border-rose-200" },
 }
@@ -303,8 +294,11 @@ function TreeNode({
           )}
         </button>
         <Icon className={cn("w-4 h-4", meta.color)} />
-        <span className="flex-1 text-sm font-medium">{node.name}</span>
-        <Badge variant="outline" className={cn("text-xs", meta.badge)}>
+        <span className="flex-1 text-sm font-medium truncate">{node.name}</span>
+        {node.gradeLabel && (
+          <span className="text-[10px] px-1.5 py-0.5 rounded bg-muted text-muted-foreground mr-1 shrink-0">{node.gradeLabel}</span>
+        )}
+        <Badge variant="outline" className={cn("text-xs shrink-0", meta.badge)}>
           {node.type}
         </Badge>
         <div className="flex items-center gap-1 text-xs text-muted-foreground min-w-[3rem] justify-end">
@@ -364,7 +358,7 @@ function TreeNode({
                 <div className="w-5" />
                 <span className="flex items-center gap-1 text-xs font-semibold text-emerald-600">
                   <GraduationCap className="w-3 h-3" />
-                  学生线：专业 / 年级 / 班级
+                  学生线：专业 / 班级
                 </span>
                 <div className="flex-1 h-px bg-emerald-100" />
               </div>
@@ -430,7 +424,6 @@ export default function OrgStructurePage() {
       school: countByType(orgData, "学校"),
       college: countByType(orgData, "二级学院"),
       major: countByType(orgData, "专业"),
-      grade: countByType(orgData, "年级"),
       class: countByType(orgData, "班级"),
       department: countByType(orgData, "行政职能部门"),
       members: totalMembers(orgData),
@@ -498,7 +491,7 @@ export default function OrgStructurePage() {
         </div>
       </div>
 
-      <div className="grid grid-cols-2 md:grid-cols-4 lg:grid-cols-7 gap-3 mb-6">
+      <div className="grid grid-cols-2 md:grid-cols-4 lg:grid-cols-6 gap-3 mb-6">
         <div className="rounded-lg border bg-white p-3 shadow-sm">
           <div className="text-xs text-muted-foreground">学校</div>
           <div className="mt-1 text-xl font-semibold text-blue-600">{stats.school}</div>
@@ -510,10 +503,6 @@ export default function OrgStructurePage() {
         <div className="rounded-lg border bg-white p-3 shadow-sm">
           <div className="text-xs text-muted-foreground">专业</div>
           <div className="mt-1 text-xl font-semibold text-emerald-600">{stats.major}</div>
-        </div>
-        <div className="rounded-lg border bg-white p-3 shadow-sm">
-          <div className="text-xs text-muted-foreground">年级</div>
-          <div className="mt-1 text-xl font-semibold text-amber-600">{stats.grade}</div>
         </div>
         <div className="rounded-lg border bg-white p-3 shadow-sm">
           <div className="text-xs text-muted-foreground">班级</div>
@@ -595,7 +584,6 @@ export default function OrgStructurePage() {
                     <SelectItem value="学校">学校</SelectItem>
                     <SelectItem value="二级学院">二级学院</SelectItem>
                     <SelectItem value="专业">专业</SelectItem>
-                    <SelectItem value="年级">年级</SelectItem>
                     <SelectItem value="班级">班级</SelectItem>
                     <SelectItem value="行政职能部门">行政职能部门</SelectItem>
                   </SelectContent>

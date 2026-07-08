@@ -1,24 +1,14 @@
 "use client"
 
 import { useState } from "react"
-import { BarChart3, BookOpen, Clock, FileText, Layers, Play, User } from "lucide-react"
+import { BarChart3, BookOpen, Clock, Layers, Play } from "lucide-react"
 import { Badge } from "@/components/ui/badge"
 import { Button } from "@/components/ui/button"
 import { Tabs, TabsList, TabsTrigger } from "@/components/ui/tabs"
 import { SectionCard } from "./section-card"
 import { StatCard } from "./stat-card"
 import { mockCourses, mockSceneTasks } from "../_data/mock-student-data"
-import { GradesContent } from "./grades-content"
-import { ArchiveContent } from "./archive-content"
-
-const learningSubTabs = [
-  { id: "courses", label: "课程与任务" },
-  { id: "grades", label: "成绩查看" },
-  { id: "archive", label: "学习档案" },
-]
-
 export function LearningTab() {
-  const [activeSubTab, setActiveSubTab] = useState("courses")
   const [courseFilter, setCourseFilter] = useState("all")
   const [sceneFilter, setSceneFilter] = useState("all")
 
@@ -56,26 +46,8 @@ export function LearningTab() {
         <StatCard title="本周完成任务" value={12} icon={BarChart3} trend="较上周 +3" trendUp color="purple" />
       </div>
 
-      {/* 子 Tab 导航 */}
-      <div className="bg-white border border-gray-100 rounded-xl shadow-sm p-1.5">
-        <Tabs value={activeSubTab} onValueChange={setActiveSubTab}>
-          <TabsList className="h-9 bg-gray-100 w-fit">
-            {learningSubTabs.map((tab) => (
-              <TabsTrigger
-                key={tab.id}
-                value={tab.id}
-                className="text-sm px-4 data-[state=active]:bg-white data-[state=active]:shadow-sm"
-              >
-                {tab.label}
-              </TabsTrigger>
-            ))}
-          </TabsList>
-        </Tabs>
-      </div>
-
-      {/* 子 Tab 内容 */}
-      {activeSubTab === "courses" && (
-        <div className="grid grid-cols-1 lg:grid-cols-2 gap-5">
+      {/* 课程与任务内容 */}
+      <div className="grid grid-cols-1 lg:grid-cols-2 gap-5">
           {/* 实践场景（左侧） */}
           <SectionCard title="我的实践场景" icon={Layers} iconColor="green" action={{ label: "全部场景" }}>
             <Tabs value={sceneFilter} onValueChange={setSceneFilter}>
@@ -198,10 +170,6 @@ export function LearningTab() {
             </div>
           </SectionCard>
         </div>
-      )}
-
-      {activeSubTab === "grades" && <GradesContent />}
-      {activeSubTab === "archive" && <ArchiveContent />}
     </div>
   )
 }

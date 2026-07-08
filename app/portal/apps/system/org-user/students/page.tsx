@@ -33,6 +33,7 @@ interface Student {
 interface OrgClassNode {
   id: string
   name: string
+  gradeLabel?: string
 }
 
 interface OrgMajorNode {
@@ -56,17 +57,17 @@ const orgTreeData: OrgDeptNode[] = [
         id: "major-1-1",
         name: "计算机系",
         classes: [
-          { id: "class-1-1-1", name: "计算机2401班" },
-          { id: "class-1-1-2", name: "计算机2301班" },
-          { id: "class-1-1-3", name: "计算机2201班" },
+          { id: "class-1-1-1", name: "计算机2401班", gradeLabel: "2024级" },
+          { id: "class-1-1-2", name: "计算机2301班", gradeLabel: "2023级" },
+          { id: "class-1-1-3", name: "计算机2201班", gradeLabel: "2022级" },
         ],
       },
       {
         id: "major-1-2",
         name: "软件工程系",
         classes: [
-          { id: "class-1-2-1", name: "2024级软件班" },
-          { id: "class-1-2-2", name: "软件2301班" },
+          { id: "class-1-2-1", name: "2024级软件班", gradeLabel: "2024级" },
+          { id: "class-1-2-2", name: "软件2301班", gradeLabel: "2023级" },
         ],
       },
     ],
@@ -79,14 +80,14 @@ const orgTreeData: OrgDeptNode[] = [
         id: "major-2-1",
         name: "会计系",
         classes: [
-          { id: "class-2-1-1", name: "会计2401班" },
+          { id: "class-2-1-1", name: "会计2401班", gradeLabel: "2024级" },
         ],
       },
       {
         id: "major-2-2",
         name: "金融系",
         classes: [
-          { id: "class-2-1-2", name: "金融2401班" },
+          { id: "class-2-1-2", name: "金融2401班", gradeLabel: "2024级" },
         ],
       },
     ],
@@ -434,7 +435,10 @@ export default function StudentsPage() {
                             >
                               <Check className={cn("mr-2 h-4 w-4", formClassId === c.id ? "opacity-100" : "opacity-0")} />
                               <div className="flex flex-col">
-                                <span>{c.name}</span>
+                                <div className="flex items-center gap-1">
+                                  <span>{c.name}</span>
+                                  {c.gradeLabel && <span className="text-[10px] px-1 rounded bg-muted">{c.gradeLabel}</span>}
+                                </div>
                                 <span className="text-xs text-muted-foreground">{major?.name} · {dept?.name}</span>
                               </div>
                             </CommandItem>
@@ -521,11 +525,14 @@ function MajorTreeNode({
               key={cls.id}
               onClick={() => onSelectClass(cls.id)}
               className={cn(
-                "w-full text-left px-2 py-1 text-xs rounded-md transition-colors truncate",
+                "w-full text-left px-2 py-1 text-xs rounded-md transition-colors truncate flex items-center gap-1",
                 selectedClassId === cls.id ? "bg-primary text-primary-foreground" : "hover:bg-muted"
               )}
             >
-              {cls.name}
+              <span className="truncate">{cls.name}</span>
+              {cls.gradeLabel && (
+                <span className="shrink-0 text-[10px] px-1 rounded bg-muted-foreground/10">{cls.gradeLabel}</span>
+              )}
             </button>
           ))}
         </div>
