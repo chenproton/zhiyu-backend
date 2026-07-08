@@ -205,7 +205,7 @@ interface CardConfig {
 
 const CARD_STYLES: Record<string, CardConfig> = {
   alliance: { gradient: "linear-gradient(145deg,#fecaca,#fca5a5)", color: "#ef4444", shadow: "rgba(239,68,68,0.3)", icon: "users" },
-  career: { gradient: "linear-gradient(145deg,#e0e7ff,#c7d2fe)", color: "#818cf8", shadow: "rgba(129,140,248,0.3)", icon: "briefcase" },
+  career: { gradient: "linear-gradient(145deg,#ccfbf1,#99f6e4)", color: "#14b8a6", shadow: "rgba(20,184,166,0.3)", icon: "briefcase" },
   scene: { gradient: "linear-gradient(120deg,#e0f2fe,#bae6fd)", color: "#38bdf8", shadow: "rgba(56,189,248,0.3)", icon: "layers" },
   course: { gradient: "linear-gradient(145deg,#d1fae5,#a7f3d0)", color: "#34d399", shadow: "rgba(52,211,153,0.3)", icon: "book" },
   ability: { gradient: "linear-gradient(145deg,#ede9fe,#ddd6fe)", color: "#a78bfa", shadow: "rgba(167,139,250,0.3)", icon: "check-circle" },
