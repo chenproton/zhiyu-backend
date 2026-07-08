@@ -274,7 +274,6 @@ function GradientTile({
 
   const isBig = variant === "big"
   const isTall = variant === "tall"
-  const isWide = variant === "wide"
 
   const layoutClass = "flex-col"
   const color = style?.color || "#000"
@@ -312,22 +311,6 @@ function GradientTile({
         <p className={`text-xs leading-relaxed text-[#5b677b] ${isBig || isTall ? "" : "line-clamp-3"}`}>{item.desc}</p>
       </div>
 
-      {/* variant-specific footer */}
-      {isBig && (
-        <div className="mt-auto pt-6 text-sm font-semibold flex items-center gap-1.5 transition-all duration-[250ms] group-hover:gap-2.5" style={{ zIndex: 2, color }}>
-          进入平台 →
-        </div>
-      )}
-      {isTall && (
-        <div className="pt-4 text-sm font-semibold flex items-center gap-1.5 transition-all duration-[250ms] group-hover:gap-2.5" style={{ zIndex: 2, color }}>
-          进入平台 →
-        </div>
-      )}
-      {isWide && (
-        <div className="pt-4 text-sm font-semibold flex items-center gap-1.5 transition-all duration-[250ms] group-hover:gap-2.5" style={{ zIndex: 2, color }}>
-          进入 →
-        </div>
-      )}
     </Wrapper>
   )
 }
