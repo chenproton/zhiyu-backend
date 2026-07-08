@@ -298,6 +298,15 @@ function GradientTile({
         <div className="absolute rounded-full pointer-events-none" style={{ width: 240, height: 240, bottom: -80, left: -80, backgroundColor: `${color}14` }} />
       )}
 
+      {item.id === "opc" && (
+        <span className="absolute top-4 right-4 inline-flex items-center gap-1 text-[10px] font-medium text-orange-600 bg-orange-50 border border-orange-100 px-2 py-0.5 rounded-md whitespace-nowrap" style={{ zIndex: 3 }}>
+          <svg className="w-3 h-3" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth={2}>
+            <path strokeLinecap="round" d="M9 12l2 2 4-4" />
+          </svg>
+          江苏省数字经济联合会&大任智库联合打造
+        </span>
+      )}
+
       <div
         className={`rounded-2xl flex items-center justify-center relative transition-all duration-[400ms] group-hover:scale-110 group-hover:-rotate-6 shrink-0 ${iconH}`}
         style={{ zIndex: 2, backgroundColor: color, color: "#fff", boxShadow: `0 8px 28px ${color}3d` }}
@@ -308,14 +317,6 @@ function GradientTile({
       {/* shared title + desc — identical across all variants */}
       <div className="relative" style={{ zIndex: 2 }}>
         <h4 className="text-lg font-bold leading-tight mb-1 text-[#141a2e]">{item.title}</h4>
-        {item.id === "opc" && (
-          <span className="inline-flex items-center gap-1 text-[11px] text-[#6b7a99] bg-[#f0f2f7] px-2.5 py-0.5 rounded-md mb-1.5">
-            <svg className="w-3 h-3" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth={2}>
-              <path strokeLinecap="round" d="M9 12l2 2 4-4" />
-            </svg>
-            江苏省数字经济联合会&大任智库联合打造
-          </span>
-        )}
         <p className="text-xs leading-relaxed text-[#5b677b] line-clamp-2">{item.desc}</p>
       </div>
 
