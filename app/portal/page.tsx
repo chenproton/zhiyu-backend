@@ -228,17 +228,17 @@ interface CardLayout {
 
 const BENTO_LAYOUT: CardLayout[] = [
   { id: "alliance", col: "1 / 3", row: "1", variant: "wide" },
-  { id: "course", col: "3", row: "1", variant: "small" },
-  { id: "resource", col: "4", row: "1", variant: "small" },
+  { id: "career", col: "3", row: "1", variant: "small" },
+  { id: "opc", col: "4", row: "1", variant: "small" },
   { id: "scene", col: "1", row: "2 / 4", variant: "tall" },
-  { id: "career", col: "2", row: "2", variant: "small" },
+  { id: "course", col: "2", row: "2", variant: "small" },
   { id: "ability", col: "3 / 5", row: "2", variant: "wide" },
   { id: "affairs", col: "2", row: "3", variant: "small" },
-  { id: "ai", col: "3", row: "3", variant: "small" },
-  { id: "decision", col: "4", row: "3", variant: "small" },
+  { id: "resource", col: "3", row: "3", variant: "small" },
+  { id: "mall", col: "4", row: "3", variant: "small" },
   { id: "research", col: "1", row: "4", variant: "small" },
-  { id: "mall", col: "2", row: "4", variant: "small" },
-  { id: "opc", col: "3 / 5", row: "4", variant: "wide" },
+  { id: "decision", col: "2", row: "4", variant: "small" },
+  { id: "ai", col: "3 / 5", row: "4", variant: "wide" },
 ]
 
 /* ─── helpers ─── */
