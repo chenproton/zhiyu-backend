@@ -227,18 +227,18 @@ interface CardLayout {
 }
 
 const BENTO_LAYOUT: CardLayout[] = [
-  { id: "alliance", col: "1", row: "1 / 3", variant: "tall" },
-  { id: "career", col: "2", row: "1", variant: "small" },
-  { id: "scene", col: "3", row: "1", variant: "small" },
-  { id: "ability", col: "2 / 4", row: "2", variant: "wide" },
-  { id: "course", col: "1", row: "3", variant: "small" },
-  { id: "affairs", col: "2", row: "3", variant: "small" },
-  { id: "ai", col: "3", row: "3", variant: "small" },
-  { id: "resource", col: "1 / 3", row: "4", variant: "wide" },
-  { id: "mall", col: "3", row: "4", variant: "small" },
-  { id: "decision", col: "1", row: "5", variant: "small" },
-  { id: "research", col: "2", row: "5", variant: "small" },
-  { id: "opc", col: "3", row: "5", variant: "small" },
+  { id: "alliance", col: "1 / 3", row: "1 / 3", variant: "tall" },
+  { id: "career", col: "3 / 5", row: "1", variant: "small" },
+  { id: "scene", col: "5 / 7", row: "1", variant: "small" },
+  { id: "ability", col: "3 / 7", row: "2", variant: "wide" },
+  { id: "course", col: "1 / 3", row: "3", variant: "small" },
+  { id: "affairs", col: "3 / 5", row: "3", variant: "small" },
+  { id: "ai", col: "5 / 7", row: "3", variant: "small" },
+  { id: "resource", col: "1 / 4", row: "4", variant: "wide" },
+  { id: "mall", col: "4 / 7", row: "4", variant: "wide" },
+  { id: "decision", col: "1 / 3", row: "5", variant: "small" },
+  { id: "research", col: "3 / 5", row: "5", variant: "small" },
+  { id: "opc", col: "5 / 7", row: "5", variant: "small" },
 ]
 
 /* ─── helpers ─── */
@@ -397,7 +397,7 @@ export default function Portal1HomePage() {
         <SectionLabel title="产教融合生态体系" tag="十二大平台 · 一站直达" />
 
         <div
-          className="grid grid-cols-3 gap-[18px]"
+          className="grid grid-cols-6 gap-[18px]"
           style={{ gridAutoRows: "170px" }}
         >
           {BENTO_LAYOUT.map((layout) => {
