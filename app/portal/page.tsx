@@ -283,7 +283,7 @@ function GradientTile({
   return (
     <Wrapper
       {...wrapperProps}
-      className={`group rounded-2xl p-6 bg-white/60 backdrop-blur-xl relative overflow-hidden cursor-pointer transition-all duration-[400ms] hover:-translate-y-2 flex border-[1.5px] ${layoutClass}`}
+      className={`group rounded-2xl p-6 bg-white/60 backdrop-blur-xl relative overflow-hidden cursor-pointer transition-all duration-[400ms] flex border-[1.5px] ${layoutClass} ${!enabled ? "hover:translate-y-0 cursor-not-allowed" : "hover:-translate-y-2"}`}
       style={{
         gridColumn,
         gridRow,
@@ -310,12 +310,14 @@ function GradientTile({
       )}
 
       {!enabled && (
-        <div className="absolute bottom-3 right-3 flex items-center gap-1 text-[11px] text-[#8590a6] bg-white/70 backdrop-blur-sm border border-[#e9edf4] px-2 py-1 rounded-lg" style={{ zIndex: 3 }}>
-          <svg className="w-3 h-3" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth={2}>
-            <rect x="3" y="11" width="18" height="11" rx="2" ry="2" />
-            <path d="M7 11V7a5 5 0 0110 0v4" />
-          </svg>
-          暂未开放
+        <div className="absolute inset-0 bg-white/40 backdrop-blur-[1px] flex flex-col items-center justify-center" style={{ zIndex: 5 }}>
+          <div className="flex flex-col items-center gap-2 bg-white/80 backdrop-blur-sm border border-[#e9edf4] px-5 py-3 rounded-xl shadow-sm">
+            <svg className="w-5 h-5 text-[#8590a6]" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth={1.5}>
+              <rect x="3" y="11" width="18" height="11" rx="2" ry="2" />
+              <path d="M7 11V7a5 5 0 0110 0v4" />
+            </svg>
+            <span className="text-xs font-medium text-[#8590a6]">暂未开放</span>
+          </div>
         </div>
       )}
 
