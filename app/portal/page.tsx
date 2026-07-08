@@ -296,13 +296,8 @@ function GradientTile({
         </>
       ) : (
         <div className="relative" style={{ zIndex: 2 }}>
-          <h4 className="text-lg font-bold leading-tight mb-1 text-[#141a2e]">{item.title}</h4>
-          <p className="text-xs leading-relaxed text-[#5b677b]">{item.desc}</p>
-          {(item.id === "alliance" || item.id === "ability") && (
-            <div className="mt-3 text-sm font-semibold flex items-center gap-1.5 transition-all duration-[250ms] group-hover:gap-2.5 text-[#5b677b]">
-              进入平台 →
-            </div>
-          )}
+          <h4 className="text-base font-bold leading-tight mb-1 text-[#141a2e]">{item.title}</h4>
+          <p className="text-xs leading-relaxed text-[#5b677b] line-clamp-3">{item.desc}</p>
         </div>
       )}
     </Wrapper>
@@ -331,15 +326,14 @@ export default function PortalHomePage() {
 
   const items = getFlatItems()
 
-  /* Core platform ids for the 3×3 grid */
-  const coreOrder = ['alliance', 'career', 'scene', 'ability', 'course', 'affairs', 'ai', 'resource', 'mall']
+  /* 4×3 grid order: 12 platforms, 3 new modules in the bottom row */
+  const cardOrder = [
+    'alliance', 'career', 'scene', 'ability',
+    'course', 'affairs', 'ai', 'resource',
+    'mall', 'opc', 'decision', 'research',
+  ]
 
-  /* Innovation service ids */
-  const innovationOrder = ['opc', 'decision', 'research']
-
-  /* ordered ids for each section */
-  const coreIds = coreOrder.filter((id) => items.some((i) => i.id === id))
-  const innovationIds = innovationOrder.filter((id) => items.some((i) => i.id === id))
+  const orderedIds = cardOrder.filter((id) => items.some((i) => i.id === id))
 
   return (
     <div className="min-h-screen relative">
@@ -397,11 +391,11 @@ export default function PortalHomePage() {
       {/* Main content */}
       <main className="max-w-6xl mx-auto px-10 relative" style={{ zIndex: 2 }}>
 
-        {/* Section 1: 核心应用平台 */}
-        <SectionLabel title="核心应用平台" tag="九大平台 · 一站直达" />
+        {/* 应用服务中心 */}
+        <SectionLabel title="产教融合生态体系" tag="十二大平台 · 一站直达" />
 
-        <div className="grid grid-cols-3 gap-[18px]" style={{ gridAutoRows: "168px" }}>
-          {coreIds.map((id) => {
+        <div className="grid grid-cols-4 gap-[18px]" style={{ gridAutoRows: "188px" }}>
+          {orderedIds.map((id) => {
             const item = findByLabel(items, id)
             if (!item) return null
             const style_ = CARD_STYLES[id]
@@ -417,30 +411,6 @@ export default function PortalHomePage() {
             )
           })}
         </div>
-
-        {/* Section 2: 创新服务专区 */}
-        {innovationIds.length > 0 && (
-          <>
-            <SectionLabel title="创新服务专区" tag="灵活就业 · 数据决策 · 教科研服务" />
-            <div className="grid grid-cols-3 gap-[18px]" style={{ gridAutoRows: "168px" }}>
-              {innovationIds.map((id) => {
-                const item = findByLabel(items, id)
-                if (!item) return null
-                const style_ = CARD_STYLES[id]
-                return (
-                  <GradientTile
-                    key={id}
-                    item={item}
-                    url={getUrl(id)}
-                    enabled={isEnabled(id)}
-                    wide={style_?.type === "wide"}
-                    tall={style_?.type === "feature" || style_?.type === "tall"}
-                  />
-                )
-              })}
-            </div>
-          </>
-        )}
 
       </main>
 
