@@ -308,7 +308,7 @@ function GradientTile({
 
       {/* shared title + desc — identical across all variants */}
       <div className="relative" style={{ zIndex: 2 }}>
-        <h4 className="text-base font-bold leading-tight mb-1 text-[#141a2e]">{item.title}</h4>
+        <h4 className="text-lg font-bold leading-tight mb-1 text-[#141a2e]">{item.title}</h4>
         <p className={`text-xs leading-relaxed text-[#5b677b] ${isBig || isTall ? "" : "line-clamp-3"}`}>{item.desc}</p>
       </div>
 
