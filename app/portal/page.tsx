@@ -299,11 +299,11 @@ function GradientTile({
       )}
 
       {item.id === "opc" && (
-        <span className="absolute top-4 right-4 flex items-center gap-1.5" style={{ zIndex: 3 }}>
-          <span className="text-[10px] font-medium text-orange-600 bg-orange-50 border border-orange-100 px-2 py-0.5 rounded-md whitespace-nowrap">
+        <span className="absolute top-4 right-4 flex flex-col items-end gap-1" style={{ zIndex: 3 }}>
+          <span className="text-[10px] font-medium text-[#6b7a99] bg-[#f0f2f7] border border-[#e0e3eb] px-2.5 py-0.5 rounded-xl whitespace-nowrap">
             江苏省数字经济联合会
           </span>
-          <span className="text-[10px] font-medium text-orange-600 bg-orange-50 border border-orange-100 px-2 py-0.5 rounded-md whitespace-nowrap">
+          <span className="text-[10px] font-medium text-[#6b7a99] bg-[#f0f2f7] border border-[#e0e3eb] px-2.5 py-0.5 rounded-xl whitespace-nowrap">
             大任智库
           </span>
         </span>
