@@ -194,7 +194,7 @@ function getIcon(name: string): ReactNode {
 }
 
 /* ─── card style config ─── */
-type CardVariant = "big" | "wide" | "small"
+type CardVariant = "big" | "tall" | "wide" | "small"
 
 interface CardConfig {
   gradient: string
@@ -228,17 +228,17 @@ interface CardLayout {
 
 const BENTO_LAYOUT: CardLayout[] = [
   { id: "alliance", col: "1 / 3", row: "1", variant: "wide" },
-  { id: "career", col: "3", row: "1", variant: "small" },
-  { id: "scene", col: "1 / 3", row: "2 / 4", variant: "big" },
+  { id: "course", col: "3", row: "1", variant: "small" },
+  { id: "resource", col: "4", row: "1", variant: "small" },
+  { id: "scene", col: "1", row: "2 / 4", variant: "tall" },
+  { id: "career", col: "2", row: "2", variant: "small" },
   { id: "ability", col: "3 / 5", row: "2", variant: "wide" },
-  { id: "course", col: "4", row: "1", variant: "small" },
+  { id: "affairs", col: "2", row: "3", variant: "small" },
   { id: "ai", col: "3", row: "3", variant: "small" },
-  { id: "opc", col: "1 / 3", row: "4", variant: "wide" },
   { id: "decision", col: "4", row: "3", variant: "small" },
-  { id: "affairs", col: "3", row: "4", variant: "small" },
-  { id: "research", col: "4", row: "4", variant: "small" },
-  { id: "resource", col: "1 / 3", row: "5", variant: "wide" },
-  { id: "mall", col: "3 / 5", row: "5", variant: "wide" },
+  { id: "research", col: "1", row: "4", variant: "small" },
+  { id: "mall", col: "2", row: "4", variant: "small" },
+  { id: "opc", col: "3 / 5", row: "4", variant: "wide" },
 ]
 
 /* ─── helpers ─── */
@@ -273,13 +273,10 @@ function GradientTile({
     url && enabled ? { href: url, target: "_blank", rel: "noopener noreferrer" as const } : {}
 
   const isBig = variant === "big"
+  const isTall = variant === "tall"
   const isWide = variant === "wide"
 
-  const layoutClass = isBig
-    ? "flex-col"
-    : isWide
-      ? "flex-row items-center gap-5"
-      : "flex-col"
+  const layoutClass = isWide ? "flex-row items-center gap-5" : "flex-col"
   const color = style?.color || "#000"
 
   return (
@@ -296,12 +293,12 @@ function GradientTile({
       {/* decorative bubble */}
       <div className="absolute rounded-full pointer-events-none transition-all duration-700 group-hover:scale-[1.4]" style={{ width: 140, height: 140, top: -50, right: -35, backgroundColor: `${color}28` }} />
 
-      {isBig && (
+      {(isBig || isTall) && (
         <div className="absolute rounded-full pointer-events-none" style={{ width: 240, height: 240, bottom: -80, left: -80, backgroundColor: `${color}14` }} />
       )}
 
       <div
-        className={`rounded-2xl flex items-center justify-center relative transition-all duration-[400ms] group-hover:scale-110 group-hover:-rotate-6 shrink-0 ${isBig ? "w-16 h-16 text-2xl mb-5" : isWide ? "w-12 h-12 text-xl mb-0" : "w-[46px] h-[46px] text-xl mb-3.5"}`}
+        className={`rounded-2xl flex items-center justify-center relative transition-all duration-[400ms] group-hover:scale-110 group-hover:-rotate-6 shrink-0 ${isBig ? "w-16 h-16 text-2xl mb-5" : isTall ? "w-14 h-14 text-2xl mb-4" : isWide ? "w-12 h-12 text-xl mb-0" : "w-[46px] h-[46px] text-xl mb-3.5"}`}
         style={{ zIndex: 2, backgroundColor: color, color: "#fff", boxShadow: `0 8px 28px ${color}3d` }}
       >
         {getIcon(item.icon)}
@@ -310,6 +307,14 @@ function GradientTile({
       {isBig ? (
         <div className="relative flex flex-col flex-1" style={{ zIndex: 2 }}>
           <h4 className="text-2xl font-bold leading-tight mb-3 text-[#141a2e]">{item.title}</h4>
+          <p className="text-sm leading-relaxed text-[#5b677b]">{item.desc}</p>
+          <div className="mt-auto pt-6 text-sm font-semibold flex items-center gap-1.5 transition-all duration-[250ms] group-hover:gap-2.5" style={{ color }}>
+            进入平台 →
+          </div>
+        </div>
+      ) : isTall ? (
+        <div className="relative flex flex-col flex-1" style={{ zIndex: 2 }}>
+          <h4 className="text-xl font-bold leading-tight mb-2 text-[#141a2e]">{item.title}</h4>
           <p className="text-sm leading-relaxed text-[#5b677b]">{item.desc}</p>
           <div className="mt-auto pt-6 text-sm font-semibold flex items-center gap-1.5 transition-all duration-[250ms] group-hover:gap-2.5" style={{ color }}>
             进入平台 →
