@@ -204,18 +204,18 @@ interface CardConfig {
 }
 
 const CARD_STYLES: Record<string, CardConfig> = {
-  alliance: { gradient: "linear-gradient(145deg,#fecaca,#fca5a5)", color: "#f87171", shadow: "rgba(248,113,113,0.3)", icon: "users" },
-  career: { gradient: "linear-gradient(145deg,#d4c4f0,#c0abe3)", color: "#b184e0", shadow: "rgba(192,171,227,0.3)", icon: "briefcase" },
-  scene: { gradient: "linear-gradient(120deg,#bdd8f5,#a2c4e8)", color: "#7db4ed", shadow: "rgba(162,196,232,0.3)", icon: "layers" },
-  course: { gradient: "linear-gradient(145deg,#b5edd0,#96d8b8)", color: "#6ad4a0", shadow: "rgba(150,216,184,0.3)", icon: "book" },
-  ability: { gradient: "linear-gradient(145deg,#c5e8c5,#aad4aa)", color: "#84cf84", shadow: "rgba(170,212,170,0.3)", icon: "check-circle" },
-  affairs: { gradient: "linear-gradient(145deg,#f5e0b8,#e8d0a0)", color: "#e0c070", shadow: "rgba(232,208,160,0.3)", icon: "calendar" },
-  ai: { gradient: "linear-gradient(120deg,#f5c8dd,#e8afcc)", color: "#e08ebd", shadow: "rgba(232,175,204,0.3)", icon: "sparkles" },
-  resource: { gradient: "linear-gradient(120deg,#d8c8f5,#c0ade8)", color: "#b088e8", shadow: "rgba(192,173,232,0.3)", icon: "share" },
-  mall: { gradient: "linear-gradient(120deg,#f5d0b8,#e8baa0)", color: "#e8a078", shadow: "rgba(232,186,160,0.3)", icon: "shopping-cart" },
-  opc: { gradient: "linear-gradient(145deg,#fcd8b8,#f5c090)", color: "#f5a050", shadow: "rgba(245,160,80,0.3)", icon: "rocket" },
-  decision: { gradient: "linear-gradient(120deg,#b8e3f5,#9ed4f0)", color: "#6abee5", shadow: "rgba(158,212,240,0.3)", icon: "bar-chart" },
-  research: { gradient: "linear-gradient(145deg,#d8d0f5,#c4b8ed)", color: "#a68ee8", shadow: "rgba(196,184,237,0.3)", icon: "graduation-cap" },
+  alliance: { gradient: "linear-gradient(145deg,#fecaca,#fca5a5)", color: "#ef4444", shadow: "rgba(239,68,68,0.3)", icon: "users" },
+  career: { gradient: "linear-gradient(145deg,#e0e7ff,#c7d2fe)", color: "#818cf8", shadow: "rgba(129,140,248,0.3)", icon: "briefcase" },
+  scene: { gradient: "linear-gradient(120deg,#e0f2fe,#bae6fd)", color: "#38bdf8", shadow: "rgba(56,189,248,0.3)", icon: "layers" },
+  course: { gradient: "linear-gradient(145deg,#d1fae5,#a7f3d0)", color: "#34d399", shadow: "rgba(52,211,153,0.3)", icon: "book" },
+  ability: { gradient: "linear-gradient(145deg,#ede9fe,#ddd6fe)", color: "#a78bfa", shadow: "rgba(167,139,250,0.3)", icon: "check-circle" },
+  affairs: { gradient: "linear-gradient(145deg,#fef3c7,#fde68a)", color: "#f59e0b", shadow: "rgba(245,158,11,0.3)", icon: "calendar" },
+  ai: { gradient: "linear-gradient(120deg,#fce7f3,#fbcfe8)", color: "#f472b6", shadow: "rgba(244,114,182,0.3)", icon: "sparkles" },
+  resource: { gradient: "linear-gradient(120deg,#dbeafe,#bfdbfe)", color: "#3b82f6", shadow: "rgba(59,130,246,0.3)", icon: "share" },
+  mall: { gradient: "linear-gradient(120deg,#ecfccb,#d9f99d)", color: "#84cc16", shadow: "rgba(132,204,22,0.3)", icon: "shopping-cart" },
+  opc: { gradient: "linear-gradient(145deg,#fed7aa,#fdba74)", color: "#fb923c", shadow: "rgba(251,146,60,0.3)", icon: "rocket" },
+  decision: { gradient: "linear-gradient(120deg,#cffafe,#a5f3fc)", color: "#22d3ee", shadow: "rgba(34,211,238,0.3)", icon: "bar-chart" },
+  research: { gradient: "linear-gradient(145deg,#fae8ff,#f5d0fe)", color: "#d946ef", shadow: "rgba(217,70,239,0.3)", icon: "graduation-cap" },
 }
 
 /* ─── Bento layout: explicit 3-column grid placement ─── */
