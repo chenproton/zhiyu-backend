@@ -279,6 +279,8 @@ function GradientTile({
   const layoutClass = isWide ? "flex-row items-center gap-5" : "flex-col"
   const color = style?.color || "#000"
 
+  const iconH = isBig ? "w-16 h-16 text-2xl mb-5" : isWide ? "w-[46px] h-[46px] text-xl mb-0" : "w-[46px] h-[46px] text-xl mb-3.5"
+
   return (
     <Wrapper
       {...wrapperProps}
@@ -298,43 +300,33 @@ function GradientTile({
       )}
 
       <div
-        className={`rounded-2xl flex items-center justify-start relative transition-all duration-[400ms] group-hover:scale-110 group-hover:-rotate-6 shrink-0 ${isBig ? "w-16 h-16 text-2xl mb-5" : isTall ? "w-[46px] h-[46px] text-xl mb-3.5" : isWide ? "w-12 h-12 text-xl mb-0" : "w-[46px] h-[46px] text-xl mb-3.5"}`}
+        className={`rounded-2xl flex items-center justify-center relative transition-all duration-[400ms] group-hover:scale-110 group-hover:-rotate-6 shrink-0 ${iconH}`}
         style={{ zIndex: 2, backgroundColor: color, color: "#fff", boxShadow: `0 8px 28px ${color}3d` }}
       >
         {getIcon(item.icon)}
       </div>
 
-      {isBig ? (
-        <div className="relative flex flex-col flex-1" style={{ zIndex: 2 }}>
-          <h4 className="text-base font-bold leading-tight mb-3 text-[#141a2e]">{item.title}</h4>
-          <p className="text-xs leading-relaxed text-[#5b677b]">{item.desc}</p>
-          <div className="mt-auto pt-6 text-sm font-semibold flex items-center gap-1.5 transition-all duration-[250ms] group-hover:gap-2.5" style={{ color }}>
-            进入平台 →
-          </div>
+      {/* shared title + desc — identical across all variants */}
+      <div className={`relative ${isWide ? "flex-1" : ""}`} style={{ zIndex: 2 }}>
+        <h4 className="text-base font-bold leading-tight mb-1 text-[#141a2e]">{item.title}</h4>
+        <p className={`text-xs leading-relaxed text-[#5b677b] ${!isBig && !isTall && !isWide ? "line-clamp-3" : ""}`}>{item.desc}</p>
+      </div>
+
+      {/* variant-specific footer */}
+      {isBig && (
+        <div className="mt-auto pt-6 text-sm font-semibold flex items-center gap-1.5 transition-all duration-[250ms] group-hover:gap-2.5" style={{ zIndex: 2, color }}>
+          进入平台 →
         </div>
-      ) : isTall ? (
-        <div className="relative" style={{ zIndex: 2 }}>
-          <h4 className="text-base font-bold leading-tight mb-1 text-[#141a2e]">{item.title}</h4>
-          <p className="text-xs leading-relaxed text-[#5b677b]">{item.desc}</p>
-          <div className="pt-4 text-sm font-semibold flex items-center gap-1.5 transition-all duration-[250ms] group-hover:gap-2.5" style={{ color }}>
-            进入平台 →
-          </div>
+      )}
+      {isTall && (
+        <div className="pt-4 text-sm font-semibold flex items-center gap-1.5 transition-all duration-[250ms] group-hover:gap-2.5" style={{ zIndex: 2, color }}>
+          进入平台 →
         </div>
-      ) : isWide ? (
-        <>
-          <div className="relative flex-1" style={{ zIndex: 2 }}>
-            <h4 className="text-base font-bold leading-tight mb-1 text-[#141a2e]">{item.title}</h4>
-            <p className="text-xs leading-relaxed text-[#5b677b]">{item.desc}</p>
-          </div>
-          <span className="relative text-sm font-semibold flex items-center gap-1.5 transition-all duration-[250ms] group-hover:gap-2.5 whitespace-nowrap shrink-0" style={{ zIndex: 2, color }}>
-            进入 →
-          </span>
-        </>
-      ) : (
-        <div className="relative" style={{ zIndex: 2 }}>
-          <h4 className="text-base font-bold leading-tight mb-1 text-[#141a2e]">{item.title}</h4>
-          <p className="text-xs leading-relaxed text-[#5b677b] line-clamp-3">{item.desc}</p>
-        </div>
+      )}
+      {isWide && (
+        <span className="text-sm font-semibold flex items-center gap-1.5 transition-all duration-[250ms] group-hover:gap-2.5 whitespace-nowrap shrink-0" style={{ zIndex: 2, color }}>
+          进入 →
+        </span>
       )}
     </Wrapper>
   )
