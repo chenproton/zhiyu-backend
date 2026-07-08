@@ -276,10 +276,10 @@ function GradientTile({
   const isTall = variant === "tall"
   const isWide = variant === "wide"
 
-  const layoutClass = isWide ? "flex-row items-center gap-5" : "flex-col"
+  const layoutClass = "flex-col"
   const color = style?.color || "#000"
 
-  const iconH = isBig ? "w-16 h-16 text-2xl mb-5" : isWide ? "w-[46px] h-[46px] text-xl mb-0" : "w-[46px] h-[46px] text-xl mb-3.5"
+  const iconH = isBig ? "w-16 h-16 text-2xl mb-5" : "w-[46px] h-[46px] text-xl mb-3.5"
 
   return (
     <Wrapper
@@ -307,9 +307,9 @@ function GradientTile({
       </div>
 
       {/* shared title + desc — identical across all variants */}
-      <div className={`relative ${isWide ? "flex-1" : ""}`} style={{ zIndex: 2 }}>
+      <div className="relative" style={{ zIndex: 2 }}>
         <h4 className="text-base font-bold leading-tight mb-1 text-[#141a2e]">{item.title}</h4>
-        <p className={`text-xs leading-relaxed text-[#5b677b] ${!isBig && !isTall && !isWide ? "line-clamp-3" : ""}`}>{item.desc}</p>
+        <p className={`text-xs leading-relaxed text-[#5b677b] ${isBig || isTall ? "" : "line-clamp-3"}`}>{item.desc}</p>
       </div>
 
       {/* variant-specific footer */}
@@ -324,9 +324,9 @@ function GradientTile({
         </div>
       )}
       {isWide && (
-        <span className="text-sm font-semibold flex items-center gap-1.5 transition-all duration-[250ms] group-hover:gap-2.5 whitespace-nowrap shrink-0" style={{ zIndex: 2, color }}>
+        <div className="pt-4 text-sm font-semibold flex items-center gap-1.5 transition-all duration-[250ms] group-hover:gap-2.5" style={{ zIndex: 2, color }}>
           进入 →
-        </span>
+        </div>
       )}
     </Wrapper>
   )
