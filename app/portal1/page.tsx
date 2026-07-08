@@ -304,7 +304,7 @@ function GradientTile({
             江苏省数字经济联合会
           </span>
           <span className="text-[10px] font-medium text-orange-600/70 bg-orange-500/10 border border-orange-500/15 px-2.5 py-0.5 rounded-xl whitespace-nowrap">
-            大任智库
+            &大任智库联合打造
           </span>
         </span>
       )}
