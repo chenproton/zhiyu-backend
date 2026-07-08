@@ -309,6 +309,16 @@ function GradientTile({
         </span>
       )}
 
+      {!enabled && (
+        <div className="absolute bottom-3 right-3 flex items-center gap-1 text-[11px] text-[#8590a6] bg-white/70 backdrop-blur-sm border border-[#e9edf4] px-2 py-1 rounded-lg" style={{ zIndex: 3 }}>
+          <svg className="w-3 h-3" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth={2}>
+            <rect x="3" y="11" width="18" height="11" rx="2" ry="2" />
+            <path d="M7 11V7a5 5 0 0110 0v4" />
+          </svg>
+          暂未开放
+        </div>
+      )}
+
       <div
         className={`rounded-2xl flex items-center justify-center relative transition-all duration-[400ms] group-hover:scale-110 group-hover:-rotate-6 shrink-0 ${iconH}`}
         style={{ zIndex: 2, backgroundColor: color, color: "#fff", boxShadow: `0 8px 28px ${color}3d` }}
