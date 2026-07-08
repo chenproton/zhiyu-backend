@@ -194,8 +194,9 @@ function getIcon(name: string): ReactNode {
 }
 
 /* ─── card style config ─── */
+type CardVariant = "big" | "wide" | "small"
+
 interface CardConfig {
-  type: "feature" | "tall" | "wide" | "tile"
   gradient: string
   color: string
   shadow: string
@@ -203,19 +204,42 @@ interface CardConfig {
 }
 
 const CARD_STYLES: Record<string, CardConfig> = {
-  alliance: { type: "tile", gradient: "linear-gradient(145deg,#fecaca,#fca5a5)", color: "#f87171", shadow: "rgba(248,113,113,0.3)", icon: "users" },
-  career: { type: "tile", gradient: "linear-gradient(145deg,#d4c4f0,#c0abe3)", color: "#b184e0", shadow: "rgba(192,171,227,0.3)", icon: "briefcase" },
-  scene: { type: "tile", gradient: "linear-gradient(120deg,#bdd8f5,#a2c4e8)", color: "#7db4ed", shadow: "rgba(162,196,232,0.3)", icon: "layers" },
-  course: { type: "tile", gradient: "linear-gradient(145deg,#b5edd0,#96d8b8)", color: "#6ad4a0", shadow: "rgba(150,216,184,0.3)", icon: "book" },
-  ability: { type: "tile", gradient: "linear-gradient(145deg,#c5e8c5,#aad4aa)", color: "#84cf84", shadow: "rgba(170,212,170,0.3)", icon: "check-circle" },
-  affairs: { type: "tile", gradient: "linear-gradient(145deg,#f5e0b8,#e8d0a0)", color: "#e0c070", shadow: "rgba(232,208,160,0.3)", icon: "calendar" },
-  ai: { type: "tile", gradient: "linear-gradient(120deg,#f5c8dd,#e8afcc)", color: "#e08ebd", shadow: "rgba(232,175,204,0.3)", icon: "sparkles" },
-  resource: { type: "tile", gradient: "linear-gradient(120deg,#d8c8f5,#c0ade8)", color: "#b088e8", shadow: "rgba(192,173,232,0.3)", icon: "share" },
-  mall: { type: "tile", gradient: "linear-gradient(120deg,#f5d0b8,#e8baa0)", color: "#e8a078", shadow: "rgba(232,186,160,0.3)", icon: "shopping-cart" },
-  opc: { type: "tile", gradient: "linear-gradient(145deg,#fcd8b8,#f5c090)", color: "#f5a050", shadow: "rgba(245,160,80,0.3)", icon: "rocket" },
-  decision: { type: "tile", gradient: "linear-gradient(120deg,#b8e3f5,#9ed4f0)", color: "#6abee5", shadow: "rgba(158,212,240,0.3)", icon: "bar-chart" },
-  research: { type: "tile", gradient: "linear-gradient(145deg,#d8d0f5,#c4b8ed)", color: "#a68ee8", shadow: "rgba(196,184,237,0.3)", icon: "graduation-cap" },
+  alliance: { gradient: "linear-gradient(145deg,#fecaca,#fca5a5)", color: "#f87171", shadow: "rgba(248,113,113,0.3)", icon: "users" },
+  career: { gradient: "linear-gradient(145deg,#d4c4f0,#c0abe3)", color: "#b184e0", shadow: "rgba(192,171,227,0.3)", icon: "briefcase" },
+  scene: { gradient: "linear-gradient(120deg,#bdd8f5,#a2c4e8)", color: "#7db4ed", shadow: "rgba(162,196,232,0.3)", icon: "layers" },
+  course: { gradient: "linear-gradient(145deg,#b5edd0,#96d8b8)", color: "#6ad4a0", shadow: "rgba(150,216,184,0.3)", icon: "book" },
+  ability: { gradient: "linear-gradient(145deg,#c5e8c5,#aad4aa)", color: "#84cf84", shadow: "rgba(170,212,170,0.3)", icon: "check-circle" },
+  affairs: { gradient: "linear-gradient(145deg,#f5e0b8,#e8d0a0)", color: "#e0c070", shadow: "rgba(232,208,160,0.3)", icon: "calendar" },
+  ai: { gradient: "linear-gradient(120deg,#f5c8dd,#e8afcc)", color: "#e08ebd", shadow: "rgba(232,175,204,0.3)", icon: "sparkles" },
+  resource: { gradient: "linear-gradient(120deg,#d8c8f5,#c0ade8)", color: "#b088e8", shadow: "rgba(192,173,232,0.3)", icon: "share" },
+  mall: { gradient: "linear-gradient(120deg,#f5d0b8,#e8baa0)", color: "#e8a078", shadow: "rgba(232,186,160,0.3)", icon: "shopping-cart" },
+  opc: { gradient: "linear-gradient(145deg,#fcd8b8,#f5c090)", color: "#f5a050", shadow: "rgba(245,160,80,0.3)", icon: "rocket" },
+  decision: { gradient: "linear-gradient(120deg,#b8e3f5,#9ed4f0)", color: "#6abee5", shadow: "rgba(158,212,240,0.3)", icon: "bar-chart" },
+  research: { gradient: "linear-gradient(145deg,#d8d0f5,#c4b8ed)", color: "#a68ee8", shadow: "rgba(196,184,237,0.3)", icon: "graduation-cap" },
 }
+
+/* ─── Bento layout: explicit 4-column grid placement ─── */
+interface CardLayout {
+  id: string
+  col: string
+  row: string
+  variant: CardVariant
+}
+
+const BENTO_LAYOUT: CardLayout[] = [
+  { id: "alliance", col: "1 / 3", row: "1", variant: "wide" },
+  { id: "affairs", col: "3", row: "1", variant: "small" },
+  { id: "ai", col: "4", row: "1", variant: "small" },
+  { id: "course", col: "1", row: "2", variant: "small" },
+  { id: "career", col: "2", row: "2", variant: "small" },
+  { id: "scene", col: "3 / 5", row: "2 / 4", variant: "big" },
+  { id: "ability", col: "1 / 3", row: "3", variant: "wide" },
+  { id: "resource", col: "1 / 3", row: "4", variant: "wide" },
+  { id: "mall", col: "3 / 5", row: "4", variant: "wide" },
+  { id: "research", col: "1", row: "5", variant: "small" },
+  { id: "decision", col: "2", row: "5", variant: "small" },
+  { id: "opc", col: "3 / 5", row: "5", variant: "wide" },
+]
 
 /* ─── helpers ─── */
 function getFlatItems() {
@@ -232,28 +256,39 @@ function GradientTile({
   item,
   url,
   enabled,
-  wide,
-  tall,
+  variant,
+  gridColumn,
+  gridRow,
 }: {
   item: NonNullable<ReturnType<typeof findByLabel>>
   url: string
   enabled: boolean
-  wide?: boolean
-  tall?: boolean
+  variant: CardVariant
+  gridColumn: string
+  gridRow: string
 }) {
   const style = CARD_STYLES[item.id]
   const Wrapper = url && enabled ? "a" : "div"
   const wrapperProps =
     url && enabled ? { href: url, target: "_blank", rel: "noopener noreferrer" as const } : {}
 
-  const sizeClass = tall && wide ? "col-span-2 row-span-2" : tall ? "row-span-2" : wide ? "col-span-2 flex-row items-center gap-5" : ""
+  const isBig = variant === "big"
+  const isWide = variant === "wide"
+
+  const layoutClass = isBig
+    ? "flex-col"
+    : isWide
+      ? "flex-row items-center gap-5"
+      : "flex-col"
   const color = style?.color || "#000"
 
   return (
     <Wrapper
       {...wrapperProps}
-      className={`group rounded-2xl p-6 bg-white/60 backdrop-blur-xl relative overflow-hidden cursor-pointer transition-all duration-[400ms] hover:-translate-y-2 flex flex-col border-[1.5px] ${sizeClass}`}
+      className={`group rounded-2xl p-6 bg-white/60 backdrop-blur-xl relative overflow-hidden cursor-pointer transition-all duration-[400ms] hover:-translate-y-2 flex border-[1.5px] ${layoutClass}`}
       style={{
+        gridColumn,
+        gridRow,
         borderColor: `${color}3d`,
         boxShadow: `0 2px 8px ${color}14, 0 16px 40px ${color}0a`,
       }}
@@ -261,38 +296,34 @@ function GradientTile({
       {/* decorative bubble */}
       <div className="absolute rounded-full pointer-events-none transition-all duration-700 group-hover:scale-[1.4]" style={{ width: 140, height: 140, top: -50, right: -35, backgroundColor: `${color}28` }} />
 
-      {tall && (
+      {isBig && (
         <div className="absolute rounded-full pointer-events-none" style={{ width: 240, height: 240, bottom: -80, left: -80, backgroundColor: `${color}14` }} />
       )}
 
       <div
-        className={`rounded-2xl flex items-center justify-center relative transition-all duration-[400ms] group-hover:scale-110 group-hover:-rotate-6 shrink-0 ${tall ? "w-14 h-14 text-2xl mb-4" : wide ? "w-12 h-12 text-xl mb-0" : "w-[46px] h-[46px] text-xl mb-3.5"}`}
+        className={`rounded-2xl flex items-center justify-center relative transition-all duration-[400ms] group-hover:scale-110 group-hover:-rotate-6 shrink-0 ${isBig ? "w-16 h-16 text-2xl mb-5" : isWide ? "w-12 h-12 text-xl mb-0" : "w-[46px] h-[46px] text-xl mb-3.5"}`}
         style={{ zIndex: 2, backgroundColor: color, color: "#fff", boxShadow: `0 8px 28px ${color}3d` }}
       >
         {getIcon(item.icon)}
       </div>
 
-      {tall ? (
+      {isBig ? (
         <div className="relative flex flex-col flex-1" style={{ zIndex: 2 }}>
-          <h4 className="text-xl font-bold leading-tight mb-2 text-[#141a2e]">{item.title}</h4>
+          <h4 className="text-2xl font-bold leading-tight mb-3 text-[#141a2e]">{item.title}</h4>
           <p className="text-sm leading-relaxed text-[#5b677b]">{item.desc}</p>
-          {(item.id === "alliance" || item.id === "ability") && (
-            <div className="mt-auto pt-6 text-sm font-semibold flex items-center gap-1.5 transition-all duration-[250ms] group-hover:gap-2.5 text-[#5b677b]">
-              进入平台 →
-            </div>
-          )}
+          <div className="mt-auto pt-6 text-sm font-semibold flex items-center gap-1.5 transition-all duration-[250ms] group-hover:gap-2.5" style={{ color }}>
+            进入平台 →
+          </div>
         </div>
-      ) : wide ? (
+      ) : isWide ? (
         <>
           <div className="relative flex-1" style={{ zIndex: 2 }}>
             <h4 className="text-lg font-bold leading-tight mb-1 text-[#141a2e]">{item.title}</h4>
             <p className="text-xs leading-relaxed text-[#5b677b]">{item.desc}</p>
           </div>
-          {(item.id === "alliance" || item.id === "ability") && (
-            <span className="relative text-sm font-semibold flex items-center gap-1.5 transition-all duration-[250ms] group-hover:gap-2.5 whitespace-nowrap text-[#5b677b]" style={{ zIndex: 2 }}>
-              进入平台 →
-            </span>
-          )}
+          <span className="relative text-sm font-semibold flex items-center gap-1.5 transition-all duration-[250ms] group-hover:gap-2.5 whitespace-nowrap shrink-0" style={{ zIndex: 2, color }}>
+            进入 →
+          </span>
         </>
       ) : (
         <div className="relative" style={{ zIndex: 2 }}>
@@ -325,15 +356,6 @@ export default function PortalHomePage() {
   const { getUrl, isEnabled } = usePlatformLinks()
 
   const items = getFlatItems()
-
-  /* 4×3 grid order: 12 platforms, 3 new modules in the bottom row */
-  const cardOrder = [
-    'alliance', 'career', 'scene', 'ability',
-    'course', 'affairs', 'ai', 'resource',
-    'mall', 'opc', 'decision', 'research',
-  ]
-
-  const orderedIds = cardOrder.filter((id) => items.some((i) => i.id === id))
 
   return (
     <div className="min-h-screen relative">
@@ -394,19 +416,22 @@ export default function PortalHomePage() {
         {/* 应用服务中心 */}
         <SectionLabel title="产教融合生态体系" tag="十二大平台 · 一站直达" />
 
-        <div className="grid grid-cols-4 gap-[18px]" style={{ gridAutoRows: "188px" }}>
-          {orderedIds.map((id) => {
-            const item = findByLabel(items, id)
+        <div
+          className="grid grid-cols-4 gap-[18px]"
+          style={{ gridAutoRows: "188px" }}
+        >
+          {BENTO_LAYOUT.map((layout) => {
+            const item = findByLabel(items, layout.id)
             if (!item) return null
-            const style_ = CARD_STYLES[id]
             return (
               <GradientTile
-                key={id}
+                key={layout.id}
                 item={item}
-                url={getUrl(id)}
-                enabled={isEnabled(id)}
-                wide={style_?.type === "wide"}
-                tall={style_?.type === "feature" || style_?.type === "tall"}
+                url={getUrl(layout.id)}
+                enabled={isEnabled(layout.id)}
+                variant={layout.variant}
+                gridColumn={layout.col}
+                gridRow={layout.row}
               />
             )
           })}
