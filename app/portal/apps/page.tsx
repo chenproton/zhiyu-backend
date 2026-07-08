@@ -13,6 +13,8 @@ import {
   Share2,
   Calendar,
   BarChart3,
+  Rocket,
+  GraduationCap,
   Star,
   ChevronRight,
   ExternalLink,
@@ -32,6 +34,9 @@ const menuItems = [
   { id: "affairs", label: "教务服务平台", icon: Calendar },
   { id: "ai", label: "AI 智能服务平台", icon: Sparkles },
   { id: "resource", label: "教学资源共享服务平台", icon: Share2 },
+  { id: "opc", label: "OPC专区", icon: Rocket },
+  { id: "decision", label: "敏捷决策中心", icon: BarChart3 },
+  { id: "research", label: "教科研服务中心", icon: GraduationCap },
 ]
 
 const quickAccess = [
@@ -57,6 +62,9 @@ const platformStyles: Record<string, PlatformStyle> = {
   affairs: { iconColor: "text-teal-600", iconBg: "bg-teal-50" },
   ai: { iconColor: "text-indigo-600", iconBg: "bg-indigo-50" },
   resource: { iconColor: "text-blue-600", iconBg: "bg-blue-50" },
+  opc: { iconColor: "text-orange-600", iconBg: "bg-orange-50" },
+  decision: { iconColor: "text-sky-600", iconBg: "bg-sky-50" },
+  research: { iconColor: "text-violet-600", iconBg: "bg-violet-50" },
 }
 
 const systemModules = [

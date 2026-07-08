@@ -45,6 +45,14 @@ const platformGroups = [
       { id: "affairs", name: "教务服务平台" },
     ],
   },
+  {
+    title: "创新服务生态",
+    items: [
+      { id: "opc", name: "OPC专区" },
+      { id: "decision", name: "敏捷决策中心" },
+      { id: "research", name: "教科研服务中心" },
+    ],
+  },
 ]
 
 export default function PlatformConfigPage() {

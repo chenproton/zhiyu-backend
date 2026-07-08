@@ -227,6 +227,78 @@
           "href": "http://111.170.170.202:3009/admin/my-resources"
         }
       ]
+    },
+    {
+      "id": "opc",
+      "name": "OPC专区",
+      "modules": [
+        {
+          "id": "opc-1",
+          "title": "一人公司培育",
+          "desc": "学生灵活就业与创业培育计划",
+          "href": "#"
+        },
+        {
+          "id": "opc-2",
+          "title": "创业项目库",
+          "desc": "轻量化创业项目展示与管理",
+          "href": "#"
+        },
+        {
+          "id": "opc-3",
+          "title": "职业赛道导航",
+          "desc": "拓宽职业发展赛道与成长路径",
+          "href": "#"
+        }
+      ]
+    },
+    {
+      "id": "decision",
+      "name": "敏捷决策中心",
+      "modules": [
+        {
+          "id": "decision-1",
+          "title": "办学数据看板",
+          "desc": "多维办学数据可视化研判",
+          "href": "#"
+        },
+        {
+          "id": "decision-2",
+          "title": "态势分析报告",
+          "desc": "办学态势智能分析与报告生成",
+          "href": "#"
+        },
+        {
+          "id": "decision-3",
+          "title": "决策辅助工具",
+          "desc": "院校科学治理与高效决策支持",
+          "href": "#"
+        }
+      ]
+    },
+    {
+      "id": "research",
+      "name": "教科研服务中心",
+      "modules": [
+        {
+          "id": "research-1",
+          "title": "教改项目管理",
+          "desc": "教改项目申报、立项与过程管理",
+          "href": "#"
+        },
+        {
+          "id": "research-2",
+          "title": "成果资源库",
+          "desc": "教科研成果沉淀与展示",
+          "href": "#"
+        },
+        {
+          "id": "research-3",
+          "title": "教师成长档案",
+          "desc": "助力教师专业成长与发展",
+          "href": "#"
+        }
+      ]
     }
   ]
 }

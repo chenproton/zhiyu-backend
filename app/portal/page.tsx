@@ -2,6 +2,7 @@
 
 import type { ReactNode } from "react"
 import { usePlatformLinks } from "@/hooks/use-platform-links"
+import { Footer } from "@/components/portal/footer"
 
 const features = [
   { label: "以产业需求为牵引", active: true },
@@ -90,6 +91,32 @@ const platforms = [
       },
     ],
   },
+  {
+    category: "innovation",
+    items: [
+      {
+        id: "opc",
+        icon: "rocket",
+        color: "bg-orange-50 text-orange-500 border border-orange-100",
+        title: "OPC专区",
+        desc: "依托一人公司培育模式，赋能学生灵活就业、轻量化创业，拓宽职业发展赛道。",
+      },
+      {
+        id: "decision",
+        icon: "bar-chart",
+        color: "bg-sky-50 text-sky-500 border border-sky-100",
+        title: "敏捷决策中心",
+        desc: "整合办学多维数据，可视化研判办学态势，赋能院校科学治理、高效决策。",
+      },
+      {
+        id: "research",
+        icon: "graduation-cap",
+        color: "bg-violet-50 text-violet-500 border border-violet-100",
+        title: "教科研服务中心",
+        desc: "统筹教科研业务与成果资源，助力教师专业成长，赋能教改提质与成果转化。",
+      },
+    ],
+  },
 ]
 
 function getIcon(name: string): ReactNode {
@@ -156,6 +183,12 @@ function getIcon(name: string): ReactNode {
         <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={1.5} d="M12 14l9-5-9-5-9 5 9 5zm0 0l6.16-3.422a12.083 12.083 0 01.665 6.479A11.952 11.952 0 0012 20.055a11.952 11.952 0 00-6.824-2.998 12.078 12.078 0 01.665-6.479L12 14zm-4 6v-7.5l4-2.222" />
       </svg>
     ),
+    rocket: (
+      <svg className="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+        <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={1.5} d="M12 2c0 0-7 4-7 11v3l-2 2h18l-2-2v-3c0-7-7-11-7-11z" />
+        <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={1.5} d="M12 14a2 2 0 100-4 2 2 0 000 4z" />
+      </svg>
+    ),
   }
   return icons[name] || icons.book
 }
@@ -170,20 +203,18 @@ interface CardConfig {
 }
 
 const CARD_STYLES: Record<string, CardConfig> = {
-  alliance: { type: "tall", gradient: "linear-gradient(145deg,#fecaca,#fca5a5)", color: "#f87171", shadow: "rgba(248,113,113,0.3)", icon: "users" },
+  alliance: { type: "tile", gradient: "linear-gradient(145deg,#fecaca,#fca5a5)", color: "#f87171", shadow: "rgba(248,113,113,0.3)", icon: "users" },
   career: { type: "tile", gradient: "linear-gradient(145deg,#d4c4f0,#c0abe3)", color: "#b184e0", shadow: "rgba(192,171,227,0.3)", icon: "briefcase" },
   scene: { type: "tile", gradient: "linear-gradient(120deg,#bdd8f5,#a2c4e8)", color: "#7db4ed", shadow: "rgba(162,196,232,0.3)", icon: "layers" },
   course: { type: "tile", gradient: "linear-gradient(145deg,#b5edd0,#96d8b8)", color: "#6ad4a0", shadow: "rgba(150,216,184,0.3)", icon: "book" },
-  ability: { type: "wide", gradient: "linear-gradient(145deg,#c5e8c5,#aad4aa)", color: "#84cf84", shadow: "rgba(170,212,170,0.3)", icon: "check-circle" },
+  ability: { type: "tile", gradient: "linear-gradient(145deg,#c5e8c5,#aad4aa)", color: "#84cf84", shadow: "rgba(170,212,170,0.3)", icon: "check-circle" },
   affairs: { type: "tile", gradient: "linear-gradient(145deg,#f5e0b8,#e8d0a0)", color: "#e0c070", shadow: "rgba(232,208,160,0.3)", icon: "calendar" },
   ai: { type: "tile", gradient: "linear-gradient(120deg,#f5c8dd,#e8afcc)", color: "#e08ebd", shadow: "rgba(232,175,204,0.3)", icon: "sparkles" },
-
-}
-
-/* section-2 resource cards */
-const RESOURCE_STYLES: Record<string, CardConfig> = {
   resource: { type: "tile", gradient: "linear-gradient(120deg,#d8c8f5,#c0ade8)", color: "#b088e8", shadow: "rgba(192,173,232,0.3)", icon: "share" },
   mall: { type: "tile", gradient: "linear-gradient(120deg,#f5d0b8,#e8baa0)", color: "#e8a078", shadow: "rgba(232,186,160,0.3)", icon: "shopping-cart" },
+  opc: { type: "tile", gradient: "linear-gradient(145deg,#fcd8b8,#f5c090)", color: "#f5a050", shadow: "rgba(245,160,80,0.3)", icon: "rocket" },
+  decision: { type: "tile", gradient: "linear-gradient(120deg,#b8e3f5,#9ed4f0)", color: "#6abee5", shadow: "rgba(158,212,240,0.3)", icon: "bar-chart" },
+  research: { type: "tile", gradient: "linear-gradient(145deg,#d8d0f5,#c4b8ed)", color: "#a68ee8", shadow: "rgba(196,184,237,0.3)", icon: "graduation-cap" },
 }
 
 /* ─── helpers ─── */
@@ -278,56 +309,6 @@ function GradientTile({
   )
 }
 
-function ResourceTile({
-  item,
-  url,
-  enabled,
-}: {
-  item: NonNullable<ReturnType<typeof findByLabel>>
-  url: string
-  enabled: boolean
-}) {
-  const style = RESOURCE_STYLES[item.id]
-  const isWide = style?.type === "wide"
-  const color = style?.color || "#000"
-  const Wrapper = url && enabled ? "a" : "div"
-  const wrapperProps =
-    url && enabled ? { href: url, target: "_blank", rel: "noopener noreferrer" as const } : {}
-
-  return (
-    <Wrapper
-      {...wrapperProps}
-      className={`group rounded-2xl p-6 bg-white/60 backdrop-blur-xl relative overflow-hidden cursor-pointer transition-all duration-[400ms] hover:-translate-y-2 flex border-[1.5px] ${isWide ? "col-span-2 flex-row items-center gap-5" : "flex-col"}`}
-      style={{
-        borderColor: `${color}3d`,
-        boxShadow: `0 2px 8px ${color}14, 0 16px 40px ${color}0a`,
-      }}
-    >
-      <div className="absolute rounded-full pointer-events-none transition-all duration-700 group-hover:scale-[1.4]" style={{ width: 140, height: 140, top: -50, right: -35, backgroundColor: `${color}28` }} />
-
-      <div className={`rounded-2xl flex items-center justify-center relative transition-all duration-[400ms] group-hover:scale-110 group-hover:-rotate-6 shrink-0 ${isWide ? "w-12 h-12 text-xl" : "w-[46px] h-[46px] text-xl mb-3.5"}`}
-        style={{ zIndex: 2, backgroundColor: color, color: "#fff", boxShadow: `0 8px 28px ${color}3d` }}
-      >
-        {getIcon(item.icon)}
-      </div>
-
-      {isWide ? (
-        <>
-          <div className="relative flex-1" style={{ zIndex: 2 }}>
-            <h4 className="text-lg font-bold leading-tight mb-1 text-[#141a2e]">{item.title}</h4>
-            <p className="text-xs leading-relaxed text-[#5b677b]">{item.desc}</p>
-          </div>
-        </>
-      ) : (
-        <div className="relative" style={{ zIndex: 2 }}>
-          <h4 className="text-lg font-bold leading-tight mb-1 text-[#141a2e]">{item.title}</h4>
-          <p className="text-xs leading-relaxed text-[#5b677b]">{item.desc}</p>
-        </div>
-      )}
-    </Wrapper>
-  )
-}
-
 /* ─── Section label ─── */
 function SectionLabel({ title, tag }: { title: string; tag: string }) {
   return (
@@ -350,14 +331,15 @@ export default function PortalHomePage() {
 
   const items = getFlatItems()
 
-  /* Card order matching the 3×3 bento grid layout */
-  const cardOrder = ['alliance', 'career', 'scene', 'ability', 'course', 'affairs', 'ai']
+  /* Core platform ids for the 3×3 grid */
+  const coreOrder = ['alliance', 'career', 'scene', 'ability', 'course', 'affairs', 'ai', 'resource', 'mall']
 
-  /* section 2: resource & mall */
-  const resourceIds = items.filter((i) => i.id === "resource" || i.id === "mall").map((i) => i.id)
+  /* Innovation service ids */
+  const innovationOrder = ['opc', 'decision', 'research']
 
-  /* ordered ids for section 1 */
-  const section1Ids = cardOrder.filter((id) => items.some((i) => i.id === id))
+  /* ordered ids for each section */
+  const coreIds = coreOrder.filter((id) => items.some((i) => i.id === id))
+  const innovationIds = innovationOrder.filter((id) => items.some((i) => i.id === id))
 
   return (
     <div className="min-h-screen relative">
@@ -413,13 +395,13 @@ export default function PortalHomePage() {
       </section>
 
       {/* Main content */}
-      <main className="max-w-6xl mx-auto px-10 pb-24 relative" style={{ zIndex: 2 }}>
+      <main className="max-w-6xl mx-auto px-10 relative" style={{ zIndex: 2 }}>
 
-        {/* Section 1: 应用服务中心 */}
-        <SectionLabel title="产教融合生态体系" tag="九大平台 · 一站直达" />
+        {/* Section 1: 核心应用平台 */}
+        <SectionLabel title="核心应用平台" tag="九大平台 · 一站直达" />
 
         <div className="grid grid-cols-3 gap-[18px]" style={{ gridAutoRows: "168px" }}>
-          {section1Ids.map((id) => {
+          {coreIds.map((id) => {
             const item = findByLabel(items, id)
             if (!item) return null
             const style_ = CARD_STYLES[id]
@@ -436,15 +418,25 @@ export default function PortalHomePage() {
           })}
         </div>
 
-        {/* Section 2: 资源共享与转化 */}
-        {resourceIds.length > 0 && (
+        {/* Section 2: 创新服务专区 */}
+        {innovationIds.length > 0 && (
           <>
-            <SectionLabel title="资源共享与转化" tag="开放共享 · 资源转化" />
-            <div className="grid grid-cols-2 gap-[18px]" style={{ gridAutoRows: "168px" }}>
-              {resourceIds.map((id) => {
+            <SectionLabel title="创新服务专区" tag="灵活就业 · 数据决策 · 教科研服务" />
+            <div className="grid grid-cols-3 gap-[18px]" style={{ gridAutoRows: "168px" }}>
+              {innovationIds.map((id) => {
                 const item = findByLabel(items, id)
                 if (!item) return null
-                return <ResourceTile key={id} item={item} url={getUrl(id)} enabled={isEnabled(id)} />
+                const style_ = CARD_STYLES[id]
+                return (
+                  <GradientTile
+                    key={id}
+                    item={item}
+                    url={getUrl(id)}
+                    enabled={isEnabled(id)}
+                    wide={style_?.type === "wide"}
+                    tall={style_?.type === "feature" || style_?.type === "tall"}
+                  />
+                )
               })}
             </div>
           </>
@@ -452,17 +444,7 @@ export default function PortalHomePage() {
 
       </main>
 
-      {/* Footer */}
-      <footer className="fixed bottom-0 left-0 right-0 h-12 z-40 bg-white border-t border-[#d7d7d7]">
-        <div className="max-w-6xl mx-auto px-8 h-full flex items-center justify-between text-xs text-[#636363]">
-          <div className="flex items-center gap-6">
-            <span className="cursor-pointer">关于平台</span>
-            <span className="cursor-pointer">使用帮助</span>
-            <span className="cursor-pointer">留言反馈</span>
-          </div>
-          <div>杭州知与未来科技有限公司 · 浙ICP xxxxxxxx</div>
-        </div>
-      </footer>
+      <Footer />
     </div>
   )
 }

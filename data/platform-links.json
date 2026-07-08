@@ -53,6 +53,24 @@
       "name": "数字教务平台",
       "url": "http://111.170.170.202:3007/admin",
       "enabled": true
+    },
+    {
+      "id": "opc",
+      "name": "OPC专区",
+      "url": "",
+      "enabled": true
+    },
+    {
+      "id": "decision",
+      "name": "敏捷决策中心",
+      "url": "",
+      "enabled": true
+    },
+    {
+      "id": "research",
+      "name": "教科研服务中心",
+      "url": "",
+      "enabled": true
     }
   ]
 }
