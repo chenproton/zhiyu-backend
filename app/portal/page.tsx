@@ -420,7 +420,7 @@ export default function PortalHomePage() {
 
         <div
           className="grid grid-cols-4 gap-[18px]"
-          style={{ gridAutoRows: "188px" }}
+          style={{ gridAutoRows: "150px" }}
         >
           {BENTO_LAYOUT.slice(0, 8).map((layout) => {
             const item = findByLabel(items, layout.id)
@@ -443,7 +443,7 @@ export default function PortalHomePage() {
 
         <div
           className="grid grid-cols-4 gap-[18px]"
-          style={{ gridAutoRows: "188px" }}
+          style={{ gridAutoRows: "150px" }}
         >
           {BENTO_LAYOUT.slice(8).map((layout) => {
             const item = findByLabel(items, layout.id)
