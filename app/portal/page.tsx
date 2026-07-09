@@ -235,10 +235,10 @@ const BENTO_LAYOUT: CardLayout[] = [
   { id: "course", col: "2", row: "2", variant: "small" },
   { id: "resource", col: "3", row: "2", variant: "small" },
   { id: "mall", col: "4", row: "2", variant: "small" },
-  { id: "affairs", col: "1", row: "3", variant: "small" },
-  { id: "research", col: "2", row: "3", variant: "small" },
-  { id: "decision", col: "3", row: "3", variant: "small" },
-  { id: "ai", col: "4", row: "3", variant: "small" },
+  { id: "affairs", col: "1", row: "1", variant: "small" },
+  { id: "research", col: "2", row: "1", variant: "small" },
+  { id: "decision", col: "3", row: "1", variant: "small" },
+  { id: "ai", col: "4", row: "1", variant: "small" },
 ]
 
 /* ─── helpers ─── */
@@ -339,9 +339,9 @@ function GradientTile({
 }
 
 /* ─── Section label ─── */
-function SectionLabel({ title, tag, className }: { title: string; tag: string; className?: string }) {
+function SectionLabel({ title, tag }: { title: string; tag: string }) {
   return (
-    <div className={`flex items-center gap-3 mb-[18px] mt-9 ${className || ""}`}>
+    <div className="flex items-center gap-3 mb-[18px] mt-9">
       <h3 className="text-base font-bold text-[#141a2e] flex items-center gap-2.5">
         <span className="w-1 h-[18px] rounded-sm bg-gradient-to-b from-violet-600 to-cyan-400 inline-block" />
         {title}
@@ -439,9 +439,7 @@ export default function PortalHomePage() {
           })}
         </div>
 
-        <div className="-mt-6">
-          <SectionLabel title="资源保障生态" tag="四大平台 · 底座支撑" className="mb-2" />
-        </div>
+        <SectionLabel title="资源保障生态" tag="四大平台 · 底座支撑" />
 
         <div
           className="grid grid-cols-4 gap-[18px]"
