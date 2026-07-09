@@ -339,9 +339,9 @@ function GradientTile({
 }
 
 /* ─── Section label ─── */
-function SectionLabel({ title, tag }: { title: string; tag: string }) {
+function SectionLabel({ title, tag, className }: { title: string; tag: string; className?: string }) {
   return (
-    <div className="flex items-center gap-3 mb-[18px] mt-9">
+    <div className={`flex items-center gap-3 mb-[18px] mt-9 ${className || ""}`}>
       <h3 className="text-base font-bold text-[#141a2e] flex items-center gap-2.5">
         <span className="w-1 h-[18px] rounded-sm bg-gradient-to-b from-violet-600 to-cyan-400 inline-block" />
         {title}
@@ -420,7 +420,7 @@ export default function PortalHomePage() {
 
         <div
           className="grid grid-cols-4 gap-[18px]"
-          style={{ gridAutoRows: "150px" }}
+          style={{ gridAutoRows: "188px" }}
         >
           {BENTO_LAYOUT.slice(0, 8).map((layout) => {
             const item = findByLabel(items, layout.id)
@@ -439,11 +439,13 @@ export default function PortalHomePage() {
           })}
         </div>
 
-        <SectionLabel title="资源保障生态" tag="四大平台 · 底座支撑" />
+        <div className="-mt-6">
+          <SectionLabel title="资源保障生态" tag="四大平台 · 底座支撑" className="mb-2" />
+        </div>
 
         <div
           className="grid grid-cols-4 gap-[18px]"
-          style={{ gridAutoRows: "150px" }}
+          style={{ gridAutoRows: "188px" }}
         >
           {BENTO_LAYOUT.slice(8).map((layout) => {
             const item = findByLabel(items, layout.id)
