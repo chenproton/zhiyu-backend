@@ -416,14 +416,36 @@ export default function PortalHomePage() {
       {/* Main content */}
       <main className="max-w-6xl mx-auto px-10 relative" style={{ zIndex: 2 }}>
 
-        {/* 应用服务中心 */}
-        <SectionLabel title="产教融合生态体系" tag="十二大平台 · 一站直达" />
+        <SectionLabel title="场景应用生态" tag="八大平台 · 场景驱动" />
 
         <div
           className="grid grid-cols-4 gap-[18px]"
           style={{ gridAutoRows: "188px" }}
         >
-          {BENTO_LAYOUT.map((layout) => {
+          {BENTO_LAYOUT.slice(0, 8).map((layout) => {
+            const item = findByLabel(items, layout.id)
+            if (!item) return null
+            return (
+              <GradientTile
+                key={layout.id}
+                item={item}
+                url={getUrl(layout.id)}
+                enabled={isEnabled(layout.id)}
+                variant={layout.variant}
+                gridColumn={layout.col}
+                gridRow={layout.row}
+              />
+            )
+          })}
+        </div>
+
+        <SectionLabel title="资源保障生态" tag="四大平台 · 底座支撑" />
+
+        <div
+          className="grid grid-cols-4 gap-[18px]"
+          style={{ gridAutoRows: "188px" }}
+        >
+          {BENTO_LAYOUT.slice(8).map((layout) => {
             const item = findByLabel(items, layout.id)
             if (!item) return null
             return (
