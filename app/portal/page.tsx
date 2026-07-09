@@ -414,7 +414,7 @@ export default function PortalHomePage() {
       </section>
 
       {/* Main content */}
-      <main className="max-w-6xl mx-auto px-10 relative" style={{ zIndex: 2 }}>
+      <main className="max-w-[1192px] mx-auto px-10 relative" style={{ zIndex: 2 }}>
 
         <SectionLabel title="场景应用生态" tag="八大平台 · 场景驱动" />
 
