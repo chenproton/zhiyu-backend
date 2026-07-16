@@ -99,7 +99,7 @@ const platforms = [
         icon: "rocket",
         color: "bg-orange-50 text-orange-500 border border-orange-100",
         title: "OPC 专区",
-        desc: "依托一人公司培育模式，赋能学生灵活就业、轻量化创业，拓宽职业发展赛道。",
+        desc: "江苏省数字经济联合会&大任智库&知与未来联合打造",
       },
       {
         id: "decision",
@@ -231,10 +231,10 @@ const BENTO_LAYOUT: CardLayout[] = [
   { id: "career", col: "2", row: "1", variant: "small" },
   { id: "scene", col: "3", row: "1", variant: "small" },
   { id: "ability", col: "4", row: "1", variant: "small" },
-  { id: "opc", col: "1", row: "2", variant: "small" },
-  { id: "course", col: "2", row: "2", variant: "small" },
-  { id: "resource", col: "3", row: "2", variant: "small" },
-  { id: "mall", col: "4", row: "2", variant: "small" },
+  { id: "opc", col: "1", row: "1", variant: "small" },
+  { id: "course", col: "2", row: "1", variant: "small" },
+  { id: "resource", col: "3", row: "1", variant: "small" },
+  { id: "mall", col: "4", row: "1", variant: "small" },
   { id: "affairs", col: "1", row: "1", variant: "small" },
   { id: "research", col: "2", row: "1", variant: "small" },
   { id: "decision", col: "3", row: "1", variant: "small" },
@@ -268,12 +268,13 @@ function GradientTile({
   gridRow: string
 }) {
   const style = CARD_STYLES[item.id]
-  const Wrapper = url && enabled ? "a" : "div"
-  const wrapperProps =
-    url && enabled ? { href: url, target: "_blank", rel: "noopener noreferrer" as const } : {}
-
   const isBig = variant === "big"
   const isTall = variant === "tall"
+  const isLocked = item.id === "opc" || item.id === "research" || item.id === "decision"
+  const isOpc = item.id === "opc"
+  const Wrapper = (isLocked || isOpc) ? "div" : url && enabled ? "a" : "div"
+  const wrapperProps =
+    (isLocked || isOpc) ? {} : url && enabled ? { href: url, target: "_blank", rel: "noopener noreferrer" as const } : {}
 
   const layoutClass = "flex-col"
   const color = style?.color || "#000"
@@ -283,7 +284,7 @@ function GradientTile({
   return (
     <Wrapper
       {...wrapperProps}
-      className={`group rounded-2xl p-6 bg-white/60 backdrop-blur-xl relative overflow-hidden cursor-pointer transition-all duration-[400ms] flex border-[1.5px] ${layoutClass} ${!enabled ? "hover:translate-y-0 cursor-not-allowed" : "hover:-translate-y-2"}`}
+      className={`group rounded-2xl p-6 bg-white/60 backdrop-blur-xl relative overflow-hidden flex border-[1.5px] ${layoutClass} ${isLocked || isOpc ? "" : "cursor-pointer hover:-translate-y-2 transition-all duration-[400ms]"}`}
       style={{
         gridColumn,
         gridRow,
@@ -298,26 +299,13 @@ function GradientTile({
         <div className="absolute rounded-full pointer-events-none" style={{ width: 240, height: 240, bottom: -80, left: -80, backgroundColor: `${color}14` }} />
       )}
 
-      {item.id === "opc" && (
-        <span className="absolute top-6 right-4 flex flex-col items-end gap-1" style={{ zIndex: 3 }}>
-          <span className="text-[10px] font-medium text-orange-600/70 bg-orange-500/10 border border-orange-500/15 px-2.5 py-0.5 rounded-xl whitespace-nowrap">
-            江苏省数字经济联合会
-          </span>
-          <span className="text-[10px] font-medium text-orange-600/70 bg-orange-500/10 border border-orange-500/15 px-2.5 py-0.5 rounded-xl whitespace-nowrap">
-            &大任智库联合打造
-          </span>
-        </span>
-      )}
-
-      {!enabled && (
-        <div className="absolute inset-0 bg-white/40 backdrop-blur-[1px] flex flex-col items-center justify-center" style={{ zIndex: 5 }}>
-          <div className="flex flex-col items-center gap-2 bg-white/80 backdrop-blur-sm border border-[#e9edf4] px-5 py-3 rounded-xl shadow-sm">
-            <svg className="w-5 h-5 text-[#8590a6]" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth={1.5}>
-              <rect x="3" y="11" width="18" height="11" rx="2" ry="2" />
-              <path d="M7 11V7a5 5 0 0110 0v4" />
-            </svg>
-            <span className="text-xs font-medium text-[#8590a6]">暂未开放</span>
-          </div>
+      {isLocked && (
+        <div className="absolute top-3 right-3 flex flex-col items-center gap-0.5" style={{ zIndex: 5 }}>
+          <svg className="w-4 h-4 text-[#8590a6]" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth={1.5}>
+            <rect x="3" y="11" width="18" height="11" rx="2" ry="2" />
+            <path d="M7 11V7a5 5 0 0110 0v4" />
+          </svg>
+          <span className="text-[9px] font-medium text-[#8590a6] whitespace-nowrap">暂未开放</span>
         </div>
       )}
 
@@ -331,7 +319,21 @@ function GradientTile({
       {/* shared title + desc — identical across all variants */}
       <div className="relative" style={{ zIndex: 2 }}>
         <h4 className="text-lg font-bold leading-tight mb-1 text-[#141a2e]">{item.title}</h4>
-        <p className="text-xs leading-relaxed text-[#5b677b] line-clamp-2">{item.desc}</p>
+        {item.id === "opc" ? (
+          <span className="inline-flex items-center gap-1.5 flex-wrap">
+            <span className="text-[10px] font-medium text-orange-600/80 bg-orange-500/10 border border-orange-500/20 px-2 py-0.5 rounded-lg whitespace-nowrap">
+              江苏省数字经济联合会
+            </span>
+            <span className="text-[10px] font-medium text-orange-600/80 bg-orange-400/10 border border-orange-400/20 px-2 py-0.5 rounded-lg whitespace-nowrap">
+              {"&大任智库"}
+            </span>
+            <span className="text-[10px] font-medium text-amber-600/80 bg-amber-500/10 border border-amber-500/20 px-2 py-0.5 rounded-lg whitespace-nowrap">
+              {"&知与未来联合打造"}
+            </span>
+          </span>
+        ) : (
+          <p className="text-xs leading-relaxed text-[#5b677b] line-clamp-2">{item.desc}</p>
+        )}
       </div>
 
     </Wrapper>
@@ -416,13 +418,13 @@ export default function PortalHomePage() {
       {/* Main content */}
       <main className="max-w-[1312px] mx-auto px-10 relative" style={{ zIndex: 2 }}>
 
-        <SectionLabel title="场景应用生态" tag="八大平台 · 场景驱动" />
+        <SectionLabel title="产教协同育人生态" tag="" />
 
         <div
           className="grid grid-cols-4 gap-[18px]"
           style={{ gridAutoRows: "188px" }}
         >
-          {BENTO_LAYOUT.slice(0, 8).map((layout) => {
+          {BENTO_LAYOUT.slice(0, 4).map((layout) => {
             const item = findByLabel(items, layout.id)
             if (!item) return null
             return (
@@ -439,7 +441,30 @@ export default function PortalHomePage() {
           })}
         </div>
 
-        <SectionLabel title="资源保障生态" tag="四大平台 · 底座支撑" />
+        <SectionLabel title="教学资源保障生态" tag="" />
+
+        <div
+          className="grid grid-cols-4 gap-[18px]"
+          style={{ gridAutoRows: "188px" }}
+        >
+          {BENTO_LAYOUT.slice(4, 8).map((layout) => {
+            const item = findByLabel(items, layout.id)
+            if (!item) return null
+            return (
+              <GradientTile
+                key={layout.id}
+                item={item}
+                url={getUrl(layout.id)}
+                enabled={isEnabled(layout.id)}
+                variant={layout.variant}
+                gridColumn={layout.col}
+                gridRow={layout.row}
+              />
+            )
+          })}
+        </div>
+
+        <SectionLabel title="教学治理服务生态" tag="" />
 
         <div
           className="grid grid-cols-4 gap-[18px]"

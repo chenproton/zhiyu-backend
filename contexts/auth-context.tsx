@@ -33,7 +33,7 @@ interface AuthContextType {
 }
 
 const mockTenants: Tenant[] = [
-  { id: "1", name: "清华大学", code: "QHDX" },
+  { id: "1", name: "知与大学", code: "QHDX" },
   { id: "2", name: "北京大学", code: "BJDX" },
   { id: "3", name: "复旦大学", code: "FDDX" },
 ]
