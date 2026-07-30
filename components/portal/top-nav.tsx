@@ -3,6 +3,7 @@
 import { useState, useEffect } from "react"
 import Link from "next/link"
 import { usePathname } from "next/navigation"
+import Image from "next/image"
 import { Home, Briefcase, LayoutGrid, ChevronDown, User, Settings, LogOut, LogIn, Building2, RefreshCw, Link2, LayoutDashboard } from "lucide-react"
 import {
   DropdownMenu,
@@ -108,11 +109,13 @@ export function TopNav() {
       <header className="h-14 bg-white/70 backdrop-blur-xl border-b border-white/20 flex items-center justify-between px-6 shrink-0 fixed top-0 left-0 right-0 z-50 shadow-sm">
         <div className="flex items-center gap-8">
           <Link href="/portal" className="flex items-center gap-2">
-            <div className="w-8 h-8 bg-primary rounded-lg flex items-center justify-center">
-              <svg className="w-5 h-5 text-primary-foreground" viewBox="0 0 24 24" fill="currentColor">
-                <path d="M12 2L2 7l10 5 10-5-10-5zM2 17l10 5 10-5M2 12l10 5 10-5" />
-              </svg>
-            </div>
+            <Image
+              src="/logo.png"
+              alt="知与大学"
+              width={32}
+              height={32}
+              className="object-contain shrink-0"
+            />
             <span className="font-semibold text-foreground text-base">场景化数智教学服务平台</span>
           </Link>
           

@@ -24,11 +24,11 @@ const platforms = [
         desc: "共建校企合作生态，打造具有行业影响力的人才培养品牌。",
       },
       {
-        id: "ai",
-        icon: "sparkles",
-        color: "bg-indigo-50 text-indigo-500 border border-indigo-100",
-        title: "AI 智能服务中心",
-        desc: "融合前沿AI技术，为教学设计、资源建设、学习辅导、评价分析提供伴随式智能服务。",
+        id: "opc",
+        icon: "rocket",
+        color: "bg-orange-50 text-orange-500 border border-orange-100",
+        title: "OPC 专区",
+        desc: "江苏省数字经济联合会&大任智库&知与未来联合打造",
       },
       {
         id: "ability",
@@ -95,11 +95,11 @@ const platforms = [
     category: "innovation",
     items: [
       {
-        id: "opc",
-        icon: "rocket",
-        color: "bg-orange-50 text-orange-500 border border-orange-100",
-        title: "OPC 专区",
-        desc: "江苏省数字经济联合会&大任智库&知与未来联合打造",
+        id: "ai",
+        icon: "sparkles",
+        color: "bg-indigo-50 text-indigo-500 border border-indigo-100",
+        title: "AI 智能服务中心",
+        desc: "融合前沿AI技术，为教学设计、资源建设、学习辅导、评价分析提供伴随式智能服务。",
       },
       {
         id: "decision",
@@ -231,14 +231,14 @@ const BENTO_LAYOUT: CardLayout[] = [
   { id: "career", col: "2", row: "1", variant: "small" },
   { id: "scene", col: "3", row: "1", variant: "small" },
   { id: "ability", col: "4", row: "1", variant: "small" },
-  { id: "opc", col: "1", row: "1", variant: "small" },
+  { id: "ai", col: "1", row: "1", variant: "small" },
   { id: "course", col: "2", row: "1", variant: "small" },
   { id: "resource", col: "3", row: "1", variant: "small" },
   { id: "mall", col: "4", row: "1", variant: "small" },
   { id: "affairs", col: "1", row: "1", variant: "small" },
   { id: "research", col: "2", row: "1", variant: "small" },
   { id: "decision", col: "3", row: "1", variant: "small" },
-  { id: "ai", col: "4", row: "1", variant: "small" },
+  { id: "opc", col: "4", row: "1", variant: "small" },
 ]
 
 /* ─── helpers ─── */

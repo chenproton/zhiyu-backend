@@ -54,9 +54,9 @@
         },
         {
           "id": "career-4",
-          "title": "我的心仪岗位",
+          "title": "目标岗位推荐管理",
           "desc": "查看与管理收藏的心仪岗位",
-          "href": "http://111.170.170.202:3002/heart-jobs"
+          "href": "https://demo2.zhiyu.com.cn:3002/post-recommend"
         }
       ]
     },

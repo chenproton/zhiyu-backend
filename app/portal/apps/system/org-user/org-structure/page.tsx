@@ -566,14 +566,14 @@ export default function OrgStructurePage() {
           {dialogType !== "members" ? (
             <div className="grid gap-4 py-4">
               <div className="grid gap-2">
-                <Label>节点名称</Label>
+                <Label>节点组织名称</Label>
                 <Input
                   placeholder="如：信息学院"
                   defaultValue={dialogType === "edit" ? selectedNode?.name : ""}
                 />
               </div>
               <div className="grid gap-2">
-                <Label>节点类型</Label>
+                <Label>组织类型</Label>
                 <Select
                   defaultValue={dialogType === "edit" ? selectedNode?.type : undefined}
                 >
@@ -581,11 +581,15 @@ export default function OrgStructurePage() {
                     <SelectValue placeholder="选择类型" />
                   </SelectTrigger>
                   <SelectContent>
-                    <SelectItem value="学校">学校</SelectItem>
+                    <SelectItem value="行政部门">行政部门</SelectItem>
                     <SelectItem value="二级学院">二级学院</SelectItem>
-                    <SelectItem value="专业">专业</SelectItem>
+                    <SelectItem value="教研室">教研室</SelectItem>
+                    <SelectItem value="专业群">专业群</SelectItem>
+                    <SelectItem value="专业系">专业系</SelectItem>
                     <SelectItem value="班级">班级</SelectItem>
-                    <SelectItem value="行政职能部门">行政职能部门</SelectItem>
+                    <SelectItem value="产业学院">产业学院</SelectItem>
+                    <SelectItem value="订单班">订单班</SelectItem>
+                    <SelectItem value="企业">企业</SelectItem>
                   </SelectContent>
                 </Select>
               </div>
